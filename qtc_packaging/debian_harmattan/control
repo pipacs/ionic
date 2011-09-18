@@ -1,14 +1,14 @@
 Source: ionic
 Section: user/other
 Priority: optional
-Maintainer: unknown <polster@unknown>
+Maintainer: Akos Polster <akos@pipacs.com>
 Build-Depends: debhelper (>= 5), libqt4-dev
 Standards-Version: 3.7.3
-Homepage: <insert the upstream URL, if relevant>
+Homepage: https://github.com/pipacs/ionic
 
 Package: ionic
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
-XSBC-Maemo-Display-Name: ionic
+Description: E-book reader
+ Reader of EPUB format e-books.
+XSBC-Maemo-Display-Name: Ionic
