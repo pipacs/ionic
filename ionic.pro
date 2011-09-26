@@ -26,8 +26,22 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # Add dependency to symbian components
 # CONFIG += qtquickcomponents
 
+QT += webkit xml sql network
+DEFINES += "unix"
+
 # The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    book.cpp \
+    bookdb.cpp \
+    bookfinder.cpp \
+    extractzip.cpp \
+    unzip/unzip.c \
+    unzip/ioapi.c \
+    library.cpp \
+    settings.cpp \
+    sortedlibrary.cpp \
+    trace.cpp \
+    platform.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -39,5 +53,31 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/copyright \
     qtc_packaging/debian_harmattan/control \
     qtc_packaging/debian_harmattan/compat \
-    qtc_packaging/debian_harmattan/changelog
+    qtc_packaging/debian_harmattan/changelog \
+    unzip/MiniZip64_info.txt \
+    unzip/MiniZip64_Changes.txt \
+    unzip/Makefile \
+    unzip/make_vms.com \
+    unzip/make_vms_com \
+    pkg/version.txt \
+    pkg/acknowledgements.txt
+
+HEADERS += \
+    book.h \
+    bookdb.h \
+    bookfinder.h \
+    containerhandler.h \
+    xmlhandler.h \
+    opshandler.h \
+    extractzip.h \
+    unzip/unzip.h \
+    unzip/ioapi.h \
+    library.h \
+    ncxhandler.h \
+    settings.h \
+    sortedlibrary.h \
+    xmlerrorhandler.h \
+    trace.h \
+    platform.h
+
 
