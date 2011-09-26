@@ -28,6 +28,8 @@
 #   define DORIAN_ICON_PREFIX ":/icons/symbian/"
 #elif defined(Q_WS_MAEMO_5)
 #   define DORIAN_ICON_PREFIX ":/icons/maemo/"
+#elif defined(Q_WS_HARMATTAN)
+#   define DORIAN_ICON_PREFIX ":/icons/harmattan"
 #else
 #   define DORIAN_ICON_PREFIX ":/icons/"
 #endif
@@ -46,28 +48,24 @@ static const char *DORIAN_VERSION =
 
 static Platform *theInstance;
 
-Platform *Platform::instance()
-{
+Platform *Platform::instance() {
     if (!theInstance) {
         theInstance = new Platform();
     }
     return theInstance;
 }
 
-void Platform::close()
-{
+void Platform::close() {
     delete theInstance;
     theInstance = 0;
 }
 
-QString Platform::dbPath()
-{
+QString Platform::dbPath() {
     QString base(QDir::home().absoluteFilePath(DORIAN_BASE));
     return QDir(base).absoluteFilePath("books.db");
 }
 
-QString Platform::icon(const QString &name, const QString &extension)
-{
+QString Platform::icon(const QString &name, const QString &extension) {
     QString iconName = QString(DORIAN_ICON_PREFIX) + name + extension;
     if (QFile(iconName).exists()) {
         return iconName;
@@ -76,8 +74,7 @@ QString Platform::icon(const QString &name, const QString &extension)
     }
 }
 
-void Platform::restart(char *argv[])
-{
+void Platform::restart(char *argv[]) {
 #if defined(Q_OS_UNIX) && !defined(Q_OS_SYMBIAN)
     extern char **environ;
     execve(argv[0], argv, environ);
@@ -105,7 +102,7 @@ QString Platform::downloadDir()
 
 QString Platform::defaultFont()
 {
-#if defined(Q_WS_MAEMO_5) || defined(Q_WS_X11)
+#if defined(Q_WS_MAEMO_5) || defined(Q_WS_X11) || defined(Q_WS_HARMATTAN)
     return QString("Serif");
 #elif defined(Q_WS_MAC)
     return QString("Hoefler Text");
@@ -116,8 +113,7 @@ QString Platform::defaultFont()
 #endif
 }
 
-void Platform::information(const QString &label, QWidget *parent)
-{
+void Platform::information(const QString &label, QWidget *parent) {
 #ifdef Q_WS_MAEMO_5
     QMaemo5InformationBox::information(parent, label,
                                        QMaemo5InformationBox::DefaultTimeout);
@@ -127,8 +123,7 @@ void Platform::information(const QString &label, QWidget *parent)
 #endif
 }
 
-void Platform::showBusy(QWidget *w, bool isBusy)
-{
+void Platform::showBusy(QWidget *w, bool isBusy) {
 #ifdef Q_WS_MAEMO_5
     w->setAttribute(Qt::WA_Maemo5ShowProgressIndicator, isBusy);
 #else
@@ -137,27 +132,23 @@ void Platform::showBusy(QWidget *w, bool isBusy)
 #endif
 }
 
-QString Platform::traceFileName()
-{
+QString Platform::traceFileName() {
     return QDir::home().absoluteFilePath(DORIAN_LOG);
 }
 
-int Platform::defaultZoom()
-{
+int Platform::defaultZoom() {
     return 150;
 }
 
-QString Platform::defaultOrientation()
-{
-#ifdef Q_OS_SYMBIAN
+QString Platform::defaultOrientation() {
+#if defined(Q_OS_SYMBIAN) || defined(Q_WS_HARMATTAN)
     return QString("portrait");
 #else
     return QString("landscape");
 #endif
 }
 
-void Platform::setOrientation(QWidget *widget, const QString &orientation)
-{
+void Platform::setOrientation(QWidget *widget, const QString &orientation) {
     TRACE;
     qDebug() << "To" << orientation;
 
@@ -190,8 +181,7 @@ void Platform::setOrientation(QWidget *widget, const QString &orientation)
     }
 }
 
-int Platform::softKeyHeight()
-{
+int Platform::softKeyHeight() {
 #if defined(Q_OS_SYMBIAN)
     return 62;
 #else
@@ -199,8 +189,7 @@ int Platform::softKeyHeight()
 #endif
 }
 
-int Platform::toolBarIconHeight()
-{
+int Platform::toolBarIconHeight() {
 #if defined(Q_OS_SYMBIAN)
     return 60;
 #elif defined(Q_WS_X11)  && !defined(Q_WS_MAEMO_5)
@@ -210,13 +199,11 @@ int Platform::toolBarIconHeight()
 #endif
 }
 
-QSize Platform::size()
-{
+QSize Platform::size() {
     return QApplication::desktop()->geometry().size();
 }
 
-QSize Platform::availableSize()
-{
+QSize Platform::availableSize() {
     QSize s = QApplication::desktop()->availableGeometry().size();
 #if defined(Q_OS_SYMBIAN)
     // Work around a Qt bug on Symbian which sometimes forgets to reduce the

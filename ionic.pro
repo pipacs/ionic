@@ -27,14 +27,16 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # CONFIG += qtquickcomponents
 
 QT += webkit xml sql network
-DEFINES += "unix"
-DEFINES += "USE_FILE32API"
-
 unix {
-    symbian {
-    } else {
-        LIBS += -lz
-    }
+    DEFINES += unix
+    DEFINES += USE_FILE32API
+}
+unix:!symbian {
+    LIBS += -lz
+}
+unix:!symbian:!maemo5 {
+    # Sorry Dennis
+    DEFINES += Q_WS_HARMATTAN
 }
 
 # The .cpp file which was generated for your project. Feel free to hack it.

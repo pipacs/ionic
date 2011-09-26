@@ -7,26 +7,22 @@
 
 static Settings *theInstance;
 
-Settings::Settings(): QObject(0)
-{
+Settings::Settings(): QObject(0) {
 }
 
-Settings *Settings::instance()
-{
+Settings *Settings::instance() {
     if (!theInstance) {
         theInstance = new Settings();
     }
     return theInstance;
 }
 
-void Settings::close()
-{
+void Settings::close() {
     delete theInstance;
     theInstance = 0;
 }
 
-void Settings::setValue(const QString &key, const QVariant &value)
-{
+void Settings::setValue(const QString &key, const QVariant &value) {
     QSettings s;
     s.setValue(QString("settings/") + key, value);
     emit valueChanged(key);
@@ -38,8 +34,7 @@ QVariant Settings::value(const QString &key, const QVariant &defaultValue) const
     return s.value(QString("settings/") + key, defaultValue);
 }
 
-void Settings::apply()
-{
+void Settings::apply() {
     TRACE;
     QSettings s;
     foreach (QString key, s.allKeys()) {
