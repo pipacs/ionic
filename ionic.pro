@@ -28,18 +28,26 @@ symbian:TARGET.CAPABILITY += NetworkServices
 
 QT += webkit xml sql network
 DEFINES += "unix"
+DEFINES += "USE_FILE32API"
+
+unix {
+    symbian {
+    } else {
+        LIBS += -lz
+    }
+}
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    book.cpp \
-    bookdb.cpp \
+    model/book.cpp \
+    model/bookdb.cpp \
     bookfinder.cpp \
-    extractzip.cpp \
-    unzip/unzip.c \
-    unzip/ioapi.c \
-    library.cpp \
+    model/extractzip.cpp \
+    model/unzip/unzip.c \
+    model/unzip/ioapi.c \
+    model/library.cpp \
     settings.cpp \
-    sortedlibrary.cpp \
+    model/sortedlibrary.cpp \
     trace.cpp \
     platform.cpp
 
@@ -54,29 +62,29 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/control \
     qtc_packaging/debian_harmattan/compat \
     qtc_packaging/debian_harmattan/changelog \
-    unzip/MiniZip64_info.txt \
-    unzip/MiniZip64_Changes.txt \
-    unzip/Makefile \
-    unzip/make_vms.com \
-    unzip/make_vms_com \
+    model/unzip/MiniZip64_info.txt \
+    model/unzip/MiniZip64_Changes.txt \
+    model/unzip/Makefile \
+    model/unzip/make_vms.com \
+    model/unzip/make_vms_com \
     pkg/version.txt \
     pkg/acknowledgements.txt
 
 HEADERS += \
-    book.h \
-    bookdb.h \
+    model/book.h \
+    model/bookdb.h \
     bookfinder.h \
-    containerhandler.h \
-    xmlhandler.h \
-    opshandler.h \
-    extractzip.h \
-    unzip/unzip.h \
-    unzip/ioapi.h \
-    library.h \
-    ncxhandler.h \
+    model/containerhandler.h \
+    model/xmlhandler.h \
+    model/opshandler.h \
+    model/extractzip.h \
+    model/unzip/unzip.h \
+    model/unzip/ioapi.h \
+    model/library.h \
+    model/ncxhandler.h \
     settings.h \
-    sortedlibrary.h \
-    xmlerrorhandler.h \
+    model/sortedlibrary.h \
+    model/xmlerrorhandler.h \
     trace.h \
     platform.h
 
