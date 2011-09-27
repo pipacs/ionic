@@ -2,9 +2,10 @@
 #include <QtDeclarative>
 
 #include "qmlapplicationviewer.h"
-#include "model/book.h"
 #include "trace.h"
 #include "settings.h"
+#include "model/book.h"
+#include "model/bookmark.h"
 
 int main(int argc, char *argv[])
 {
@@ -20,6 +21,7 @@ int main(int argc, char *argv[])
 
     // Register QML types
     qmlRegisterType<Book>("com.pipacs.ionic.Book", 1, 0, "Book");
+    qmlRegisterType<Bookmark>("com.pipacs.ionic.Bookmark", 1, 0, "Bookmark");
 
     // Show QML widget with main.qml
     QmlApplicationViewer viewer;

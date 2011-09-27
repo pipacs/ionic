@@ -15,8 +15,7 @@ class Bookmark: public QObject {
     Q_PROPERTY(QString note READ note WRITE setNote NOTIFY noteChanged)
 
 public:
-    Bookmark(QObject *parent = 0): QObject(parent), part_(0), pos_(0),
-        note_("") {
+    Bookmark(): QObject(0), part_(0), pos_(0), note_("") {
     }
 
     Bookmark(int part, qreal pos, const QString &note = QString(),
@@ -24,16 +23,30 @@ public:
         note_(note) {
     }
 
+    Bookmark(const Bookmark &other): QObject(), part_(other.part_),
+        pos_(other.pos_), note_(other.note_) {
+    }
+
     bool operator<(const Bookmark &other) const {
-        return (part == other.part)? (pos<other.pos): (part<other.part);
+        return (part_ == other.part_)?
+            (pos_ < other.pos_): (part_ < other.part_);
+    }
+
+    Bookmark& operator=(const Bookmark &other) {
+        if (this != &other) {
+            pos_ = other.pos_;
+            part_ = other.part_;
+            note_ = other.note_;
+        }
+        return *this;
     }
 
     int part() {return part_;}
-    void setPart(int p) {part_ = p; emit partChanged;}
+    void setPart(int p) {part_ = p; emit partChanged();}
     qreal pos() {return pos_;}
-    void setPos(const qreal p) {pos_ = p; emit posChanged;}
+    void setPos(const qreal p) {pos_ = p; emit posChanged();}
     QString note() {return note_;}
-    void setNote(const QString &n) {note_ = n; emit noteChanged;}
+    void setNote(const QString &n) {note_ = n; emit noteChanged();}
 
 signals:
     void partChanged();

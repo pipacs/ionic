@@ -10,6 +10,8 @@
 #include <QTemporaryFile>
 #include <QDateTime>
 
+#include "bookmark.h"
+
 class QPixmap;
 
 /** A book. */
@@ -27,23 +29,6 @@ public:
         QString href;
         QString name;
         qint64 size;
-    };
-
-    /**
-    Bookmark: A location in the book identified by a volume index and
-    a relative position in volume.
-    */
-    struct Bookmark
-    {
-        Bookmark(int part_, qreal pos_, const QString &note_ = QString()):
-                part(part_), pos(pos_), note(note_) {}
-        Bookmark(): part(0), pos(0.0) {}
-        int part;
-        qreal pos;
-        QString note;
-        bool operator<(const Bookmark &other) const {
-            return (part == other.part)? (pos<other.pos): (part<other.part);
-        }
     };
 
     /** Default constructor. */

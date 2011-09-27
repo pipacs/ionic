@@ -287,8 +287,8 @@ void Book::load() {
     subject = data["subject"].toString();
     source = data["source"].toString();
     rights = data["rights"].toString();
-    mLastBookmark.part = data["lastpart"].toInt();
-    mLastBookmark.pos = data["lastpos"].toReal();
+    mLastBookmark.setPart(data["lastpart"].toInt());
+    mLastBookmark.setPos(data["lastpos"].toReal());
     cover = data["cover"].value<QImage>();
     if (cover.isNull()) {
         cover = makeCover(":/icons/book.png");
@@ -317,14 +317,14 @@ void Book::save() {
     data["subject"] = subject;
     data["source"] = source;
     data["rights"] = rights;
-    data["lastpart"] = mLastBookmark.part;
-    data["lastpos"] = mLastBookmark.pos;
+    data["lastpart"] = mLastBookmark.part();
+    data["lastpos"] = mLastBookmark.pos();
     data["cover"] = cover;
     data["bookmarks"] = mBookmarks.size();
     for (int i = 0; i < mBookmarks.size(); i++) {
-        data[QString("bookmark%1part").arg(i)] = mBookmarks[i].part;
-        data[QString("bookmark%1pos").arg(i)] = mBookmarks[i].pos;
-        data[QString("bookmark%1note").arg(i)] = mBookmarks[i].note;
+        data[QString("bookmark%1part").arg(i)] = mBookmarks[i].part();
+        data[QString("bookmark%1pos").arg(i)] = mBookmarks[i].pos();
+        data[QString("bookmark%1note").arg(i)] = mBookmarks[i].note();
     }
     data["dateadded"] = dateAdded;
     data["dateopened"] = dateOpened;
@@ -337,16 +337,16 @@ void Book::setLastBookmark(int part, qreal position, bool fast) {
     if (!fast) {
         load();
     }
-    mLastBookmark.part = part;
-    mLastBookmark.pos = position;
+    mLastBookmark.setPart(part);
+    mLastBookmark.setPos(position);
     if (!fast) {
         save();
     }
 }
 
-Book::Bookmark Book::lastBookmark() {
+Bookmark Book::lastBookmark() {
     load();
-    return Book::Bookmark(mLastBookmark);
+    return mLastBookmark;
 }
 
 void Book::addBookmark(int part, qreal position, const QString &note) {
@@ -359,7 +359,7 @@ void Book::addBookmark(int part, qreal position, const QString &note) {
 void Book::setBookmarkNote(int index, const QString &note) {
     load();
     if (index >= 0 && index < mBookmarks.length()) {
-        mBookmarks[index].note = note;
+        mBookmarks[index].setNote(note);
     }
     save();
 
@@ -371,7 +371,7 @@ void Book::deleteBookmark(int index) {
     save();
 }
 
-QList<Book::Bookmark> Book::bookmarks() {
+QList<Bookmark> Book::bookmarks() {
     load();
     return mBookmarks;
 }
@@ -518,8 +518,8 @@ void Book::upgrade() {
     subject = settings.value(key + "subject").toString();
     source = settings.value(key + "source").toString();
     rights = settings.value(key + "rights").toString();
-    mLastBookmark.part = settings.value(key + "lastpart").toInt();
-    mLastBookmark.pos = settings.value(key + "lastpos").toReal();
+    mLastBookmark.setPart(settings.value(key + "lastpart").toInt());
+    mLastBookmark.setPos(settings.value(key + "lastpos").toReal());
     cover = settings.value(key + "cover").value<QImage>();
     if (cover.isNull()) {
         cover = makeCover(":/icons/book.png");
