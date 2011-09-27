@@ -56,8 +56,8 @@ int SortedLibrary::compareBy(SortBy key, Book *left, Book *right) const
     Q_ASSERT(right);
     switch (key) {
     case SortByAuthor:
-        return QString::localeAwareCompare(left->creators.join(" "),
-                                           right->creators.join(" "));
+        return QString::localeAwareCompare(left->creators().join(" "),
+                                           right->creators().join(" "));
     default:
         return QString::localeAwareCompare(left->shortName(),
                                            right->shortName());

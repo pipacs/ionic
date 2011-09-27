@@ -15,10 +15,10 @@ const int COVER_WIDTH = 53;
 const int COVER_HEIGHT = 59;
 const int COVER_MAX = 512 * 1024;
 
-Book::Book(): QObject(0), mPath(""), loaded(false) {
+Book::Book(): QObject(0), path_(""), loaded_(false) {
 }
 
-Book::Book(const QString &p, QObject *parent): QObject(parent), loaded(false) {
+Book::Book(const QString &p, QObject *parent): QObject(parent), loaded_(false) {
     setPath(p);
 }
 
@@ -27,18 +27,18 @@ Book::~Book() {
 }
 
 void Book::setPath(const QString &p) {
-    mPath = "";
+    path_ = "";
     if (p.size()) {
         QFileInfo info(p);
-        mPath = info.absoluteFilePath();
-        title = info.baseName();
-        mTempFile.open();
+        path_ = info.absoluteFilePath();
+        title_ = info.baseName();
+        tempFile_.open();
     }
     emit pathChanged();
 }
 
 QString Book::path() {
-    return mPath;
+    return path_;
 }
 
 bool Book::open() {
@@ -48,7 +48,7 @@ bool Book::open() {
     clear();
     load();
     if (path().isEmpty()) {
-        title = "No book";
+        setTitle("No book");
         return false;
     }
     if (!extract(QStringList())) {
@@ -57,7 +57,7 @@ bool Book::open() {
     if (!parse()) {
         return false;
     }
-    dateOpened = QDateTime::currentDateTime().toUTC();
+    setDateOpened(QDateTime::currentDateTime().toUTC());
     save();
     emit opened(path());
     return true;
@@ -70,7 +70,7 @@ void Book::peek() {
     clear();
     load();
     if (path().isEmpty()) {
-        title = "No book";
+        setTitle("No book");
         return;
     }
     if (!extractMetaData()) {
@@ -85,14 +85,14 @@ void Book::peek() {
 
 void Book::close() {
     Trace t("Book::close");
-    content.clear();
-    parts.clear();
+    clearContent();
+    clearParts();
     QDir::setCurrent(QDir::rootPath());
     clearDir(tmpDir());
 }
 
 QString Book::tmpDir() const {
-    QString tmpName = QFileInfo(mTempFile.fileName()).fileName();
+    QString tmpName = QFileInfo(tempFile_.fileName()).fileName();
     return QDir(QDir::temp().absoluteFilePath("dorian")).
             absoluteFilePath(tmpName);
 }
@@ -101,7 +101,7 @@ bool Book::extract(const QStringList &excludedExtensions) {
     TRACE;
     bool ret = false;
     QString tmp = tmpDir();
-    qDebug() << "Extracting" << mPath << "to" << tmp;
+    qDebug() << "Extracting" << path_ << "to" << tmp;
 
     load();
     QDir::setCurrent(QDir::rootPath());
@@ -166,15 +166,16 @@ bool Book::parse() {
 
     // Initially, put all content items in the chapter list.
     // This will be refined by parsing the NCX file later
-    chapters = parts;
+    chapters_ = parts_;
+    emit chaptersChanged();
 
     // Load cover image
     QString coverPath;
     QStringList coverKeys;
     coverKeys << "cover-image" << "img-cover-jpeg" << "cover";
     foreach (QString key, coverKeys) {
-        if (content.contains(key)) {
-            coverPath = QDir(rootPath()).absoluteFilePath(content[key].href);
+        if (content_.contains(key)) {
+            coverPath = QDir(rootPath()).absoluteFilePath(content_[key].href);
             break;
         }
     }
@@ -187,18 +188,18 @@ bool Book::parse() {
     }
     if (!coverPath.isEmpty()) {
         qDebug() << "Loading cover image from" << coverPath;
-        cover = makeCover(coverPath);
+        setCover(makeCover(coverPath));
     }
 
     // If there is an "ncx" item in content, parse it: That's the real table
     // of contents
     QString ncxFileName;
-    if (content.contains("ncx")) {
-        ncxFileName = content["ncx"].href;
-    } else if (content.contains("ncxtoc")) {
-        ncxFileName = content["ncxtoc"].href;
-    } else if (content.contains("toc")) {
-        ncxFileName = content["toc"].href;
+    if (content_.contains("ncx")) {
+        ncxFileName = content_["ncx"].href;
+    } else if (content_.contains("ncxtoc")) {
+        ncxFileName = content_["ncxtoc"].href;
+    } else if (content_.contains("toc")) {
+        ncxFileName = content_["toc"].href;
     } else {
         qDebug() << "No NCX table of contents";
     }
@@ -216,13 +217,14 @@ bool Book::parse() {
         delete source;
     }
 
-    // Calculate book part sizes
-    size = 0;
-    foreach (QString part, parts) {
-        QFileInfo info(QDir(rootPath()).absoluteFilePath(content[part].href));
-        content[part].size = info.size();
-        size += content[part].size;
+    // Calculate book part sizes and total size
+    size_ = 0;
+    foreach (QString part, parts_) {
+        QFileInfo info(QDir(rootPath()).absoluteFilePath(content_[part].href));
+        content_[part].size = info.size();
+        size_ += content_[part].size;
     }
+    emit sizeChanged();
 
     return ret;
 }
@@ -258,50 +260,50 @@ bool Book::clearDir(const QString &dir) {
 
 void Book::clear() {
     close();
-    title = "";
-    creators.clear();
-    date = "";
-    publisher = "";
-    datePublished = "";
-    subject = "";
-    source = "";
-    rights = "";
+    setTitle("");
+    clearCreators();
+    setDate("");
+    setPublisher("");
+    setDatePublished("");
+    setSubject("");
+    setSource("");
+    setRights("");
 }
 
 void Book::load() {
-    if (loaded) {
+    if (loaded_) {
         return;
     }
 
     TRACE;
-    loaded = true;
+    loaded_ = true;
     qDebug() << "path" << path();
 
     QVariantHash data = BookDb::instance()->load(path());
-    title = data["title"].toString();
-    qDebug() << title;
-    creators = data["creators"].toStringList();
-    date = data["date"].toString();
-    publisher = data["publisher"].toString();
-    datePublished = data["datepublished"].toString();
-    subject = data["subject"].toString();
-    source = data["source"].toString();
-    rights = data["rights"].toString();
-    mLastBookmark.setPart(data["lastpart"].toInt());
-    mLastBookmark.setPos(data["lastpos"].toReal());
-    cover = data["cover"].value<QImage>();
-    if (cover.isNull()) {
-        cover = makeCover(":/icons/book.png");
+    setTitle(data["title"].toString());
+    qDebug() << title_;
+    setCreators(data["creators"].toStringList());
+    setDate(data["date"].toString());
+    setPublisher(data["publisher"].toString());
+    setDatePublished(data["datepublished"].toString());
+    setSubject(data["subject"].toString());
+    setSource(data["source"].toString());
+    setRights(data["rights"].toString());
+    Bookmark bookmark(data["lastpart"].toInt(), data["lastpos"].toReal(), "");
+    setLastBookmark(bookmark);
+    setCover(data["cover"].value<QImage>());
+    if (cover().isNull()) {
+        setCover(makeCover(":/icons/book.png"));
     }
     int size = data["bookmarks"].toInt();
     for (int i = 0; i < size; i++) {
         int part = data[QString("bookmark%1part").arg(i)].toInt();
         qreal pos = data[QString("bookmark%1pos").arg(i)].toReal();
         QString note = data[QString("bookmark%1note").arg(i)].toString();
-        mBookmarks.append(Bookmark(part, pos, note));
+        bookmarks_.append(Bookmark(part, pos, note));
     }
-    dateAdded = data["dateadded"].toDateTime();
-    dateOpened = data["dateopened"].toDateTime();
+    setDateAdded(data["dateadded"].toDateTime());
+    setDateOpened(data["dateopened"].toDateTime());
 }
 
 void Book::save() {
@@ -309,25 +311,25 @@ void Book::save() {
 
     load();
     QVariantHash data;
-    data["title"] = title;
-    data["creators"] = creators;
-    data["date"] = date;
-    data["publisher"] = publisher;
-    data["datepublished"] = datePublished;
-    data["subject"] = subject;
-    data["source"] = source;
-    data["rights"] = rights;
-    data["lastpart"] = mLastBookmark.part();
-    data["lastpos"] = mLastBookmark.pos();
-    data["cover"] = cover;
-    data["bookmarks"] = mBookmarks.size();
-    for (int i = 0; i < mBookmarks.size(); i++) {
-        data[QString("bookmark%1part").arg(i)] = mBookmarks[i].part();
-        data[QString("bookmark%1pos").arg(i)] = mBookmarks[i].pos();
-        data[QString("bookmark%1note").arg(i)] = mBookmarks[i].note();
+    data["title"] = title_;
+    data["creators"] = creators_;
+    data["date"] = date_;
+    data["publisher"] = publisher_;
+    data["datepublished"] = datePublished_;
+    data["subject"] = subject_;
+    data["source"] = source_;
+    data["rights"] = rights_;
+    data["lastpart"] = lastBookmark_.part();
+    data["lastpos"] = lastBookmark_.pos();
+    data["cover"] = cover_;
+    data["bookmarks"] = bookmarks_.size();
+    for (int i = 0; i < bookmarks_.size(); i++) {
+        data[QString("bookmark%1part").arg(i)] = bookmarks_[i].part();
+        data[QString("bookmark%1pos").arg(i)] = bookmarks_[i].pos();
+        data[QString("bookmark%1note").arg(i)] = bookmarks_[i].note();
     }
-    data["dateadded"] = dateAdded;
-    data["dateopened"] = dateOpened;
+    data["dateadded"] = dateAdded_;
+    data["dateopened"] = dateOpened_;
     BookDb::instance()->save(path(), data);
 }
 
@@ -337,29 +339,30 @@ void Book::setLastBookmark(int part, qreal position, bool fast) {
     if (!fast) {
         load();
     }
-    mLastBookmark.setPart(part);
-    mLastBookmark.setPos(position);
+    lastBookmark_.setPart(part);
+    lastBookmark_.setPos(position);
     if (!fast) {
         save();
     }
+    emit lastBookmarkChanged();
 }
 
 Bookmark Book::lastBookmark() {
     load();
-    return mLastBookmark;
+    return lastBookmark_;
 }
 
 void Book::addBookmark(int part, qreal position, const QString &note) {
     load();
-    mBookmarks.append(Bookmark(part, position, note));
-    qSort(mBookmarks.begin(), mBookmarks.end());
+    bookmarks_.append(Bookmark(part, position, note));
+    qSort(bookmarks_.begin(), bookmarks_.end());
     save();
 }
 
 void Book::setBookmarkNote(int index, const QString &note) {
     load();
-    if (index >= 0 && index < mBookmarks.length()) {
-        mBookmarks[index].setNote(note);
+    if (index >= 0 && index < bookmarks_.length()) {
+        bookmarks_[index].setNote(note);
     }
     save();
 
@@ -367,13 +370,13 @@ void Book::setBookmarkNote(int index, const QString &note) {
 
 void Book::deleteBookmark(int index) {
     load();
-    mBookmarks.removeAt(index);
+    bookmarks_.removeAt(index);
     save();
 }
 
 QList<Bookmark> Book::bookmarks() {
     load();
-    return mBookmarks;
+    return bookmarks_;
 }
 
 QString Book::opsPath() {
@@ -391,8 +394,9 @@ QString Book::opsPath() {
     reader.setErrorHandler(errorHandler);
     if (reader.parse(source)) {
         ret = tmpDir() + "/" + containerHandler->rootFile;
-        mRootPath = QFileInfo(ret).absoluteDir().absolutePath();
-        qDebug() << "OSP path" << ret << "\nRoot dir" << mRootPath;
+        rootPath_ = QFileInfo(ret).absoluteDir().absolutePath();
+        emit rootPathChanged();
+        qDebug() << "OSP path" << ret << "\nRoot dir" << rootPath_;
     }
     delete errorHandler;
     delete containerHandler;
@@ -402,15 +406,15 @@ QString Book::opsPath() {
 
 QString Book::rootPath() {
     load();
-    return mRootPath;
+    return rootPath_;
 }
 
 QString Book::name() {
     load();
-    if (title.size()) {
-        QString ret = title;
-        if (creators.length()) {
-            ret += "\nBy " + creators.join(", ");
+    if (title_.size()) {
+        QString ret = title_;
+        if (creators_.length()) {
+            ret += "\nBy " + creators_.join(", ");
         }
         return ret;
     }
@@ -419,12 +423,12 @@ QString Book::name() {
 
 QString Book::shortName() {
     load();
-    return (title.isEmpty())? QFileInfo(path()).baseName(): title;
+    return (title_.isEmpty())? QFileInfo(path()).baseName(): title_;
 }
 
 QImage Book::coverImage() {
     load();
-    return cover;
+    return cover_;
 }
 
 int Book::chapterFromPart(int index) {
@@ -432,12 +436,12 @@ int Book::chapterFromPart(int index) {
     load();
     int ret = -1;
 
-    QString partId = parts[index];
-    QString partHref = content[partId].href;
+    QString partId = parts_[index];
+    QString partHref = content_[partId].href;
 
-    for (int i = 0; i < chapters.size(); i++) {
-        QString id = chapters[i];
-        QString href = content[id].href;
+    for (int i = 0; i < chapters_.size(); i++) {
+        QString id = chapters_[i];
+        QString href = content_[id].href;
         int hashPos = href.indexOf("#");
         if (hashPos != -1) {
             href = href.left(hashPos);
@@ -456,8 +460,8 @@ int Book::partFromChapter(int index, QString &fragment) {
     TRACE;
     load();
     fragment.clear();
-    QString id = chapters[index];
-    QString href = content[id].href;
+    QString id = chapters_[index];
+    QString href = content_[id].href;
     int hashPos = href.indexOf("#");
     if (hashPos != -1) {
         fragment = href.mid(hashPos);
@@ -469,16 +473,16 @@ int Book::partFromChapter(int index, QString &fragment) {
     qDebug() << " href" << href;
     qDebug() << " fragment" << fragment;
 
-    for (int i = 0; i < parts.size(); i++) {
-        QString partId = parts[i];
-        if (content[partId].href == href) {
+    for (int i = 0; i < parts_.size(); i++) {
+        QString partId = parts_[i];
+        if (content_[partId].href == href) {
             qDebug() << "Part index for" << href << "is" << i;
             return i;
         }
     }
 
     qWarning() << "Book::partFromChapter: Could not find part index for"
-            << href;
+        << href;
     return -1;
 }
 
@@ -488,12 +492,12 @@ qreal Book::getProgress(int part, qreal position) {
     QString key;
     qreal partSize = 0;
     for (int i = 0; i < part; i++) {
-        key = parts[i];
-        partSize += content[key].size;
+        key = parts_[i];
+        partSize += content_[key].size;
     }
-    key = parts[part];
-    partSize += content[key].size * position;
-    return partSize / (qreal)size;
+    key = parts_[part];
+    partSize += content_[key].size * position;
+    return partSize / (qreal)size_;
 }
 
 bool Book::extractMetaData() {
@@ -501,47 +505,6 @@ bool Book::extractMetaData() {
     excludedExtensions << ".html" << ".xhtml" << ".xht" << ".htm" << ".gif"
             << ".css" << "*.ttf" << "mimetype";
     return extract(excludedExtensions);
-}
-
-void Book::upgrade() {
-    TRACE;
-
-    // Load book from old database (QSettings)
-    QSettings settings;
-    QString key = "book/" + path() + "/";
-    title = settings.value(key + "title").toString();
-    qDebug() << title;
-    creators = settings.value(key + "creators").toStringList();
-    date = settings.value(key + "date").toString();
-    publisher = settings.value(key + "publisher").toString();
-    datePublished = settings.value(key + "datepublished").toString();
-    subject = settings.value(key + "subject").toString();
-    source = settings.value(key + "source").toString();
-    rights = settings.value(key + "rights").toString();
-    mLastBookmark.setPart(settings.value(key + "lastpart").toInt());
-    mLastBookmark.setPos(settings.value(key + "lastpos").toReal());
-    cover = settings.value(key + "cover").value<QImage>();
-    if (cover.isNull()) {
-        cover = makeCover(":/icons/book.png");
-    } else {
-        cover = makeCover(QPixmap::fromImage(cover));
-    }
-    int size = settings.value(key + "bookmarks").toInt();
-    for (int i = 0; i < size; i++) {
-        int part = settings.value(key + "bookmark" + QString::number(i) +
-                                     "/part").toInt();
-        qreal pos = settings.value(key + "bookmark" + QString::number(i) +
-                                   "/pos").toReal();
-        qDebug() << QString("Bookmark %1 at part %2, %3").
-                arg(i).arg(part).arg(pos);
-        mBookmarks.append(Bookmark(part, pos));
-    }
-
-    // Remove QSettings
-    settings.remove("book/" + path());
-
-    // Save book to new database
-    save();
 }
 
 void Book::remove() {

@@ -20,12 +20,31 @@ class Book: public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
+    Q_PROPERTY(QString rootPath READ rootPath NOTIFY rootPathChanged)
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
+    Q_PROPERTY(QStringList parts READ parts NOTIFY partsChanged)
+    // FIXME Q_PROPERTY(QHash<QString, ContentItem> content READ content NOTIFY contentChanged)
+    Q_PROPERTY(QImage cover READ cover NOTIFY coverChanged)
+    Q_PROPERTY(QStringList creators READ creators NOTIFY creatorsChanged)
+    Q_PROPERTY(QString date READ date NOTIFY dateChanged)
+    Q_PROPERTY(QString publisher READ publisher NOTIFY publisherChanged)
+    Q_PROPERTY(QString datePublished READ datePublished
+        NOTIFY datePublishedChanged)
+    Q_PROPERTY(QString subject READ subject NOTIFY subjectChanged)
+    Q_PROPERTY(QString source READ source NOTIFY sourceChanged)
+    Q_PROPERTY(QString rights READ rights NOTIFY rightsChanged)
+    Q_PROPERTY(QStringList chapters READ chapters NOTIFY chaptersChanged)
+    Q_PROPERTY(qint64 size READ size NOTIFY sizeChanged)
+    Q_PROPERTY(QDateTime dateAdded READ dateAdded NOTIFY dateAddedChanged)
+    Q_PROPERTY(QDateTime dateOpened READ dateOpened NOTIFY dateOpenedChanged)
+    Q_PROPERTY(Bookmark lastBookmark READ lastBookmark WRITE setLastBookmark
+        NOTIFY lastBookmarkChanged)
 
 public:
 
     /** Content item: An individual, named part of the book. */
-    struct ContentItem
-    {
+    struct ContentItem {
         QString href;
         QString name;
         qint64 size;
@@ -45,9 +64,6 @@ public:
 
     /** Save book meta-data to persistent storage. */
     void save();
-
-    /** Upgrade persistent storage of book meta-data. */
-    void upgrade();
 
     /** Delete book meta-data from persistent storage. */
     void remove();
@@ -118,23 +134,89 @@ public:
     /** Get progress (0..1) corresponding to part index and part position. */
     qreal getProgress(int part, qreal position);
 
-    QString title;                          //< Book title from EPUB.
-    QStringList parts;                      //< EPUB part list.
-    QHash<QString, ContentItem> content;    //< Content items from EPUB.
-    QImage cover;                           //< Cover image.
-    QStringList creators;                   //< Creators.
-    QString date;                           //< Date of creation.
-    QString publisher;                      //< Publisher.
-    QString datePublished;                  //< Date of publishing.
-    QString subject;                        //< Subject.
-    QString source;                         //< Source.
-    QString rights;                         //< Rights.
-    QString tocPath;                        //< Path to toc NCX file.
-    QString coverPath;                      //< Path to cover HTML file.
-    QStringList chapters;                   //< Main navigation items.
-    qint64 size;                            //< Size of all parts.
-    QDateTime dateAdded;                    //< Date book added to library.
-    QDateTime dateOpened;                   //< Date book was last read.
+    QString title() {return title_;}
+    QStringList parts() {return parts_;}
+    QHash<QString, ContentItem> content() {return content_;}
+    QImage cover() {return cover_;}
+    QStringList creators() {return creators_;}
+    QString date() {return date_;}
+    QString publisher() {return publisher_;}
+    QString datePublished() {return datePublished_;}
+    QString subject() {return subject_;}
+    QString source() {return source_;}
+    QString rights() {return rights_;}
+    QString tocPath() {return tocPath_;}
+    QString coverPath() {return coverPath_;}
+    QStringList chapters() {return chapters_;}
+    qint64 size() {return size_;}
+    QDateTime dateAdded() {return dateAdded_;}
+    QDateTime dateOpened() {return dateOpened_;}
+
+    void setTitle(const QString &title) {title_ = title; emit titleChanged();}
+    void addPart(const QString &part) {
+        parts_.append(part);
+        emit partsChanged();
+    }
+    void clearParts() {parts_.clear(); emit partsChanged();}
+    void addContent(const QString &key, ContentItem &item) {
+        content_[key] = item;
+        emit contentChanged();
+    }
+    void clearContent() {content_.clear(); emit contentChanged();}
+    void setCover(const QImage &cover) {cover_ = cover; emit coverChanged();}
+    void addCreator(const QString &creator) {
+        creators_.append(creator);
+        emit creatorsChanged();
+    }
+    void clearCreators() {creators_.clear(); emit creatorsChanged();}
+    void setCreators(const QStringList &creators) {
+        creators_ = creators;
+        emit creatorsChanged();
+    }
+    void setDate(const QString &date) {date_ = date; emit dateChanged();}
+    void setPublisher(const QString &publisher) {
+        publisher_ = publisher;
+        emit publisherChanged();
+    }
+    void setDatePublished(const QString date) {
+        datePublished_ = date;
+        emit datePublishedChanged();
+    }
+    void setSubject(const QString &subject) {
+        subject_ = subject;
+        emit subjectChanged();
+    }
+    void setSource(const QString &source) {
+        source_ = source;
+        emit sourceChanged();
+    }
+    void setRights(const QString &rights) {
+        rights_ = rights;
+        emit rightsChanged();
+    }
+    void setTocPath(const QString &tocPath) {tocPath_ = tocPath;}
+    void setCoverPath(const QString &path) {coverPath_ = path;}
+    void addChapter(const QString &chapter) {
+        chapters_.append(chapter);
+        emit chaptersChanged();
+    }
+    void clearChapters() {chapters_.clear(); emit chaptersChanged();}
+    void setSize(const quint64 size) {size_ = size; emit sizeChanged();}
+    void setDateAdded(const QDateTime &date) {
+        dateAdded_ = date;
+        emit dateAddedChanged();
+    }
+    void setDateOpened(const QDateTime &date) {
+        dateOpened_ = date;
+        emit dateOpenedChanged();
+    }
+    void setLastBookmark(const Bookmark &bm) {
+        setLastBookmark(bm.part(), bm.pos());
+    }
+    void setRootPath(const QString &path) {
+        rootPath_ = path;
+        emit rootPathChanged();
+    }
 
 signals:
     /** Emitted if @see open() succeeds. */
@@ -142,6 +224,25 @@ signals:
 
     /* Property change notifications */
     void pathChanged();
+    void rootPathChanged();
+    void titleChanged();
+    void partsChanged();
+    void contentChanged();
+    void coverChanged();
+    void creatorsChanged();
+    void dateChanged();
+    void publisherChanged();
+    void datePublishedChanged();
+    void subjectChanged();
+    void sourceChanged();
+    void rightsChanged();
+    void chaptersChanged();
+    void sizeChanged();
+    void dateAddedChanged();
+    void dateOpenedChanged();
+    void nameChanged();
+    void shortNameChanged();
+    void lastBookmarkChanged();
 
 protected:
     /** Extract EPUB as ZIP. */
@@ -165,12 +266,29 @@ protected:
     /** Make a cover image from an pixmap. */
     QImage makeCover(const QPixmap &pixmap);
 
-    QString mPath;                          //< Path to EPUB file.
-    Bookmark mLastBookmark;                 //< Last position read.
-    QList<Bookmark> mBookmarks;             //< List of bookmarks.
-    QString mRootPath;                      //< Path to root item in EPUB dir.
-    QTemporaryFile mTempFile;               //< Guards extracting books.
-    bool loaded;                            //< True, if loaded from database.
+    QString title_;                         //< Book title from EPUB.
+    QStringList parts_;                     //< EPUB part list.
+    QHash<QString, ContentItem> content_;   //< Content items from EPUB.
+    QImage cover_;                          //< Cover image.
+    QStringList creators_;                  //< Creators.
+    QString date_;                          //< Date of creation.
+    QString publisher_;                     //< Publisher.
+    QString datePublished_;                 //< Date of publishing.
+    QString subject_;                       //< Subject.
+    QString source_;                        //< Source.
+    QString rights_;                        //< Rights.
+    QString tocPath_;                       //< Path to toc NCX file.
+    QString coverPath_;                     //< Path to cover HTML file.
+    QStringList chapters_;                  //< Main navigation items.
+    qint64 size_;                           //< Size of all parts.
+    QDateTime dateAdded_;                   //< Date book added to library.
+    QDateTime dateOpened_;                  //< Date book was last read.
+    QString path_;                          //< Path to EPUB file.
+    Bookmark lastBookmark_;                 //< Last position read.
+    QList<Bookmark> bookmarks_;             //< List of bookmarks.
+    QString rootPath_;                      //< Path to root item in EPUB dir.
+    QTemporaryFile tempFile_;               //< Guards extracting books.
+    bool loaded_;                           //< True, if loaded from database.
 };
 
 #endif // BOOK_H

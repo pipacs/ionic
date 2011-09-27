@@ -6,11 +6,9 @@
 #include "trace.h"
 
 /** XML content handler for NCX format. */
-class NcxHandler: public XmlHandler
-{
+class NcxHandler: public XmlHandler {
 public:
-    struct TreeItem
-    {
+    struct TreeItem {
         TreeItem(const QString &i, TreeItem *p = 0): id(i), parent(p) {
             if (parent) {
                 parent->children.append(this);
@@ -27,8 +25,8 @@ public:
             contentItem.href = href;
             contentItem.name = QString(" ").repeated(depth) + name;
             contentItem.size = 0;
-            book.content[id] = contentItem;
-            book.chapters.append(id);
+            book.addContent(id, contentItem);
+            book.addChapter(id);
             qDebug() << "TreeItem::addToBook" << id << contentItem.href
                     << contentItem.name;
             foreach (TreeItem *child, children) {
@@ -44,7 +42,7 @@ public:
     };
 
     NcxHandler(Book &b): book(b), rootItem(0), currentItem(0) {
-        book.chapters.clear();
+        book.clearChapters();
     }
 
     ~NcxHandler() {

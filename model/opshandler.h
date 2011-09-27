@@ -9,7 +9,7 @@
 class OpsHandler: public XmlHandler {
 public:
     OpsHandler(Book &b): book(b), partCount(0) {
-        book.creators.clear();
+        book.clearCreators();
     }
 
     bool endElement(const QString &namespaceUri, const QString &name,
@@ -18,17 +18,17 @@ public:
         (void)qName;
         if (currentText.size()) {
             if (name == "title") {
-                book.title = currentText;
+                book.setTitle(currentText);
             } else if (name == "creator") {
-                book.creators.append(currentText);
+                book.addCreator(currentText);
             } else if (name == "publisher") {
-                book.publisher = currentText;
+                book.setPublisher(currentText);
             } else if (name == "subject") {
-                book.subject = currentText;
+                book.setSubject(currentText);
             } else if (name == "source") {
-                book.source = currentText;
+                book.setSource(currentText);
             } else if (name == "rights") {
-                book.rights = currentText;
+                book.setRights(currentText);
             }
         }
         return true;
@@ -46,10 +46,10 @@ public:
             item.name = QString("Part %1").arg(partCount + 1);
             item.size = 0;
             QString key = attrs.value("id");
-            book.content[key] = item;
+            book.addContent(key, item);
             partCount++;
         } else if (name == "itemref") {
-            book.parts.append(attrs.value("idref"));
+            book.addPart(attrs.value("idref"));
         }
         return true;
     }

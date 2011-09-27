@@ -28,7 +28,6 @@ public:
     QModelIndex nowReading() const;
     Book *book(const QModelIndex &index);
     QStringList bookPaths();
-    void upgrade();
 
 signals:
     void nowReadingChanged();

@@ -41,11 +41,11 @@ public:
         return *this;
     }
 
-    int part() {return part_;}
+    int part() const {return part_;}
     void setPart(int p) {part_ = p; emit partChanged();}
-    qreal pos() {return pos_;}
+    qreal pos() const {return pos_;}
     void setPos(const qreal p) {pos_ = p; emit posChanged();}
-    QString note() {return note_;}
+    QString note() const {return note_;}
     void setNote(const QString &n) {note_ = n; emit noteChanged();}
 
 signals:
