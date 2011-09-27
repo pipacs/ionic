@@ -51,7 +51,8 @@ SOURCES += main.cpp \
     settings.cpp \
     model/sortedlibrary.cpp \
     trace.cpp \
-    platform.cpp
+    platform.cpp \
+    model/bookmark.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -88,6 +89,9 @@ HEADERS += \
     model/sortedlibrary.h \
     model/xmlerrorhandler.h \
     trace.h \
-    platform.h
+    platform.h \
+    model/bookmark.h
+
+
 
 

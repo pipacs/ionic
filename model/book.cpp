@@ -15,7 +15,18 @@ const int COVER_WIDTH = 53;
 const int COVER_HEIGHT = 59;
 const int COVER_MAX = 512 * 1024;
 
+Book::Book(): QObject(0), mPath(""), loaded(false) {
+}
+
 Book::Book(const QString &p, QObject *parent): QObject(parent), loaded(false) {
+    setPath(p);
+}
+
+Book::~Book() {
+    close();
+}
+
+void Book::setPath(const QString &p) {
     mPath = "";
     if (p.size()) {
         QFileInfo info(p);
@@ -23,10 +34,7 @@ Book::Book(const QString &p, QObject *parent): QObject(parent), loaded(false) {
         title = info.baseName();
         mTempFile.open();
     }
-}
-
-Book::~Book() {
-    close();
+    emit pathChanged();
 }
 
 QString Book::path() {

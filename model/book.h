@@ -17,6 +17,8 @@ class Book: public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
+
 public:
 
     /** Content item: An individual, named part of the book. */
@@ -27,7 +29,10 @@ public:
         qint64 size;
     };
 
-    /** Bookmark: a volume index and a relative position in volume. */
+    /**
+    Bookmark: A location in the book identified by a volume index and
+    a relative position in volume.
+    */
     struct Bookmark
     {
         Bookmark(int part_, qreal pos_, const QString &note_ = QString()):
@@ -40,6 +45,9 @@ public:
             return (part == other.part)? (pos<other.pos): (part<other.part);
         }
     };
+
+    /** Default constructor. */
+    Book();
 
     /** Construct a book from an EPUB file. */
     Book(const QString &fileName, QObject *parent = 0);
@@ -67,6 +75,9 @@ public:
 
     /** Clear toc and content members, remove extracted content files. */
     void close();
+
+    /** Set path to EPUB. */
+    void setPath(const QString &path);
 
     /** Return path to EPUB. */
     QString path();
@@ -143,6 +154,9 @@ public:
 signals:
     /** Emitted if @see open() succeeds. */
     void opened(const QString &bookPath);
+
+    /* Property change notifications */
+    void pathChanged();
 
 protected:
     /** Extract EPUB as ZIP. */
