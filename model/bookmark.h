@@ -4,7 +4,7 @@
 #include <QObject>
 
 /**
-Bookmark: A location in the book identified by a volume index and
+Bookmark: A location in the book identified by a part (volume) index and
 a relative position in volume.
 */
 class Bookmark: public QObject {
