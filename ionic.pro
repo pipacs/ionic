@@ -70,7 +70,8 @@ OTHER_FILES += \
     model/unzip/make_vms.com \
     model/unzip/make_vms_com \
     pkg/version.txt \
-    pkg/acknowledgements.txt
+    pkg/acknowledgements.txt \
+    books/2BR02B.epub
 
 HEADERS += \
     model/book.h \
@@ -90,6 +91,13 @@ HEADERS += \
     trace.h \
     platform.h \
     model/bookmark.h
+
+RESOURCES += \
+    ionic.qrc
+
+
+
+
 
 
 

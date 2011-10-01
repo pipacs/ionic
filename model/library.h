@@ -1,18 +1,17 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
+#include <QObject>
 #include <QAbstractListModel>
 #include <QVariant>
 #include <QString>
 #include <QList>
 #include <QStringList>
 
-class QObject;
 class Book;
 
 /** Library of books. */
-class Library: public QAbstractListModel
-{
+class Library: public QAbstractListModel {
     Q_OBJECT
 
 public:

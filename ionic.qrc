@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>books/2BR02B.epub</file>
+    </qresource>
+</RCC>
