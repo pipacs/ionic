@@ -1,23 +1,14 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
+import QtWebKit 1.0
+
+import com.pipacs.ionic.Bookmark 1.0
+import com.pipacs.ionic.Book 1.0
 
 Page {
     tools: commonTools
-
-    Label {
-        id: label
-        anchors.centerIn: parent
-        text: qsTr("Hello world!")
-        visible: false
-    }
-
-    Button{
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            top: label.bottom
-            topMargin: 10
-        }
-        text: qsTr("Click here!")
-        onClicked: label.visible = true
+    BookView {
+        url: library.nowReading.lastUrl
+        anchors {top: headerSpace.bottom; left: parent.left; right: parent.right; bottom: parent.bottom}
     }
 }

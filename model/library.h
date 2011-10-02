@@ -8,11 +8,12 @@
 #include <QList>
 #include <QStringList>
 
-class Book;
+#include "book.h"
 
 /** Library of books. */
 class Library: public QAbstractListModel {
     Q_OBJECT
+    Q_PROPERTY(Book *nowReading READ nowReading WRITE setNowReading NOTIFY nowReadingChanged)
 
 public:
     static Library *instance();
@@ -23,8 +24,8 @@ public:
     void save();
     QModelIndex find(QString path) const;
     QModelIndex find(const Book *book) const;
-    void setNowReading(const QModelIndex &index);
-    QModelIndex nowReading() const;
+    void setNowReading(Book *book);
+    Book *nowReading() const;
     Book *book(const QModelIndex &index);
     QStringList bookPaths();
 
@@ -48,7 +49,7 @@ private:
     ~Library();
     void clear();
     QList<Book *> mBooks;
-    QModelIndex mNowReading;
+    Book *mNowReading;
 };
 
 #endif // LIBRARY_H

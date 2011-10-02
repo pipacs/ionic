@@ -26,8 +26,8 @@ int main(int argc, char *argv[]) {
     qDebug() << "Ionic version " << ionicVersion;
 
     // Register QML types
-    qmlRegisterType<Book>("com.pipacs.ionic.Book", 1, 0, "Book");
     qmlRegisterType<Bookmark>("com.pipacs.ionic.Bookmark", 1, 0, "Bookmark");
+    qmlRegisterType<Book>("com.pipacs.ionic.Book", 1, 0, "Book");
     // qmlRegisterType<Library>("com.pipacs.ionic.Library", 1, 0, "Library");
 
     // Show QML widget with main.qml
@@ -41,15 +41,15 @@ int main(int argc, char *argv[]) {
     viewer.showExpanded();
 
     // Initialize library, load last book or default book
-    QModelIndex index = library->nowReading();
-    if (index.isValid()) {
-        library->setNowReading(index);
+    Book *current = library->nowReading();
+    if (current->isValid()) {
+        library->setNowReading(current);
     } else {
         if (!library->rowCount()) {
             library->add(":/books/2BR02B.epub");
         }
         SortedLibrary sorted;
-        library->setNowReading(sorted.mapToSource(sorted.index(0, 0)));
+        library->setNowReading(library->book(sorted.mapToSource(sorted.index(0, 0))));
     }
 
     int ret = app.exec();

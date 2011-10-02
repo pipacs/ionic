@@ -15,8 +15,7 @@
 class QPixmap;
 
 /** A book. */
-class Book: public QObject
-{
+class Book: public QObject {
     Q_OBJECT
 
     Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
@@ -29,8 +28,7 @@ class Book: public QObject
     Q_PROPERTY(QStringList creators READ creators NOTIFY creatorsChanged)
     Q_PROPERTY(QString date READ date NOTIFY dateChanged)
     Q_PROPERTY(QString publisher READ publisher NOTIFY publisherChanged)
-    Q_PROPERTY(QString datePublished READ datePublished
-        NOTIFY datePublishedChanged)
+    Q_PROPERTY(QString datePublished READ datePublished NOTIFY datePublishedChanged)
     Q_PROPERTY(QString subject READ subject NOTIFY subjectChanged)
     Q_PROPERTY(QString source READ source NOTIFY sourceChanged)
     Q_PROPERTY(QString rights READ rights NOTIFY rightsChanged)
@@ -38,8 +36,8 @@ class Book: public QObject
     Q_PROPERTY(qint64 size READ size NOTIFY sizeChanged)
     Q_PROPERTY(QDateTime dateAdded READ dateAdded NOTIFY dateAddedChanged)
     Q_PROPERTY(QDateTime dateOpened READ dateOpened NOTIFY dateOpenedChanged)
-    Q_PROPERTY(Bookmark lastBookmark READ lastBookmark WRITE setLastBookmark
-        NOTIFY lastBookmarkChanged)
+    Q_PROPERTY(Bookmark *lastBookmark READ lastBookmark WRITE setLastBookmark NOTIFY lastBookmarkChanged)
+    Q_PROPERTY(QString lastUrl READ lastUrl NOTIFY lastUrlChanged)
 
 public:
 
@@ -81,7 +79,7 @@ public:
     void setPath(const QString &path);
 
     /** Return path to EPUB. */
-    QString path();
+    QString path() const;
 
     /**
      * Return path to root directory of extracted EPUB.
@@ -96,10 +94,16 @@ public:
     bool clearDir(const QString &directory);
 
     /** Set last bookmark. */
-    void setLastBookmark(int part, qreal position, bool fast = false);
+    void setLastBookmark(int part, qreal position, const QString &note = QString());
+
+    /** Set last bookmark explicitly. */
+    void setLastBookmark(Bookmark *bookmark);
 
     /** Get last bookmark. */
-    Bookmark lastBookmark();
+    Bookmark *lastBookmark();
+
+    /** Get the URL corresponding to the part in the last bookmark. */
+    QString lastUrl();
 
     /** Add bookmark. */
     void addBookmark(int part, qreal position, const QString &note);
@@ -111,7 +115,7 @@ public:
     void deleteBookmark(int index);
 
     /** List bookmarks. */
-    QList<Bookmark> bookmarks();
+    QList<Bookmark *> bookmarks();
 
     /**
      * Get friendly name.
@@ -210,13 +214,16 @@ public:
         dateOpened_ = date;
         emit dateOpenedChanged();
     }
-    void setLastBookmark(const Bookmark &bm) {
-        setLastBookmark(bm.part(), bm.pos());
-    }
     void setRootPath(const QString &path) {
         rootPath_ = path;
         emit rootPathChanged();
     }
+
+    /**
+     * Is this a valid book?
+     * @return True if the book represents a valid EPUB file, false otherwise.
+     */
+    bool isValid() const;
 
 signals:
     /** Emitted if @see open() succeeds. */
@@ -243,6 +250,7 @@ signals:
     void nameChanged();
     void shortNameChanged();
     void lastBookmarkChanged();
+    void lastUrlChanged();
 
 protected:
     /** Extract EPUB as ZIP. */
@@ -284,11 +292,12 @@ protected:
     QDateTime dateAdded_;                   //< Date book added to library.
     QDateTime dateOpened_;                  //< Date book was last read.
     QString path_;                          //< Path to EPUB file.
-    Bookmark lastBookmark_;                 //< Last position read.
-    QList<Bookmark> bookmarks_;             //< List of bookmarks.
+    Bookmark *lastBookmark_;                //< Last position read.
+    QList<Bookmark *> bookmarks_;           //< List of bookmarks.
     QString rootPath_;                      //< Path to root item in EPUB dir.
     QTemporaryFile tempFile_;               //< Guards extracting books.
     bool loaded_;                           //< True, if loaded from database.
+    bool valid_;                            //< True, if the book represents a valid EPUB file.
 };
 
 #endif // BOOK_H

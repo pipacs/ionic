@@ -15,10 +15,10 @@ const int COVER_WIDTH = 53;
 const int COVER_HEIGHT = 59;
 const int COVER_MAX = 512 * 1024;
 
-Book::Book(): QObject(0), path_(""), loaded_(false) {
+Book::Book(): QObject(0), path_(""), lastBookmark_(0), loaded_(false), valid_(false) {
 }
 
-Book::Book(const QString &p, QObject *parent): QObject(parent), loaded_(false) {
+Book::Book(const QString &p, QObject *parent): QObject(parent), lastBookmark_(0), loaded_(false) {
     setPath(p);
 }
 
@@ -28,17 +28,23 @@ Book::~Book() {
 
 void Book::setPath(const QString &p) {
     path_ = "";
+    valid_ = false;
     if (p.size()) {
         QFileInfo info(p);
         path_ = info.absoluteFilePath();
         title_ = info.baseName();
         tempFile_.open();
+        valid_ = true;
     }
     emit pathChanged();
 }
 
-QString Book::path() {
+QString Book::path() const {
     return path_;
+}
+
+bool Book::isValid() const {
+    return valid_;
 }
 
 bool Book::open() {
@@ -289,8 +295,7 @@ void Book::load() {
     setSubject(data["subject"].toString());
     setSource(data["source"].toString());
     setRights(data["rights"].toString());
-    Bookmark bookmark(data["lastpart"].toInt(), data["lastpos"].toReal(), "");
-    setLastBookmark(bookmark);
+    setLastBookmark(data["lastpart"].toInt(), data["lastpos"].toReal(), "");
     setCover(data["cover"].value<QImage>());
     if (cover().isNull()) {
         setCover(makeCover(":/icons/book.png"));
@@ -300,7 +305,7 @@ void Book::load() {
         int part = data[QString("bookmark%1part").arg(i)].toInt();
         qreal pos = data[QString("bookmark%1pos").arg(i)].toReal();
         QString note = data[QString("bookmark%1note").arg(i)].toString();
-        bookmarks_.append(Bookmark(part, pos, note));
+        bookmarks_.append(new Bookmark(part, pos, note));
     }
     setDateAdded(data["dateadded"].toDateTime());
     setDateOpened(data["dateopened"].toDateTime());
@@ -319,42 +324,57 @@ void Book::save() {
     data["subject"] = subject_;
     data["source"] = source_;
     data["rights"] = rights_;
-    data["lastpart"] = lastBookmark_.part();
-    data["lastpos"] = lastBookmark_.pos();
+    data["lastpart"] = lastBookmark_->part();
+    data["lastpos"] = lastBookmark_->pos();
     data["cover"] = cover_;
     data["bookmarks"] = bookmarks_.size();
     for (int i = 0; i < bookmarks_.size(); i++) {
-        data[QString("bookmark%1part").arg(i)] = bookmarks_[i].part();
-        data[QString("bookmark%1pos").arg(i)] = bookmarks_[i].pos();
-        data[QString("bookmark%1note").arg(i)] = bookmarks_[i].note();
+        data[QString("bookmark%1part").arg(i)] = bookmarks_[i]->part();
+        data[QString("bookmark%1pos").arg(i)] = bookmarks_[i]->pos();
+        data[QString("bookmark%1note").arg(i)] = bookmarks_[i]->note();
     }
     data["dateadded"] = dateAdded_;
     data["dateopened"] = dateOpened_;
     BookDb::instance()->save(path(), data);
 }
 
-void Book::setLastBookmark(int part, qreal position, bool fast) {
+void Book::setLastBookmark(int part, qreal position, const QString &note) {
     TRACE;
-    qDebug() << "Part" << part << "position" << position << "fast?" << fast;
-    if (!fast) {
-        load();
-    }
-    lastBookmark_.setPart(part);
-    lastBookmark_.setPos(position);
-    if (!fast) {
-        save();
-    }
-    emit lastBookmarkChanged();
+    qDebug() << "Part" << part << "position" << position << "note" << note;
+    setLastBookmark(new Bookmark(part, position, note));
 }
 
-Bookmark Book::lastBookmark() {
+void Book::setLastBookmark(Bookmark *bookmark) {
+    lastBookmark_ = bookmark;
+    save();
+    emit lastBookmarkChanged();
+    emit lastUrlChanged();
+}
+
+Bookmark *Book::lastBookmark() {
+    TRACE;
     load();
+    if (!lastBookmark_) {
+        qDebug() << "Creating initial last bookmark";
+        setLastBookmark(0, 0);
+    }
     return lastBookmark_;
+}
+
+QString Book::lastUrl() {
+    TRACE;
+    Bookmark *bookmark = lastBookmark();
+    open();
+    QString lastPart = parts_[bookmark->part()];
+    QString fullPath = QDir(rootPath_).absoluteFilePath(content_[lastPart].href);
+    QUrl ret = QUrl::fromLocalFile(fullPath);
+    qDebug() << "Return" << ret.toString();
+    return ret.toString();
 }
 
 void Book::addBookmark(int part, qreal position, const QString &note) {
     load();
-    bookmarks_.append(Bookmark(part, position, note));
+    bookmarks_.append(new Bookmark(part, position, note));
     qSort(bookmarks_.begin(), bookmarks_.end());
     save();
 }
@@ -362,7 +382,7 @@ void Book::addBookmark(int part, qreal position, const QString &note) {
 void Book::setBookmarkNote(int index, const QString &note) {
     load();
     if (index >= 0 && index < bookmarks_.length()) {
-        bookmarks_[index].setNote(note);
+        bookmarks_[index]->setNote(note);
     }
     save();
 
@@ -374,7 +394,7 @@ void Book::deleteBookmark(int index) {
     save();
 }
 
-QList<Bookmark> Book::bookmarks() {
+QList<Bookmark *> Book::bookmarks() {
     load();
     return bookmarks_;
 }

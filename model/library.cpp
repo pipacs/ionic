@@ -3,27 +3,31 @@
 #include "trace.h"
 #include "bookdb.h"
 
-static Library *theInstance = 0;
-
-Library::Library(QObject *parent): QAbstractListModel(parent)
-{
+static Book *noBook() {
+    static Book *instance;
+    if (!instance) {
+        instance = new Book();
+    }
+    return instance;
 }
 
-Library::~Library()
-{
+static Library *theInstance = 0;
+
+Library::Library(QObject *parent): QAbstractListModel(parent), mNowReading(noBook()) {
+}
+
+Library::~Library() {
     clear();
 }
 
-Library *Library::instance()
-{
+Library *Library::instance() {
     if (!theInstance) {
         theInstance = new Library();
     }
     return theInstance;
 }
 
-int Library::rowCount(const QModelIndex &parent) const
-{
+int Library::rowCount(const QModelIndex &parent) const {
     if (parent.isValid()) {
         return 0;
     } else {
@@ -31,8 +35,7 @@ int Library::rowCount(const QModelIndex &parent) const
     }
 }
 
-QVariant Library::data(const QModelIndex &index, int role) const
-{
+QVariant Library::data(const QModelIndex &index, int role) const {
     QVariant ret;
     if (!index.isValid()) {
         return ret;
@@ -52,28 +55,21 @@ QVariant Library::data(const QModelIndex &index, int role) const
     return ret;
 }
 
-Book *Library::book(const QModelIndex &index)
-{
-    if (index.isValid()) {
-        if ((index.row() >= 0) && (index.row() < mBooks.size())) {
-            return mBooks[index.row()];
-        } else {
-            qCritical() << "Library::book: Bad index" << index.row();
-        }
+Book *Library::book(const QModelIndex &index) {
+    if (index.isValid() && (index.row() >= 0) && (index.row() < mBooks.size())) {
+        return mBooks[index.row()];
     }
+    qCritical() << "Library::book: Bad or invalid index" << index.row();
     return 0;
 }
 
-void Library::close()
-{
+void Library::close() {
     delete theInstance;
     theInstance = 0;
 }
 
-void Library::load()
-{
+void Library::load() {
     TRACE;
-
     clear();
     QStringList books = BookDb::instance()->books();
     emit beginLoad(books.size());
@@ -81,29 +77,25 @@ void Library::load()
     foreach(QString path, books) {
         emit loading(path);
         Book *book = new Book(path);
-        connect(book, SIGNAL(opened(const QString &)),
-                this, SLOT(onBookOpened(const QString &)));
+        connect(book, SIGNAL(opened(const QString &)), this, SLOT(onBookOpened(const QString &)));
         // book->load();
         mBooks.append(book);
     }
 
     QSettings settings;
     QString currentPath = settings.value("lib/nowreading").toString();
-    mNowReading = find(currentPath);
+    mNowReading = book(find(currentPath));
     emit endLoad();
+    emit nowReadingChanged();
 }
 
-void Library::save()
-{
+void Library::save() {
     TRACE;
     QSettings settings;
-    Book *currentBook = book(mNowReading);
-    settings.setValue("lib/nowreading",
-                      currentBook? currentBook->path(): QString());
+    settings.setValue("lib/nowreading", mNowReading->path());
 }
 
-bool Library::add(const QString &path)
-{
+bool Library::add(const QString &path) {
     TRACE;
     if (path == "") {
         qCritical() << "Library::add: Empty path";
@@ -124,15 +116,14 @@ bool Library::add(const QString &path)
     return true;
 }
 
-void Library::remove(const QModelIndex &index)
-{
+void Library::remove(const QModelIndex &index) {
     TRACE;
     Book *toRemove = book(index);
     if (!toRemove) {
         return;
     }
-    if (index == mNowReading) {
-        mNowReading = QModelIndex();
+    if (toRemove == mNowReading) {
+        mNowReading = 0;
         emit nowReadingChanged();
     }
     toRemove->remove();
@@ -144,36 +135,38 @@ void Library::remove(const QModelIndex &index)
     delete toRemove;
 }
 
-void Library::remove(const QString &path)
-{
+void Library::remove(const QString &path) {
     TRACE;
     remove(find(path));
 }
 
-QModelIndex Library::nowReading() const
-{
+Book *Library::nowReading() const {
+    TRACE;
     return mNowReading;
 }
 
-void Library::setNowReading(const QModelIndex &index)
-{
-    mNowReading = index;
+void Library::setNowReading(Book *book) {
+    TRACE;
+    if (find(book).isValid()) {
+        mNowReading = book;
+    } else {
+        mNowReading = noBook();
+    }
     save();
     emit nowReadingChanged();
 }
 
-void Library::clear()
-{
+void Library::clear() {
     TRACE;
     for (int i = 0; i < mBooks.size(); i++) {
         delete mBooks[i];
     }
     mBooks.clear();
-    mNowReading = QModelIndex();
+    mNowReading = noBook();
+    emit nowReadingChanged();
 }
 
-QModelIndex Library::find(QString path) const
-{
+QModelIndex Library::find(QString path) const {
     TRACE;
     if (path != "") {
         QString absolutePath = QFileInfo(path).absoluteFilePath();
@@ -186,8 +179,7 @@ QModelIndex Library::find(QString path) const
     return QModelIndex();
 }
 
-QModelIndex Library::find(const Book *book) const
-{
+QModelIndex Library::find(const Book *book) const {
     TRACE;
     if (book) {
         for (int i = 0; i < mBooks.size(); i++) {
@@ -199,8 +191,7 @@ QModelIndex Library::find(const Book *book) const
     return QModelIndex();
 }
 
-void Library::onBookOpened(const QString &path)
-{
+void Library::onBookOpened(const QString &path) {
     TRACE;
     QModelIndex index = find(path);
     if (index.isValid()) {
@@ -208,8 +199,7 @@ void Library::onBookOpened(const QString &path)
     }
 }
 
-QStringList Library::bookPaths()
-{
+QStringList Library::bookPaths() {
     QStringList ret;
     foreach (Book *book, mBooks) {
         ret.append(book->path());
