@@ -37,6 +37,8 @@ unix:!symbian {
 unix:!symbian:!maemo5 {
     # Sorry Dennis
     DEFINES += Q_WS_HARMATTAN
+    CONFIG +=  link_pkgconfig
+    PKGCONFIG += libresourceqt1
 }
 
 # The .cpp file which was generated for your project. Feel free to hack it.

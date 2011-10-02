@@ -1,5 +1,6 @@
 #include <QtGui/QApplication>
 #include <QtDeclarative>
+#include <policy/resource-set.h>
 
 #include "qmlapplicationviewer.h"
 #include "trace.h"
@@ -51,6 +52,12 @@ int main(int argc, char *argv[]) {
         SortedLibrary sorted;
         library->setNowReading(library->book(sorted.mapToSource(sorted.index(0, 0))));
     }
+
+    // Acquire volume keys
+    ResourcePolicy::ResourceSet* mySet = new ResourcePolicy::ResourceSet("player");
+    mySet->addResourceObject(new ResourcePolicy::ScaleButtonResource);
+    mySet->acquire();
+    // FIXME: QApplication::instance()->installEventFilter(this);
 
     int ret = app.exec();
 

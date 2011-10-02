@@ -9,6 +9,6 @@ Page {
     tools: commonTools
     BookView {
         url: library.nowReading.lastUrl
-        anchors {top: headerSpace.bottom; left: parent.left; right: parent.right; bottom: parent.bottom}
+        anchors {top: parent.top; left: parent.left; right: parent.right; bottom: parent.bottom}
     }
 }

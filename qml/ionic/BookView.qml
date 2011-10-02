@@ -56,11 +56,20 @@ Flickable {
         settings.standardFontFamily: "Nokia Pure Text"
         smooth: false
         focus: true
-        onAlert: console.log("WebView onAlert: " + message);
-        onLoadFailed: root.webViewReady(false);
-        onLoadFinished: {
-            flickable.interactive = true;
+
+        onLoadFailed: {
+            // FIXME root.webViewReady(false)
         }
+
+        onLoadFinished: {
+            flickable.interactive = true
+        }
+
+        onLoadStarted: {
+            console.log("BookView onLoadStarted")
+            flickable.interactive = false
+        }
+
         javaScriptWindowObjects:QtObject {
             WebView.windowObjectName: "qml"
             function consoleLog(msg)      {console.log(msg);}
@@ -68,95 +77,32 @@ Flickable {
             function enableScroll(enable) {flickable.interactive = enable;}
         }
 
-        function doZoom(zoom,centerX,centerY) {
-            if (centerX) {
-                var sc = zoom*contentsScale;
-                scaleAnim.to = sc;
-                flickVX.from = flickable.contentX
-                flickVX.to = Math.max(0,Math.min(centerX-flickable.width/2,webView.width*sc-flickable.width))
-                finalX.value = flickVX.to
-                flickVY.from = flickable.contentY
-                flickVY.to = Math.max(0,Math.min(centerY-flickable.height/2,webView.height*sc-flickable.height))
-                finalY.value = flickVY.to
-                quickZoom.start()
-            }
-        }
-
         Keys.onPressed: {
-            if (event.key == Qt.Key_Plus) {
+            console.log("BookView Key.onPressed " + event.key)
+            if (event.key == 16777330) {
+                // Volume up
+                var newY = flickable.contentY - flickable.height + 31;
+                if (newY < 0) {
+                    console.log(" reached top")
+                    newY = 0;
+                }
+                flickable.contentY = newY;
             }
-            if (event.key == Qt.Key_Minus) {
+            if (event.key == 16777328) {
+                // Volume down
+                var newY = flickable.contentY + flickable.height - 31;
+                if (newY > webView.contentsSize.height) {
+                    console.log(" reached bottom at " + webView.contentsSize.height)
+                    return
+                }
+                flickable.contentY = newY
             }
-            if (event.key == Qt.Key_0) {
-            }
+            // if (event.key == Qt.Key_Plus) {
+            // }
         }
 
         preferredWidth: flickable.width
         preferredHeight: flickable.height
         contentsScale: 1
-        onUrlChanged: {
-            // got to topleft
-            flickable.contentX = 0
-            flickable.contentY = 0
-        }
-
-        SequentialAnimation {
-            id: quickZoom
-
-            PropertyAction {
-                target: webView
-                property: "renderingEnabled"
-                value: false
-            }
-            ParallelAnimation {
-                NumberAnimation {
-                    id: scaleAnim
-                    target: webView
-                    property: "contentsScale"
-                    // the to property is set before calling
-                    easing.type: Easing.Linear
-                    duration: 200
-                }
-                NumberAnimation {
-                    id: flickVX
-                    target: flickable
-                    property: "contentX"
-                    easing.type: Easing.Linear
-                    duration: 200
-                    from: 0 // set before calling
-                    to: 0 // set before calling
-                }
-                NumberAnimation {
-                    id: flickVY
-                    target: flickable
-                    property: "contentY"
-                    easing.type: Easing.Linear
-                    duration: 200
-                    from: 0 // set before calling
-                    to: 0 // set before calling
-                }
-            }
-            // Have to set the contentXY, since the above 2
-            // size changes may have started a correction if
-            // contentsScale < 1.0.
-            PropertyAction {
-                id: finalX
-                target: flickable
-                property: "contentX"
-                value: 0 // set before calling
-            }
-            PropertyAction {
-                id: finalY
-                target: flickable
-                property: "contentY"
-                value: 0 // set before calling
-            }
-            PropertyAction {
-                target: webView
-                property: "renderingEnabled"
-                value: true
-            }
-        }
-        onZoomTo: doZoom(zoom,centerX,centerY)
     }
 }
