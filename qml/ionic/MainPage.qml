@@ -38,6 +38,8 @@ Page {
 
     Component.onCompleted: {
         bookView.book = library.nowReading
-        bookView.url = library.nowReading.url(0)
+        bookView.targetPos = bookView.book.lastBookmark.pos
+        bookView.part = bookView.book.lastBookmark.part
+        bookView.url = bookView.book.url(bookView.part)
     }
 }

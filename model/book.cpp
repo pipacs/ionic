@@ -24,6 +24,7 @@ Book::Book(const QString &p, QObject *parent): QObject(parent), lastBookmark_(0)
 
 Book::~Book() {
     close();
+    delete lastBookmark_;
 }
 
 void Book::setPath(const QString &p) {
@@ -305,7 +306,7 @@ void Book::load() {
     setSubject(data["subject"].toString());
     setSource(data["source"].toString());
     setRights(data["rights"].toString());
-    setLastBookmark(data["lastpart"].toInt(), data["lastpos"].toReal(), "");
+    setLastBookmark(data["lastpart"].toInt(), data["lastpos"].toReal());
     setCover(data["cover"].value<QImage>());
     if (cover().isNull()) {
         setCover(makeCover(":/icons/book.png"));
@@ -348,20 +349,20 @@ void Book::save() {
     BookDb::instance()->save(path(), data);
 }
 
-void Book::setLastBookmark(int part, qreal position, const QString &note) {
+void Book::setLastBookmark(int part, qreal position) {
     TRACE;
-    qDebug() << "Part" << part << "position" << position << "note" << note;
-    setLastBookmark(new Bookmark(part, position, note));
+    qDebug() << "Part" << part << "position" << position;
+    setLastBookmark(new Bookmark(part, position));
 }
 
 void Book::setLastBookmark(Bookmark *bookmark) {
+    delete lastBookmark_;
     lastBookmark_ = bookmark;
     save();
     emit lastBookmarkChanged();
 }
 
 Bookmark *Book::lastBookmark() {
-    TRACE;
     load();
     if (!lastBookmark_) {
         qDebug() << "Creating initial last bookmark";

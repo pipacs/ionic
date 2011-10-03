@@ -36,7 +36,7 @@ class Book: public QObject {
     Q_PROPERTY(qint64 size READ size NOTIFY sizeChanged)
     Q_PROPERTY(QDateTime dateAdded READ dateAdded NOTIFY dateAddedChanged)
     Q_PROPERTY(QDateTime dateOpened READ dateOpened NOTIFY dateOpenedChanged)
-    Q_PROPERTY(Bookmark *lastBookmark READ lastBookmark WRITE setLastBookmark NOTIFY lastBookmarkChanged)
+    Q_PROPERTY(Bookmark *lastBookmark READ lastBookmark NOTIFY lastBookmarkChanged)
     Q_PROPERTY(int partCount READ partCount)
 
 public:
@@ -61,7 +61,7 @@ public:
     void load();
 
     /** Save book meta-data to persistent storage. */
-    void save();
+    Q_INVOKABLE void save();
 
     /** Delete book meta-data from persistent storage. */
     void remove();
@@ -94,9 +94,9 @@ public:
     bool clearDir(const QString &directory);
 
     /** Set last bookmark. */
-    void setLastBookmark(int part, qreal position, const QString &note = QString());
+    void setLastBookmark(int part, qreal position);
 
-    /** Set last bookmark explicitly. */
+    /** Set last bookmark. */
     void setLastBookmark(Bookmark *bookmark);
 
     /** Get last bookmark. */

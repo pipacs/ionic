@@ -1,7 +1,4 @@
 /*
- * NPM: originally from QtSDK 1.1
- * /opt/QtSDK/Demos/4.7/declarative/webbrowser/content/FlickableWebView.qml
- *
  * Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
  * Copyright (C) 2011 Niels Mayer <NielsMayer _AT_ gmail _DOT_ com>
  * Copyright (C) 2011 Akos Polster <akos@pipacs.com>
@@ -31,8 +28,7 @@ Flickable {
     // Book to display
     property Book book: emptyBook
 
-    // Target reading position, within the current part url.
-    // Upon successful loading, BookView will jump to this position.
+    // Target reading position, within the current part of the book. After loading the part, BookView will jump to this position.
     property double targetPos: 0
 
     // Current part index
@@ -71,6 +67,13 @@ Flickable {
         transformOrigin: Item.TopLeft
         pressGrabTime: 999
         settings.standardFontFamily: "Nokia Pure Text"
+        settings.defaultFontSize: 30
+        settings.javaEnabled: false
+        settings.javascriptCanAccessClipboard: false
+        settings.javascriptCanOpenWindows: false
+        settings.javascriptEnabled: false
+        settings.localContentCanAccessRemoteUrls: false
+        settings.localStorageDatabaseEnabled: false
         smooth: false
         preferredWidth: flickable.width
         preferredHeight: flickable.height
@@ -83,29 +86,25 @@ Flickable {
 
         onLoadFinished: {
             flickable.interactive = true
-            var newY = webView.contentsSize.height * flickable.targetPos - flickable.height
+            var newY = webView.contentsSize.height * flickable.targetPos
+            if (flickable.targetPos == 1) {
+                newY -= flickable.height
+            }
             if (newY < 0) {
                 newY = 0
             }
             flickable.contentY = newY
             flickable.targetPos = 0
+            updateLastBookmark()
         }
 
         onLoadStarted: {
-            console.log("BookView onLoadStarted")
+            console.log("* BookView onLoadStarted")
             flickable.interactive = false
         }
 
-        javaScriptWindowObjects:QtObject {
-            WebView.windowObjectName: "qml"
-            function consoleLog(msg) {console.log(msg);}
-            function consoleInfo(msg) {console.info(msg);}
-            function enableScroll(enable) {flickable.interactive = enable;}
-        }
-
         Keys.onPressed: {
-            if (event.key == 16777330) {
-                // Volume up
+            if ((event.key == Qt.Key_VolumeUp) || (event.key == Qt.Key_Up)) {
                 if (flickable.contentY == 0) {
                     goToPreviousPart()
                     return
@@ -116,21 +115,21 @@ Flickable {
                 }
                 flickable.contentY = newY;
             }
-            if (event.key == 16777328) {
-                // Volume down
-                var newY = flickable.contentY + flickable.height - 31;
-                if (newY > webView.contentsSize.height) {
+            if ((event.key == Qt.Key_VolumeDown) || (event.key == Qt.Key_Down)) {
+                if (flickable.contentY + flickable.height >= webView.contentsSize.height) {
                     goToNextPart()
+                }
+                var newY = flickable.contentY + flickable.height - 31;
+                if (newY + flickable.height > webView.contentsSize.height) {
+                    newY = webView.contentsSize.height - flickable.height
                 }
                 flickable.contentY = newY
             }
-            // if (event.key == Qt.Key_Plus) {
-            // }
         }
 
         // Forward signals on completion
         Component.onCompleted: {
-            console.log("webView onCompleted")
+            console.log("* webView onCompleted")
             loadStarted.connect(flickable.loadStarted)
             loadFailed.connect(flickable.loadFailed)
             loadFinished.connect(flickable.loadFinished)
@@ -154,6 +153,26 @@ Flickable {
             flickable.part += 1
             flickable.targetPos = 0
             webView.url = flickable.book.url(flickable.part)
+        }
+
+        // Update book's last reading position
+        function updateLastBookmark() {
+            var currentPos = flickable.contentY / webView.contentsSize.height
+            if ((Math.abs(flickable.book.lastBookmark.pos - currentPos) > 0.0005) || (flickable.book.lastBookmark.part != flickable.part)) {
+                console.log("* webView.updateLastBookmark: Needs update")
+                flickable.book.lastBookmark.pos = currentPos
+                flickable.book.lastBookmark.part = flickable.part
+                flickable.book.save()
+            }
+        }
+    }
+
+    Timer {
+        interval: 3000
+        running: true
+        repeat: true
+        onTriggered: {
+            webView.updateLastBookmark()
         }
     }
 }
