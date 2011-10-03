@@ -60,7 +60,7 @@ Book *Library::book(const QModelIndex &index) {
         return mBooks[index.row()];
     }
     qCritical() << "Library::book: Bad or invalid index" << index.row();
-    return 0;
+    return noBook();
 }
 
 void Library::close() {
@@ -176,6 +176,7 @@ QModelIndex Library::find(QString path) const {
             }
         }
     }
+    qDebug() << "Not found" << path;
     return QModelIndex();
 }
 

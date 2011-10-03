@@ -37,7 +37,7 @@ class Book: public QObject {
     Q_PROPERTY(QDateTime dateAdded READ dateAdded NOTIFY dateAddedChanged)
     Q_PROPERTY(QDateTime dateOpened READ dateOpened NOTIFY dateOpenedChanged)
     Q_PROPERTY(Bookmark *lastBookmark READ lastBookmark WRITE setLastBookmark NOTIFY lastBookmarkChanged)
-    Q_PROPERTY(QString lastUrl READ lastUrl NOTIFY lastUrlChanged)
+    Q_PROPERTY(int partCount READ partCount)
 
 public:
 
@@ -101,9 +101,6 @@ public:
 
     /** Get last bookmark. */
     Bookmark *lastBookmark();
-
-    /** Get the URL corresponding to the part in the last bookmark. */
-    QString lastUrl();
 
     /** Add bookmark. */
     void addBookmark(int part, qreal position, const QString &note);
@@ -225,6 +222,12 @@ public:
      */
     bool isValid() const;
 
+    /** Get the URL corresponding to a given part. */
+    Q_INVOKABLE QString url(int part);
+
+    /** Get the number of parts. */
+    int partCount();
+
 signals:
     /** Emitted if @see open() succeeds. */
     void opened(const QString &bookPath);
@@ -250,7 +253,6 @@ signals:
     void nameChanged();
     void shortNameChanged();
     void lastBookmarkChanged();
-    void lastUrlChanged();
 
 protected:
     /** Extract EPUB as ZIP. */

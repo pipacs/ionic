@@ -31,36 +31,41 @@ int main(int argc, char *argv[]) {
     qmlRegisterType<Book>("com.pipacs.ionic.Book", 1, 0, "Book");
     // qmlRegisterType<Library>("com.pipacs.ionic.Library", 1, 0, "Library");
 
-    // Show QML widget with main.qml
-    QmlApplicationViewer viewer;
-    Library *library = Library::instance();
-    viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-    viewer.rootContext()->setContextProperty("library", library);
-    Library::instance()->load();
-    viewer.rootContext()->setContextProperty("settings", Settings::instance());
-    viewer.setMainQmlFile(QLatin1String("qml/ionic/main.qml"));
-    viewer.showExpanded();
-
     // Initialize library, load last book or default book
+    Library *library = Library::instance();
+    library->load();
     Book *current = library->nowReading();
-    if (current->isValid()) {
-        library->setNowReading(current);
-    } else {
+    if (!current->isValid()) {
         if (!library->rowCount()) {
+#if 0
             library->add(":/books/2BR02B.epub");
+#endif
+            library->add(":/books/hacker-monthly-2.epub");
         }
         SortedLibrary sorted;
         library->setNowReading(library->book(sorted.mapToSource(sorted.index(0, 0))));
     }
 
+    // Show QML widget with main.qml
+    QmlApplicationViewer viewer;
+    viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
+    viewer.rootContext()->setContextProperty("library", library);
+    viewer.rootContext()->setContextProperty("settings", Settings::instance());
+    Book *emptyBook = new Book();
+    viewer.rootContext()->setContextProperty("emptyBook", emptyBook);
+    viewer.setMainQmlFile(QLatin1String("qml/ionic/main.qml"));
+    viewer.showExpanded();
+
     // Acquire volume keys
     ResourcePolicy::ResourceSet* mySet = new ResourcePolicy::ResourceSet("player");
     mySet->addResourceObject(new ResourcePolicy::ScaleButtonResource);
     mySet->acquire();
-    // FIXME: QApplication::instance()->installEventFilter(this);
+    // FIXME: Install event filter to release volume keys when main view is not in front
 
     int ret = app.exec();
 
+    // Delete singletons
+    delete emptyBook;
     Library::close();
     BookDb::close();
     Settings::close();

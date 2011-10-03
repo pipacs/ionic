@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>books/2BR02B.epub</file>
+        <file>books/hacker-monthly-2.epub</file>
     </qresource>
 </RCC>

@@ -73,7 +73,8 @@ OTHER_FILES += \
     model/unzip/make_vms_com \
     pkg/version.txt \
     pkg/acknowledgements.txt \
-    books/2BR02B.epub
+    books/2BR02B.epub \
+    books/hacker-monthly-2.epub
 
 HEADERS += \
     model/book.h \
@@ -96,6 +97,7 @@ HEADERS += \
 
 RESOURCES += \
     ionic.qrc
+
 
 
 

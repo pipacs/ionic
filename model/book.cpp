@@ -348,7 +348,6 @@ void Book::setLastBookmark(Bookmark *bookmark) {
     lastBookmark_ = bookmark;
     save();
     emit lastBookmarkChanged();
-    emit lastUrlChanged();
 }
 
 Bookmark *Book::lastBookmark() {
@@ -359,17 +358,6 @@ Bookmark *Book::lastBookmark() {
         setLastBookmark(0, 0);
     }
     return lastBookmark_;
-}
-
-QString Book::lastUrl() {
-    TRACE;
-    Bookmark *bookmark = lastBookmark();
-    open();
-    QString lastPart = parts_[bookmark->part()];
-    QString fullPath = QDir(rootPath_).absoluteFilePath(content_[lastPart].href);
-    QUrl ret = QUrl::fromLocalFile(fullPath);
-    qDebug() << "Return" << ret.toString();
-    return ret.toString();
 }
 
 void Book::addBookmark(int part, qreal position, const QString &note) {
@@ -501,9 +489,18 @@ int Book::partFromChapter(int index, QString &fragment) {
         }
     }
 
-    qWarning() << "Book::partFromChapter: Could not find part index for"
-        << href;
+    qWarning() << "Book::partFromChapter: Could not find part index for" << href;
     return -1;
+}
+
+QString Book::url(int part) {
+    TRACE;
+    open();
+    QString partName = parts_[part];
+    QString fullPath = QDir(rootPath_).absoluteFilePath(content_[partName].href);
+    QString ret = QUrl::fromLocalFile(fullPath).toString();
+    qDebug() << "Return" << ret;
+    return ret;
 }
 
 qreal Book::getProgress(int part, qreal position) {
@@ -522,8 +519,7 @@ qreal Book::getProgress(int part, qreal position) {
 
 bool Book::extractMetaData() {
     QStringList excludedExtensions;
-    excludedExtensions << ".html" << ".xhtml" << ".xht" << ".htm" << ".gif"
-            << ".css" << "*.ttf" << "mimetype";
+    excludedExtensions << ".html" << ".xhtml" << ".xht" << ".htm" << ".gif" << ".css" << "*.ttf" << "mimetype";
     return extract(excludedExtensions);
 }
 
@@ -553,9 +549,14 @@ QImage Book::makeCover(const QPixmap &pixmap) {
     QPainter p;
     p.begin(&transparent);
     p.setCompositionMode(QPainter::CompositionMode_Source);
-    p.drawPixmap((COVER_WIDTH - src.width()) / 2,
-                 (COVER_HEIGHT - src.height()) / 2, src);
+    p.drawPixmap((COVER_WIDTH - src.width()) / 2, (COVER_HEIGHT - src.height()) / 2, src);
     p.end();
 
     return transparent.toImage();
+}
+
+int Book::partCount() {
+    TRACE;
+    load();
+    return parts_.count();
 }
