@@ -78,10 +78,17 @@ Flickable {
 
         onLoadFailed: {
             flickable.interactive = true
+            flickable.targetPos = 0
         }
 
         onLoadFinished: {
             flickable.interactive = true
+            var newY = webView.contentsSize.height * flickable.targetPos - flickable.height
+            if (newY < 0) {
+                newY = 0
+            }
+            flickable.contentY = newY
+            flickable.targetPos = 0
         }
 
         onLoadStarted: {

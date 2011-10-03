@@ -15,10 +15,10 @@ const int COVER_WIDTH = 53;
 const int COVER_HEIGHT = 59;
 const int COVER_MAX = 512 * 1024;
 
-Book::Book(): QObject(0), path_(""), lastBookmark_(0), loaded_(false), valid_(false) {
+Book::Book(): QObject(0), path_(""), lastBookmark_(0), loaded_(false), valid_(false), isOpen_(false) {
 }
 
-Book::Book(const QString &p, QObject *parent): QObject(parent), lastBookmark_(0), loaded_(false) {
+Book::Book(const QString &p, QObject *parent): QObject(parent), lastBookmark_(0), loaded_(false), isOpen_(false) {
     setPath(p);
 }
 
@@ -50,6 +50,10 @@ bool Book::isValid() const {
 bool Book::open() {
     TRACE;
     qDebug() << path();
+    if (isOpen_) {
+        qDebug() << "Already open";
+        return true;
+    }
     close();
     clear();
     load();
@@ -64,6 +68,7 @@ bool Book::open() {
         return false;
     }
     setDateOpened(QDateTime::currentDateTime().toUTC());
+    isOpen_ = true;
     save();
     emit opened(path());
     return true;
@@ -72,6 +77,10 @@ bool Book::open() {
 void Book::peek() {
     TRACE;
     qDebug() << path();
+    if (isOpen_) {
+        qDebug() << "Open already";
+        return;
+    }
     close();
     clear();
     load();
@@ -95,6 +104,7 @@ void Book::close() {
     clearParts();
     QDir::setCurrent(QDir::rootPath());
     clearDir(tmpDir());
+    isOpen_ = false;
 }
 
 QString Book::tmpDir() const {

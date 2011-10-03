@@ -300,6 +300,7 @@ protected:
     QTemporaryFile tempFile_;               //< Guards extracting books.
     bool loaded_;                           //< True, if loaded from database.
     bool valid_;                            //< True, if the book represents a valid EPUB file.
+    bool isOpen_;                           //< True, if the book is open.
 };
 
 #endif // BOOK_H
