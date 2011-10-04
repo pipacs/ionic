@@ -16,8 +16,9 @@ PageStackWindow {
     ToolBarLayout {
         id: commonTools
         visible: true
+        // autohide: true
         ToolIcon {
-            iconId: "toolbar-back"
+            iconId: "toolbar-directory"
             onClicked: {myMenu.close(); pageStack.push(libraryPage)}
         }
 
