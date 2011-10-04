@@ -74,7 +74,40 @@ OTHER_FILES += \
     pkg/version.txt \
     pkg/acknowledgements.txt \
     books/2BR02B.epub \
-    books/hacker-monthly-2.epub
+    books/hacker-monthly-2.epub \
+    icons/view-normal.png \
+    icons/view-fullscreen.png \
+    icons/system-file-manager.png \
+    icons/style-sand.png \
+    icons/style-night.png \
+    icons/style-default.png \
+    icons/style-day.png \
+    icons/splash.png \
+    icons/splash.jpg \
+    icons/settings-portrait.png \
+    icons/settings-landscape.png \
+    icons/search.png \
+    icons/rotate.png \
+    icons/previous.png \
+    icons/previous-disabled.png \
+    icons/preferences-system.png \
+    icons/next.png \
+    icons/next-disabled.png \
+    icons/library.png \
+    icons/info.png \
+    icons/goto.png \
+    icons/general_delete.png \
+    icons/forward.png \
+    icons/folder.png \
+    icons/edit.png \
+    icons/developer.png \
+    icons/delete.png \
+    icons/chapters.png \
+    icons/bookmarks.png \
+    icons/bookmark.png \
+    icons/book.png \
+    icons/back.png \
+    icons/add.png
 
 HEADERS += \
     model/book.h \
@@ -97,6 +130,9 @@ HEADERS += \
 
 RESOURCES += \
     ionic.qrc
+
+
+
 
 
 

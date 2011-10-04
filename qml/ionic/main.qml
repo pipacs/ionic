@@ -9,9 +9,18 @@ PageStackWindow {
         id: mainPage
     }
 
+    LibraryPage {
+        id: libraryPage
+    }
+
     ToolBarLayout {
         id: commonTools
         visible: true
+        ToolIcon {
+            iconId: "toolbar-back"
+            onClicked: {myMenu.close(); pageStack.push(libraryPage)}
+        }
+
         ToolIcon {
             platformIconId: "toolbar-view-menu"
             anchors.right: (parent === undefined) ? undefined : parent.right
@@ -23,7 +32,7 @@ PageStackWindow {
         id: myMenu
         visualParent: pageStack
         MenuLayout {
-            MenuItem {text: qsTr("Sample menu item")}
+            MenuItem {text: qsTr("Settings")}
         }
     }
 }
