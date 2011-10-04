@@ -13,7 +13,7 @@ static Book *noBook() {
 
 static Library *theInstance = 0;
 
-Library::Library(QObject *parent): QAbstractListModel(parent), mNowReading(noBook()) {
+Library::Library(QObject *parent): QObject(parent), mNowReading(noBook()) {
 }
 
 Library::~Library() {
@@ -27,39 +27,11 @@ Library *Library::instance() {
     return theInstance;
 }
 
-int Library::rowCount(const QModelIndex &parent) const {
-    if (parent.isValid()) {
-        return 0;
-    } else {
-        return mBooks.size();
+Book *Library::book(int index) {
+    if ((index >= 0) && (index < mBooks.size())) {
+        return mBooks[index];
     }
-}
-
-QVariant Library::data(const QModelIndex &index, int role) const {
-    QVariant ret;
-    if (!index.isValid()) {
-        return ret;
-    }
-
-    switch (role) {
-    case Qt::DisplayRole:
-        ret = mBooks[index.row()]->name();
-        break;
-    case Qt::DecorationRole:
-        ret.setValue(mBooks[index.row()]->coverImage());
-        break;
-    default:
-        ;
-    }
-
-    return ret;
-}
-
-Book *Library::book(const QModelIndex &index) {
-    if (index.isValid() && (index.row() >= 0) && (index.row() < mBooks.size())) {
-        return mBooks[index.row()];
-    }
-    qCritical() << "Library::book: Bad or invalid index" << index.row();
+    qCritical() << "Library::book: Bad or invalid index" << index;
     return noBook();
 }
 
@@ -86,6 +58,7 @@ void Library::load() {
     QString currentPath = settings.value("lib/nowreading").toString();
     mNowReading = book(find(currentPath));
     emit endLoad();
+    emit booksChanged();
     emit nowReadingChanged();
 }
 
@@ -101,22 +74,20 @@ bool Library::add(const QString &path) {
         qCritical() << "Library::add: Empty path";
         return false;
     }
-    if (find(path).isValid()) {
+    if (find(path) != -1) {
         qDebug() << "Book already exists in library";
         return false;
     }
-    int size = mBooks.size();
-    beginInsertRows(QModelIndex(), size, size);
     Book *book = new Book(path);
     book->peek();
     book->setDateAdded(QDateTime::currentDateTime().toUTC());
     mBooks.append(book);
     save();
-    endInsertRows();
+    emit booksChanged();
     return true;
 }
 
-void Library::remove(const QModelIndex &index) {
+void Library::remove(int index) {
     TRACE;
     Book *toRemove = book(index);
     if (!toRemove) {
@@ -127,11 +98,9 @@ void Library::remove(const QModelIndex &index) {
         emit nowReadingChanged();
     }
     toRemove->remove();
-    int row = index.row();
-    beginRemoveRows(QModelIndex(), row, row);
-    mBooks.removeAt(row);
+    mBooks.removeAt(index);
     save();
-    endRemoveRows();
+    emit booksChanged();
     delete toRemove;
 }
 
@@ -147,7 +116,7 @@ Book *Library::nowReading() const {
 
 void Library::setNowReading(Book *book) {
     TRACE;
-    if (find(book).isValid()) {
+    if (find(book) != -1) {
         mNowReading = book;
     } else {
         mNowReading = noBook();
@@ -163,47 +132,47 @@ void Library::clear() {
     }
     mBooks.clear();
     mNowReading = noBook();
+    emit booksChanged();
     emit nowReadingChanged();
 }
 
-QModelIndex Library::find(QString path) const {
+int Library::find(QString path) const {
     TRACE;
     if (path != "") {
         QString absolutePath = QFileInfo(path).absoluteFilePath();
         for (int i = 0; i < mBooks.size(); i++) {
             if (absolutePath == mBooks[i]->path()) {
-                return index(i);
+                return i;
             }
         }
     }
     qDebug() << "Not found" << path;
-    return QModelIndex();
+    return -1;
 }
 
-QModelIndex Library::find(const Book *book) const {
+int Library::find(const Book *book) const {
     TRACE;
     if (book) {
         for (int i = 0; i < mBooks.size(); i++) {
             if (book == mBooks[i]) {
-                return index(i);
+                return i;
             }
         }
     }
-    return QModelIndex();
+    return -1;
 }
 
 void Library::onBookOpened(const QString &path) {
     TRACE;
-    QModelIndex index = find(path);
-    if (index.isValid()) {
-        emit dataChanged(index, index);
-    }
+    (void)path;
+    // FIXME: What is this supposed to do
 }
 
-QStringList Library::bookPaths() {
-    QStringList ret;
-    foreach (Book *book, mBooks) {
-        ret.append(book->path());
-    }
-    return ret;
+QDeclarativeListProperty<Book> Library::books() {
+    TRACE;
+    return QDeclarativeListProperty<Book>(this, mBooks);
+}
+
+int Library::bookCount() {
+    return mBooks.count();
 }

@@ -18,12 +18,11 @@ class QPixmap;
 class Book: public QObject {
     Q_OBJECT
 
-    Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
+    Q_PROPERTY(QString path READ path NOTIFY pathChanged)
     Q_PROPERTY(QString rootPath READ rootPath NOTIFY rootPathChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QStringList parts READ parts NOTIFY partsChanged)
-    // FIXME Q_PROPERTY(QHash<QString, ContentItem> content READ content NOTIFY contentChanged)
     Q_PROPERTY(QImage cover READ cover NOTIFY coverChanged)
     Q_PROPERTY(QStringList creators READ creators NOTIFY creatorsChanged)
     Q_PROPERTY(QString date READ date NOTIFY dateChanged)
@@ -120,9 +119,6 @@ public:
      */
     QString name();
 
-    /** Get cover image. */
-    QImage coverImage();
-
     /** Get short friendly name: title or file name. */
     QString shortName();
 
@@ -135,23 +131,23 @@ public:
     /** Get progress (0..1) corresponding to part index and part position. */
     qreal getProgress(int part, qreal position);
 
-    QString title() {return title_;}
-    QStringList parts() {return parts_;}
-    QHash<QString, ContentItem> content() {return content_;}
-    QImage cover() {return cover_;}
-    QStringList creators() {return creators_;}
-    QString date() {return date_;}
-    QString publisher() {return publisher_;}
-    QString datePublished() {return datePublished_;}
-    QString subject() {return subject_;}
-    QString source() {return source_;}
-    QString rights() {return rights_;}
-    QString tocPath() {return tocPath_;}
-    QString coverPath() {return coverPath_;}
-    QStringList chapters() {return chapters_;}
-    qint64 size() {return size_;}
-    QDateTime dateAdded() {return dateAdded_;}
-    QDateTime dateOpened() {return dateOpened_;}
+    QString title() {load(); return title_;}
+    QStringList parts() {load(); return parts_;}
+    QHash<QString, ContentItem> content() {load(); return content_;}
+    QImage cover() {load(); return cover_;}
+    QStringList creators() {load(); return creators_;}
+    QString date() {load(); return date_;}
+    QString publisher() {load(); return publisher_;}
+    QString datePublished() {load(); return datePublished_;}
+    QString subject() {load(); return subject_;}
+    QString source() {load(); return source_;}
+    QString rights() {load(); return rights_;}
+    QString tocPath() {load(); return tocPath_;}
+    QString coverPath() {load(); return coverPath_;}
+    QStringList chapters() {load(); return chapters_;}
+    qint64 size() {load(); return size_;}
+    QDateTime dateAdded() {load(); return dateAdded_;}
+    QDateTime dateOpened() {load(); return dateOpened_;}
 
     void setTitle(const QString &title) {title_ = title; emit titleChanged();}
     void addPart(const QString &part) {

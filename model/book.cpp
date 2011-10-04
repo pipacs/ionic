@@ -445,11 +445,6 @@ QString Book::shortName() {
     return (title_.isEmpty())? QFileInfo(path()).baseName(): title_;
 }
 
-QImage Book::coverImage() {
-    load();
-    return cover_;
-}
-
 int Book::chapterFromPart(int index) {
     TRACE;
     load();
@@ -507,6 +502,9 @@ int Book::partFromChapter(int index, QString &fragment) {
 QString Book::url(int part) {
     TRACE;
     open();
+    if (part >= parts_.count()) {
+        return QString();
+    }
     QString partName = parts_[part];
     QString fullPath = QDir(rootPath_).absoluteFilePath(content_[partName].href);
     QString ret = QUrl::fromLocalFile(fullPath).toString();

@@ -51,7 +51,6 @@ SOURCES += main.cpp \
     model/unzip/ioapi.c \
     model/library.cpp \
     settings.cpp \
-    model/sortedlibrary.cpp \
     trace.cpp \
     platform.cpp
 
@@ -122,7 +121,6 @@ HEADERS += \
     model/library.h \
     model/ncxhandler.h \
     settings.h \
-    model/sortedlibrary.h \
     model/xmlerrorhandler.h \
     trace.h \
     platform.h \
@@ -130,6 +128,8 @@ HEADERS += \
 
 RESOURCES += \
     ionic.qrc
+
+
 
 
 

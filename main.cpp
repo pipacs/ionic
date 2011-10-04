@@ -9,7 +9,6 @@
 #include "model/bookmark.h"
 #include "model/bookdb.h"
 #include "model/library.h"
-#include "model/sortedlibrary.h"
 
 static const char *ionicVersion =
 #include "pkg/version.txt"
@@ -36,14 +35,13 @@ int main(int argc, char *argv[]) {
     library->load();
     Book *current = library->nowReading();
     if (!current->isValid()) {
-        if (!library->rowCount()) {
+        if (!library->bookCount()) {
 #if 0
             library->add(":/books/2BR02B.epub");
 #endif
             library->add(":/books/hacker-monthly-2.epub");
         }
-        SortedLibrary sorted;
-        library->setNowReading(library->book(sorted.mapToSource(sorted.index(0, 0))));
+        library->setNowReading(library->book(0));
     }
 
     // Show QML widget with main.qml
