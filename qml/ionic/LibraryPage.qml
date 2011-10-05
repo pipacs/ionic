@@ -89,5 +89,11 @@ Page {
             iconId: "toolbar-back"
             onClicked: {myMenu.close(); pageStack.pop()}
         }
+        ToolIcon {
+            iconId: "toolbar-add"
+        }
+        ToolIcon {
+            iconId: "toolbar-search"
+        }
     }
 }

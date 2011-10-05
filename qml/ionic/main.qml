@@ -17,6 +17,21 @@ PageStackWindow {
         id: commonTools
         visible: true
         // autohide: true
+
+        ToolIcon {
+            iconId: "toolbar-mediacontrol-previous"
+            onClicked: {mainPage.goToPreviousPage()}
+        }
+
+        ToolIcon {
+            iconId: "toolbar-mediacontrol-next"
+            onClicked: {mainPage.goToNextPage()}
+        }
+
+        ToolIcon {
+            iconId: "toolbar-list"
+        }
+
         ToolIcon {
             iconId: "toolbar-directory"
             onClicked: {myMenu.close(); pageStack.push(libraryPage)}
@@ -34,6 +49,7 @@ PageStackWindow {
         visualParent: pageStack
         MenuLayout {
             MenuItem {text: qsTr("Settings")}
+            MenuItem {text: "About"}
         }
     }
 }

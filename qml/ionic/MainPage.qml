@@ -6,9 +6,8 @@ import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
 Page {
-    tools: commonTools
-
     signal nowReadingChanged
+    tools: commonTools
 
     BookView {
         id: bookView
@@ -49,5 +48,13 @@ Page {
         bookView.targetPos = bookView.book.lastBookmark.pos
         bookView.part = bookView.book.lastBookmark.part
         bookView.url = bookView.book.url(bookView.part)
+    }
+
+    function goToPreviousPage() {
+        bookView.goToPreviousPage()
+    }
+
+    function goToNextPage() {
+        bookView.goToNextPage()
     }
 }

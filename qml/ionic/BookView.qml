@@ -105,25 +105,10 @@ Flickable {
 
         Keys.onPressed: {
             if ((event.key == Qt.Key_VolumeUp) || (event.key == Qt.Key_Up)) {
-                if (flickable.contentY == 0) {
-                    goToPreviousPart()
-                    return
-                }
-                var newY = flickable.contentY - flickable.height + 31;
-                if (newY < 0) {
-                    newY = 0;
-                }
-                flickable.contentY = newY;
+                goToPreviousPage()
             }
             if ((event.key == Qt.Key_VolumeDown) || (event.key == Qt.Key_Down)) {
-                if (flickable.contentY + flickable.height >= webView.contentsSize.height) {
-                    goToNextPart()
-                }
-                var newY = flickable.contentY + flickable.height - 31;
-                if (newY + flickable.height > webView.contentsSize.height) {
-                    newY = webView.contentsSize.height - flickable.height
-                }
-                flickable.contentY = newY
+                goToNextPage()
             }
         }
 
@@ -134,36 +119,57 @@ Flickable {
             loadFailed.connect(flickable.loadFailed)
             loadFinished.connect(flickable.loadFinished)
         }
+    }
 
-        // Go to the previous part
-        function goToPreviousPart() {
-            if (flickable.part == 0) {
-                return
-            }
-            flickable.part -= 1
-            flickable.targetPos = 1
-            webView.url = flickable.book.url(flickable.part)
+    function goToPreviousPage() {
+        if (flickable.contentY == 0) {
+            goToPreviousPart()
+            return
         }
-
-        // Go to the next part
-        function goToNextPart() {
-            if (flickable.part >= (flickable.book.partCount - 1)) {
-                return;
-            }
-            flickable.part += 1
-            flickable.targetPos = 0
-            webView.url = flickable.book.url(flickable.part)
+        var newY = flickable.contentY - flickable.height + 31;
+        if (newY < 0) {
+            newY = 0;
         }
+        flickable.contentY = newY;
+    }
 
-        // Update book's last reading position
-        function updateLastBookmark() {
-            var currentPos = flickable.contentY / webView.contentsSize.height
-            if ((Math.abs(flickable.book.lastBookmark.pos - currentPos) > 0.0005) || (flickable.book.lastBookmark.part != flickable.part)) {
-                console.log("* webView.updateLastBookmark: Needs update")
-                flickable.book.lastBookmark.pos = currentPos
-                flickable.book.lastBookmark.part = flickable.part
-                flickable.book.save()
-            }
+    function goToNextPage() {
+        if (flickable.contentY + flickable.height >= webView.contentsSize.height) {
+            goToNextPart()
+        }
+        var newY = flickable.contentY + flickable.height - 31;
+        if (newY + flickable.height > webView.contentsSize.height) {
+            newY = webView.contentsSize.height - flickable.height
+        }
+        flickable.contentY = newY
+    }
+
+    function goToPreviousPart() {
+        if (flickable.part == 0) {
+            return
+        }
+        flickable.part -= 1
+        flickable.targetPos = 1
+        webView.url = flickable.book.url(flickable.part)
+    }
+
+    function goToNextPart() {
+        if (flickable.part >= (flickable.book.partCount - 1)) {
+            return;
+        }
+        flickable.part += 1
+        flickable.targetPos = 0
+        webView.url = flickable.book.url(flickable.part)
+    }
+
+    // Update book's last reading position
+    function updateLastBookmark() {
+        var currentPos = flickable.contentY / webView.contentsSize.height
+        if ((Math.abs(flickable.book.lastBookmark.pos - currentPos) > 0.0005) || (flickable.book.lastBookmark.part != flickable.part)) {
+            console.log("* webView.updateLastBookmark: Needs update")
+            flickable.book.lastBookmark.pos = currentPos
+            flickable.book.lastBookmark.part = flickable.part
+            flickable.book.save()
         }
     }
 
@@ -172,7 +178,7 @@ Flickable {
         running: true
         repeat: true
         onTriggered: {
-            webView.updateLastBookmark()
+            updateLastBookmark()
         }
     }
 }
