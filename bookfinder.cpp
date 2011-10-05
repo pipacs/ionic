@@ -1,36 +1,52 @@
 #include <QFileInfoList>
 #include <QStringList>
 #include <QDir>
+#include <QDesktopServices>
 
+#include "model/library.h"
 #include "bookfinder.h"
 #include "trace.h"
 
 BookFinder::BookFinder(QObject *parent): QObject(parent) {
 }
 
-void BookFinder::find(const QString &path, const QStringList &books) {
+void BookFinder::find() {
     TRACE;
     QStringList booksFound;
     int toAdd = 0;
     int added = 0;
 
+    // Gather all .epub files
     QStringList filters(QString("*.epub"));
-    QFileInfoList entries =
-            QDir(path).entryInfoList(filters, QDir::Files | QDir::Readable);
-    foreach (QFileInfo entry, entries) {
-        booksFound.append(entry.absoluteFilePath());
+    QStringList paths;
+    paths.append(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    paths.append(QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + QString("/Download"));
+    paths.append(QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + QString("/Books"));
+    paths.append(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    paths.append(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation));
+    foreach (QString path, paths) {
+        qDebug() << "Checking" << path;
+        QFileInfoList entries = QDir(path).entryInfoList(filters, QDir::Files | QDir::Readable);
+        foreach (QFileInfo entry, entries) {
+            booksFound.append(entry.absoluteFilePath());
+        }
     }
 
-    foreach (QString found, booksFound) {
-        if (!books.contains(found)) {
+    // Count the number of new books
+    Library *library = Library::instance();
+    foreach (QString path, booksFound) {
+        if (library->find(path) == -1) {
             toAdd++;
         }
     }
+
+    // Add new books to the library
     emit begin(toAdd);
-    foreach (QString found, booksFound) {
-        if (!books.contains(found)) {
-            qDebug() << "New book" << found;
-            emit add(found);
+    foreach (QString path, booksFound) {
+        if (library->find(path) == -1) {
+            qDebug() << "New book" << path;
+            library->add(path);
+            emit add(path);
             added++;
         }
     }

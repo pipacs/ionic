@@ -15,6 +15,19 @@ Page {
         text: book.title
     }
 
+    QueryDialog {
+        id: deleteQuery
+        icon: "qrc:/ionic80.png"
+        titleText: book.title
+        message: "Are you sure to delete this book?"
+        acceptButtonText: "Yes"
+        rejectButtonText: "No"
+        onAccepted: {
+            library.remove(book)
+            pageStack.pop()
+        }
+    }
+
     ToolBarLayout {
         id: libraryTools
         visible: true
@@ -34,8 +47,7 @@ Page {
         ToolIcon {
             iconId: "toolbar-delete"
             onClicked: {
-                // library.remove(book)
-                pageStack.pop()
+                deleteQuery.open()
             }
         }
     }

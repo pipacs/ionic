@@ -10,6 +10,7 @@
 #include "model/bookdb.h"
 #include "model/library.h"
 #include "model/coverprovider.h"
+#include "bookfinder.h"
 
 static const char *ionicVersion =
 #include "pkg/version.txt"
@@ -51,6 +52,8 @@ int main(int argc, char *argv[]) {
     viewer.rootContext()->setContextProperty("settings", Settings::instance());
     Book *emptyBook = new Book();
     viewer.rootContext()->setContextProperty("emptyBook", emptyBook);
+    BookFinder *bookFinder = new BookFinder();
+    viewer.rootContext()->setContextProperty("bookFinder", bookFinder);
     viewer.setMainQmlFile(QLatin1String("qml/ionic/main.qml"));
     viewer.showExpanded();
 
@@ -63,6 +66,7 @@ int main(int argc, char *argv[]) {
     int ret = app.exec();
 
     // Delete singletons
+    delete bookFinder;
     delete emptyBook;
     Library::close();
     BookDb::close();

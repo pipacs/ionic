@@ -2,25 +2,37 @@
 #define BOOKFINDER_H
 
 #include <QObject>
-#include <QThread>
 
-class QStringList;
 class QString;
 
-/** Find new books in a folder. */
-class BookFinder: public QObject
-{
+/** Find new books in candidate folders, add them to the library. */
+class BookFinder: public QObject {
     Q_OBJECT
 
 public:
     explicit BookFinder(QObject *parent = 0);
 
 public slots:
-    void find(const QString &directory, const QStringList &books);
+    /** Start finding books and adding them to the library. */
+    Q_INVOKABLE void find();
 
 signals:
+    /**
+    Emitted before adding books to the library starts.
+    @param  count   Number of books about to be be added.
+    */
     void begin(int count);
-    void add(const QString &bookPath);
+
+    /**
+    Emitted after adding a new book to the library.
+    @param  title   Title of the book added.
+    */
+    void add(const QString &title);
+
+    /**
+    Emitted after all new books have been added to the library.
+    @param  count   Total number of books added.
+    */
     void done(int count);
 };
 

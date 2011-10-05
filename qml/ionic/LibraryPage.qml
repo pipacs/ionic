@@ -91,6 +91,7 @@ Page {
         }
         ToolIcon {
             iconId: "toolbar-add"
+            onClicked: {bookFinder.find()}
         }
         ToolIcon {
             iconId: "toolbar-search"

@@ -94,7 +94,7 @@ void Library::remove(int index) {
         return;
     }
     if (toRemove == mNowReading) {
-        mNowReading = 0;
+        mNowReading = noBook();
         emit nowReadingChanged();
     }
     toRemove->remove();
