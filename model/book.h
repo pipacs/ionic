@@ -23,7 +23,7 @@ class Book: public QObject {
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QStringList parts READ parts NOTIFY partsChanged)
-    Q_PROPERTY(QImage cover READ cover NOTIFY coverChanged)
+    Q_PROPERTY(QString coverUrl READ coverUrl NOTIFY coverChanged)
     Q_PROPERTY(QStringList creators READ creators NOTIFY creatorsChanged)
     Q_PROPERTY(QString date READ date NOTIFY dateChanged)
     Q_PROPERTY(QString publisher READ publisher NOTIFY publisherChanged)
@@ -211,6 +211,9 @@ public:
         rootPath_ = path;
         emit rootPathChanged();
     }
+
+    /** Get cover image url. */
+    QString coverUrl();
 
     /**
      * Is this a valid book?

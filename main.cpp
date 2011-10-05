@@ -9,6 +9,7 @@
 #include "model/bookmark.h"
 #include "model/bookdb.h"
 #include "model/library.h"
+#include "model/coverprovider.h"
 
 static const char *ionicVersion =
 #include "pkg/version.txt"
@@ -36,9 +37,7 @@ int main(int argc, char *argv[]) {
     Book *current = library->nowReading();
     if (!current->isValid()) {
         if (!library->bookCount()) {
-#if 0
             library->add(":/books/2BR02B.epub");
-#endif
             library->add(":/books/hacker-monthly-2.epub");
         }
         library->setNowReading(library->book(0));
@@ -47,6 +46,7 @@ int main(int argc, char *argv[]) {
     // Show QML widget with main.qml
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
+    viewer.engine()->addImageProvider(QString("covers"), new CoverProvider);
     viewer.rootContext()->setContextProperty("library", library);
     viewer.rootContext()->setContextProperty("settings", Settings::instance());
     Book *emptyBook = new Book();

@@ -16,14 +16,16 @@ Page {
     Component {
         id: delegate
         Item {
+            height: 110
             Row {
                 Image {
                     width: 100
-                    source: cover
+                    source: coverUrl
                 }
                 Text {
                     text: name
-                    font.pixelSize: 28
+                    font.pixelSize: 26
+                    font.family: "Nokia Pure Text"
                 }
             }
         }

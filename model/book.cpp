@@ -51,6 +51,10 @@ bool Book::isValid() const {
 bool Book::open() {
     TRACE;
     qDebug() << path();
+    if (!valid_) {
+        qDebug() << "Not valid";
+        return true;
+    }
     if (isOpen_) {
         qDebug() << "Already open";
         return true;
@@ -78,6 +82,10 @@ bool Book::open() {
 void Book::peek() {
     TRACE;
     qDebug() << path();
+    if (!valid_) {
+        qDebug() << "Not valid";
+        return;
+    }
     if (isOpen_) {
         qDebug() << "Open already";
         return;
@@ -288,6 +296,9 @@ void Book::clear() {
 }
 
 void Book::load() {
+    if (!valid_) {
+        return;
+    }
     if (loaded_) {
         return;
     }
@@ -323,6 +334,10 @@ void Book::load() {
 }
 
 void Book::save() {
+    if (!valid_) {
+        return;
+    }
+
     TRACE;
 
     load();
@@ -568,4 +583,8 @@ int Book::partCount() {
     TRACE;
     load();
     return parts_.count();
+}
+
+QString Book::coverUrl() {
+    return QString("image://covers/%1").arg(path());
 }

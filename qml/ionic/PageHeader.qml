@@ -22,6 +22,7 @@ Rectangle {
         anchors.topMargin: 15
         text: pageHeader.text
         font.pixelSize: 32
+        font.family: "Nokia Pure Text"
         color: "white"
     }
 
