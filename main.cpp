@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
         library->setNowReading(library->book(0));
     }
 
-    // Show QML widget with main.qml
+    // Set up and show QML widget with main.qml
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.engine()->addImageProvider(QString("covers"), new CoverProvider);
@@ -53,6 +53,15 @@ int main(int argc, char *argv[]) {
     Book *emptyBook = new Book();
     viewer.rootContext()->setContextProperty("emptyBook", emptyBook);
     BookFinder *bookFinder = new BookFinder();
+    BookFinderWorker *bookFinderWorker = new BookFinderWorker();
+    BookFinderWorkerThread *bookFinderWorkerThread = new BookFinderWorkerThread();
+    bookFinderWorker->moveToThread(bookFinderWorkerThread);
+    bookFinder->connect(bookFinder, SIGNAL(findRequested()), bookFinderWorker, SLOT(doFind()));
+    bookFinderWorker->connect(bookFinderWorker, SIGNAL(begin(int)), bookFinder, SIGNAL(begin(int)));
+    bookFinderWorker->connect(bookFinderWorker, SIGNAL(add(QString)), bookFinder, SIGNAL(add(QString)));
+    bookFinderWorker->connect(bookFinderWorker, SIGNAL(done(int)), bookFinder, SIGNAL(done(int)));
+    bookFinderWorkerThread->start();
+    bookFinderWorkerThread->setPriority(QThread::LowestPriority);
     viewer.rootContext()->setContextProperty("bookFinder", bookFinder);
     viewer.setMainQmlFile(QLatin1String("qml/ionic/main.qml"));
     viewer.showExpanded();
@@ -66,6 +75,10 @@ int main(int argc, char *argv[]) {
     int ret = app.exec();
 
     // Delete singletons
+    bookFinderWorkerThread->quit();
+    bookFinderWorkerThread->wait();
+    delete bookFinderWorkerThread;
+    delete bookFinderWorker;
     delete bookFinder;
     delete emptyBook;
     Library::close();

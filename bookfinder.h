@@ -2,19 +2,35 @@
 #define BOOKFINDER_H
 
 #include <QObject>
+#include <QThread>
 
 class QString;
 
-/** Find new books in candidate folders, add them to the library. */
+/** Request finding books. */
 class BookFinder: public QObject {
     Q_OBJECT
 
 public:
-    explicit BookFinder(QObject *parent = 0);
+    explicit BookFinder(QObject *parent = 0): QObject(parent) {}
+    Q_INVOKABLE void find() {emit findRequested();}
+
+signals:
+    void findRequested();
+    void begin(int count);
+    void add(const QString &title);
+    void done(int count);
+};
+
+/** Do the real work of finding books. */
+class BookFinderWorker: public QObject {
+    Q_OBJECT
+
+public:
+    explicit BookFinderWorker(QObject *parent = 0);
 
 public slots:
-    /** Start finding books and adding them to the library. */
-    Q_INVOKABLE void find();
+    /** Do the real work. */
+    void doFind();
 
 signals:
     /**
@@ -34,6 +50,14 @@ signals:
     @param  count   Total number of books added.
     */
     void done(int count);
+};
+
+/** Book finder worker thread. */
+class BookFinderWorkerThread: public QThread {
+public:
+    void run() {
+        exec();
+    }
 };
 
 #endif // BOOKFINDER_H

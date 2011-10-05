@@ -7,10 +7,10 @@
 #include "bookfinder.h"
 #include "trace.h"
 
-BookFinder::BookFinder(QObject *parent): QObject(parent) {
+BookFinderWorker::BookFinderWorker(QObject *parent): QObject(parent) {
 }
 
-void BookFinder::find() {
+void BookFinderWorker::doFind() {
     TRACE;
     QStringList booksFound;
     int toAdd = 0;

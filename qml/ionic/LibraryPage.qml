@@ -129,6 +129,7 @@ Page {
     onAdd: {
         console.log("* LibraryPage.onAdd " + title)
         importDialog.messageText = title
+        importDialog.value = importDialog.value + 1
     }
 
     onDone: {
