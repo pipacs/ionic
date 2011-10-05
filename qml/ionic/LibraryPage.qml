@@ -7,6 +7,9 @@ import com.pipacs.ionic.Book 1.0
 
 Page {
     tools: libraryTools
+    signal begin(int total)
+    signal add(string title)
+    signal done(int total)
 
     BookPage {
         id: bookPage
@@ -82,19 +85,54 @@ Page {
         flickableItem: listView
     }
 
+    ProgressDialog {
+        id: importDialog
+        titleText: "Importing Books"
+        messageText: "Gathering books"
+    }
+
     ToolBarLayout {
         id: libraryTools
         visible: true
         ToolIcon {
             iconId: "toolbar-back"
-            onClicked: {myMenu.close(); pageStack.pop()}
+            onClicked: {pageStack.pop()}
         }
         ToolIcon {
             iconId: "toolbar-add"
-            onClicked: {bookFinder.find()}
+            onClicked: {
+                // bookFinder.find()
+                importDialog.indeterminate = true
+                importDialog.open()
+                bookFinder.find()
+            }
         }
         ToolIcon {
             iconId: "toolbar-search"
         }
+    }
+
+    Component.onCompleted: {
+        bookFinder.begin.connect(begin)
+        bookFinder.add.connect(add)
+        bookFinder.done.connect(done)
+    }
+
+    onBegin: {
+        console.log("* LibraryPage.onBegin " + total)
+        importDialog.indeterminate = false
+        importDialog.minimumValue = 0
+        importDialog.maximumValue = total
+        importDialog.value = 0
+    }
+
+    onAdd: {
+        console.log("* LibraryPage.onAdd " + title)
+        importDialog.messageText = title
+    }
+
+    onDone: {
+        console.log("* LibraryPage.onDone " + total)
+        importDialog.messageText = "Import complete, " + total + " book(s) imported"
     }
 }
