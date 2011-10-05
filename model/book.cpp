@@ -588,3 +588,13 @@ int Book::partCount() {
 QString Book::coverUrl() {
     return QString("image://covers/%1").arg(path());
 }
+
+QString Book::dateAdded() {
+    load();
+    return dateAdded_.isValid()? dateAdded_.toString(Qt::SystemLocaleShortDate): QString("-");
+}
+
+QString Book::dateOpened() {
+    load();
+    return dateOpened_.isValid()? dateOpened_.toString(Qt::SystemLocaleShortDate): QString("-");
+}

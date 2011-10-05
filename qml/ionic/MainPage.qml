@@ -8,21 +8,23 @@ import com.pipacs.ionic.Book 1.0
 Page {
     tools: commonTools
 
+    signal nowReadingChanged
+
     BookView {
         id: bookView
         anchors {top: parent.top; left: parent.left; right: parent.right; bottom: parent.bottom}
         onLoadStarted: {
-            console.log("bookView onLoadStarted")
+            console.log("* bookView onLoadStarted")
             spinner.visible = true
             spinner.running = true
         }
         onLoadFinished: {
-            console.log("bookView onLoadFinished")
+            console.log("* bookView onLoadFinished")
             spinner.visible = false
             spinner.running = false
         }
         onLoadFailed: {
-            console.log("bookView onLoadFailed")
+            console.log("* bookView onLoadFailed")
             spinner.visible = false
             spinner.running = false
         }
@@ -37,6 +39,12 @@ Page {
     }
 
     Component.onCompleted: {
+        library.nowReadingChanged.connect(nowReadingChanged)
+        library.setNowReading(library.nowReading)
+    }
+
+    onNowReadingChanged: {
+        console.log("* MainPage.onNowReadingChanged")
         bookView.book = library.nowReading
         bookView.targetPos = bookView.book.lastBookmark.pos
         bookView.part = bookView.book.lastBookmark.part

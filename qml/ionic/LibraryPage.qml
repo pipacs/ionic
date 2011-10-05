@@ -8,6 +8,10 @@ import com.pipacs.ionic.Book 1.0
 Page {
     tools: libraryTools
 
+    BookPage {
+        id: bookPage
+    }
+
     PageHeader {
         id: header
         text: "Library"
@@ -16,16 +20,46 @@ Page {
     Component {
         id: delegate
         Item {
-            height: 110
+            height: 120
+            width: parent.width
+
+            BorderImage {
+                id: background
+                anchors.fill: parent
+                // Fill page borders
+                anchors.leftMargin: -listView.anchors.leftMargin
+                anchors.rightMargin: -listView.anchors.rightMargin
+                visible: mouseArea.pressed
+                source: "image://theme/meegotouch-list-background-pressed-center"
+            }
+
             Row {
                 Image {
-                    width: 100
+                    width: 70
+                    height: 120
                     source: coverUrl
                 }
-                Text {
-                    text: name
-                    font.pixelSize: 26
-                    font.family: "Nokia Pure Text"
+                Column {
+                    Text {
+                        text: name
+                        font.pixelSize: 26
+                        font.family: "Nokia Pure Text"
+                    }
+                    Text {
+                        text: "Last read: " + dateOpened
+                        font.pixelSize: 20
+                        font.family: "Nokia Pure Text"
+                    }
+                }
+            }
+
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                onClicked: {
+                    console.log("* Item.onClicked " + index)
+                    bookPage.book = library.books[index]
+                    pageStack.push(bookPage)
                 }
             }
         }

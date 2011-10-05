@@ -21,7 +21,7 @@ public:
     void save();
     int find(QString path) const;
     int find(const Book *book) const;
-    void setNowReading(Book *book);
+    Q_INVOKABLE void setNowReading(Book *book);
     Book *nowReading() const;
     Book *book(int index);
     QDeclarativeListProperty<Book> books();

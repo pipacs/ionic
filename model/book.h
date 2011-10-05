@@ -33,8 +33,8 @@ class Book: public QObject {
     Q_PROPERTY(QString rights READ rights NOTIFY rightsChanged)
     Q_PROPERTY(QStringList chapters READ chapters NOTIFY chaptersChanged)
     Q_PROPERTY(qint64 size READ size NOTIFY sizeChanged)
-    Q_PROPERTY(QDateTime dateAdded READ dateAdded NOTIFY dateAddedChanged)
-    Q_PROPERTY(QDateTime dateOpened READ dateOpened NOTIFY dateOpenedChanged)
+    Q_PROPERTY(QString dateAdded READ dateAdded NOTIFY dateAddedChanged)
+    Q_PROPERTY(QString dateOpened READ dateOpened NOTIFY dateOpenedChanged)
     Q_PROPERTY(Bookmark *lastBookmark READ lastBookmark NOTIFY lastBookmarkChanged)
     Q_PROPERTY(int partCount READ partCount)
 
@@ -146,8 +146,8 @@ public:
     QString coverPath() {load(); return coverPath_;}
     QStringList chapters() {load(); return chapters_;}
     qint64 size() {load(); return size_;}
-    QDateTime dateAdded() {load(); return dateAdded_;}
-    QDateTime dateOpened() {load(); return dateOpened_;}
+    QString dateAdded();
+    QString dateOpened();
 
     void setTitle(const QString &title) {title_ = title; emit titleChanged();}
     void addPart(const QString &part) {
