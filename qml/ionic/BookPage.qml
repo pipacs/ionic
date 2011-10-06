@@ -28,6 +28,72 @@ Page {
         }
     }
 
+    Component {
+        id: delegate
+        Item {
+            height: content.length? Math.max(31, textContent.height): 0
+            width: parent.width
+            Row {
+                // Image {
+                //     width: 70
+                //     height: 120
+                // }
+                // Column {
+                    Text {
+                        id: textLabel
+                        text: content.length? label: ""
+                        font.pixelSize: 22
+                        font.family: "Nokia Pure Text"
+                    }
+                    Text {
+                        id: textContent
+                        text: content
+                        font.pixelSize: 22
+                        font.family: "Nokia Pure Text"
+                        font.bold: true
+                        wrapMode: Text.Wrap
+                    }
+                // }
+            }
+        }
+    }
+
+    property list<QtObject> bookModel: [
+        QtObject {property string label: "Author: "; property string content: book.creatorsString},
+        QtObject {property string label: "Date: "; property string content: book.date},
+        QtObject {property string label: "Publisher: "; property string content: book.publisher},
+        QtObject {property string label: "Date published: "; property string content: book.datePublished},
+        QtObject {property string label: "Subject: "; property string content: book.subject},
+        QtObject {property string label: "Source: "; property string content: book.source},
+        QtObject {property string label: "Rights: "; property string content: book.rights},
+        QtObject {property string label: "Added to library: "; property string content: book.dateAdded},
+        QtObject {property string label: "Last read: "; property string content: book.dateOpened}
+    ]
+
+    ListView {
+        id: listView
+        anchors.top: header.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.margins: 11
+        clip: true
+        focus: true
+        model: bookModel
+        delegate: delegate
+    }
+
+    Image {
+        anchors.top: header.bottom
+        anchors.right: parent.right
+        anchors.margins: 11
+        source: book.coverUrl
+    }
+
+    ScrollDecorator {
+        flickableItem: listView
+    }
+
     ToolBarLayout {
         id: libraryTools
         visible: true

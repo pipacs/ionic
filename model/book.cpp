@@ -598,3 +598,7 @@ QString Book::dateOpened() {
     load();
     return dateOpened_.isValid()? dateOpened_.toString(Qt::SystemLocaleShortDate): QString("-");
 }
+
+QString Book::creatorsString() {
+    return creators_.join(", ");
+}

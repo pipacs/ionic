@@ -25,6 +25,7 @@ class Book: public QObject {
     Q_PROPERTY(QStringList parts READ parts NOTIFY partsChanged)
     Q_PROPERTY(QString coverUrl READ coverUrl NOTIFY coverChanged)
     Q_PROPERTY(QStringList creators READ creators NOTIFY creatorsChanged)
+    Q_PROPERTY(QString creatorsString READ creatorsString NOTIFY creatorsChanged)
     Q_PROPERTY(QString date READ date NOTIFY dateChanged)
     Q_PROPERTY(QString publisher READ publisher NOTIFY publisherChanged)
     Q_PROPERTY(QString datePublished READ datePublished NOTIFY datePublishedChanged)
@@ -215,10 +216,10 @@ public:
     /** Get cover image url. */
     QString coverUrl();
 
-    /**
-     * Is this a valid book?
-     * @return True if the book represents a valid EPUB file, false otherwise.
-     */
+    /** Get creator names as a string. */
+    QString creatorsString();
+
+    /** Is this a valid book? */
     bool isValid() const;
 
     /** Get the URL corresponding to a given part. */
