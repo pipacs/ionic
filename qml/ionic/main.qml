@@ -16,27 +16,21 @@ PageStackWindow {
     ToolBarLayout {
         id: commonTools
         visible: true
-        // autohide: true
 
         ToolIcon {
-            iconId: "toolbar-mediacontrol-previous"
+            iconId: "toolbar-previous"
             onClicked: {mainPage.goToPreviousPage()}
         }
-
         ToolIcon {
-            iconId: "toolbar-mediacontrol-next"
+            iconId: "toolbar-next"
             onClicked: {mainPage.goToNextPage()}
         }
-
         ToolIcon {
             iconId: "toolbar-list"
         }
-
         ToolIcon {
-            iconId: "toolbar-directory"
-            onClicked: {myMenu.close(); pageStack.push(libraryPage)}
+            iconId: "toolbar-favorite-mark"
         }
-
         ToolIcon {
             platformIconId: "toolbar-view-menu"
             anchors.right: (parent === undefined) ? undefined : parent.right
@@ -48,7 +42,11 @@ PageStackWindow {
         id: myMenu
         visualParent: pageStack
         MenuLayout {
-            MenuItem {text: qsTr("Settings")}
+            MenuItem {
+                text: "Library"
+                onClicked: {myMenu.close(); pageStack.push(libraryPage)}
+            }
+            MenuItem {text: "Settings"}
             MenuItem {text: "About"}
         }
     }

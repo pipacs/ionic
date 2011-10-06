@@ -66,18 +66,24 @@ Flickable {
         id: webView
         transformOrigin: Item.TopLeft
         pressGrabTime: 999
-        settings.standardFontFamily: "Nokia Pure Text"
-        settings.defaultFontSize: 28
+        // settings.standardFontFamily: "Nokia Pure Text"
+        settings.defaultFontSize: 26
         settings.javaEnabled: false
         settings.javascriptCanAccessClipboard: false
         settings.javascriptCanOpenWindows: false
         settings.javascriptEnabled: false
+        settings.linksIncludedInFocusChain: false
         settings.localContentCanAccessRemoteUrls: false
         settings.localStorageDatabaseEnabled: false
+        settings.offlineStorageDatabaseEnabled: false
+        settings.offlineWebApplicationCacheEnabled: false
+        settings.pluginsEnabled: false
         smooth: false
         preferredWidth: flickable.width
         preferredHeight: flickable.height
         contentsScale: 1
+        focus: false
+        enabled: false
 
         onLoadFailed: {
             flickable.interactive = true

@@ -118,8 +118,7 @@ void Book::close() {
 
 QString Book::tmpDir() const {
     QString tmpName = QFileInfo(tempFile_.fileName()).fileName();
-    return QDir(QDir::temp().absoluteFilePath("dorian")).
-            absoluteFilePath(tmpName);
+    return QDir(QDir::temp().absoluteFilePath("dorian")).absoluteFilePath(tmpName);
 }
 
 bool Book::extract(const QStringList &excludedExtensions) {
@@ -206,15 +205,9 @@ bool Book::parse() {
     }
     if (coverPath.isEmpty()) {
         // Last resort
-        QString coverJpeg = QDir(rootPath()).absoluteFilePath("cover.jpg");
-        if (QFileInfo(coverJpeg).exists()) {
-            coverPath = coverJpeg;
-        }
+        coverPath = QDir(rootPath()).absoluteFilePath("cover.jpg");
     }
-    if (!coverPath.isEmpty()) {
-        qDebug() << "Loading cover image from" << coverPath;
-        setCover(makeCover(coverPath));
-    }
+    setCover(makeCover(coverPath));
 
     // If there is an "ncx" item in content, parse it: That's the real table
     // of contents
@@ -320,7 +313,7 @@ void Book::load() {
     setLastBookmark(data["lastpart"].toInt(), data["lastpos"].toReal());
     setCover(data["cover"].value<QImage>());
     if (cover().isNull()) {
-        setCover(makeCover(":/icons/book.png"));
+        qDebug() << "No cover image";
     }
     int size = data["bookmarks"].toInt();
     for (int i = 0; i < size; i++) {
@@ -543,7 +536,7 @@ qreal Book::getProgress(int part, qreal position) {
 
 bool Book::extractMetaData() {
     QStringList excludedExtensions;
-    excludedExtensions << ".html" << ".xhtml" << ".xht" << ".htm" << ".gif" << ".css" << "*.ttf" << "mimetype";
+    excludedExtensions << ".html" << ".xhtml" << ".xht" << ".htm" << ".html" << ".css" << "*.ttf" << "mimetype";
     return extract(excludedExtensions);
 }
 
@@ -556,27 +549,27 @@ void Book::remove() {
 QImage Book::makeCover(const QString &fileName) {
     TRACE;
     qDebug() << fileName;
-    QFileInfo info(fileName);
-    if (info.isReadable() && (info.size() < COVER_MAX)) {
-        return makeCover(QPixmap(fileName));
+    if (!fileName.isEmpty()) {
+        QFileInfo info(fileName);
+        if (info.exists() && info.isReadable() && (info.size() < COVER_MAX)) {
+            return makeCover(QImage(fileName));
+        }
     }
-    return makeCover(QPixmap(":/icons/book.png"));
+    qDebug() << "Could not read cover file, using default image";
+    return makeCover(QImage(":/icons/book.png"));
 }
 
-QImage Book::makeCover(const QPixmap &pixmap) {
+QImage Book::makeCover(const QImage &image) {
     TRACE;
-    QPixmap src = pixmap.scaled(COVER_WIDTH, COVER_HEIGHT,
-        Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    QPixmap transparent(COVER_WIDTH, COVER_HEIGHT);
+    QImage src = image.scaled(COVER_WIDTH, COVER_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QImage transparent(COVER_WIDTH, COVER_HEIGHT, QImage::Format_ARGB32);
     transparent.fill(Qt::transparent);
-
     QPainter p;
     p.begin(&transparent);
     p.setCompositionMode(QPainter::CompositionMode_Source);
-    p.drawPixmap((COVER_WIDTH - src.width()) / 2, (COVER_HEIGHT - src.height()) / 2, src);
+    p.drawImage((COVER_WIDTH - src.width()) / 2, (COVER_HEIGHT - src.height()) / 2, src);
     p.end();
-
-    return transparent.toImage();
+    return transparent;
 }
 
 int Book::partCount() {

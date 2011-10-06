@@ -60,6 +60,15 @@ Page {
         QtObject {property string label: "Last read: "; property string content: book.dateOpened}
     ]
 
+    Image {
+        anchors.top: header.bottom
+        anchors.right: parent.right
+        anchors.margins: 11
+        source: book.coverUrl
+        width: 106
+        height: 118
+    }
+
     ListView {
         id: listView
         anchors.top: header.bottom
@@ -71,15 +80,6 @@ Page {
         focus: true
         model: bookModel
         delegate: delegate
-    }
-
-    Image {
-        anchors.top: header.bottom
-        anchors.right: parent.right
-        anchors.margins: 11
-        source: book.coverUrl
-        width: 106
-        height: 118
     }
 
     ScrollDecorator {

@@ -273,8 +273,8 @@ protected:
     /** Make a cover image from a file. */
     QImage makeCover(const QString &fileName);
 
-    /** Make a cover image from an pixmap. */
-    QImage makeCover(const QPixmap &pixmap);
+    /** Make a cover image from an image. */
+    QImage makeCover(const QImage &image);
 
     QString title_;                         //< Book title from EPUB.
     QStringList parts_;                     //< EPUB part list.
