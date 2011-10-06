@@ -19,8 +19,8 @@ public:
     static void close();
     void load();
     void save();
-    int find(QString path) const;
-    int find(const Book *book) const;
+    Book *find(QString path) const;
+    Book *find(Book *book) const;
     Q_INVOKABLE void setNowReading(Book *book);
     Book *nowReading() const;
     Book *book(int index);

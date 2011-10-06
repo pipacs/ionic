@@ -23,7 +23,6 @@ class Trace {
 public:
     Trace(const QString &s);
     ~Trace();
-    static QString event(QEvent::Type t);
     static void messageHandler(QtMsgType type, const char *msg);
     static QtMsgType level;
     static void setFileName(const QString &fileName);
@@ -33,8 +32,6 @@ protected:
     static QString prefix();
     QString name;
     static int indent;
-    typedef struct {int type; const char *name;} EventName;
-    static EventName eventTab[];
     static QFile file;
 };
 

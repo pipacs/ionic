@@ -42,6 +42,8 @@ Page {
                     id: textContent
                     text: content
                     font.bold: true
+                    // FIXME style: Text.Sunken
+                    styleColor: "white"
                     wrapMode: Text.WordWrap
                 }
             }

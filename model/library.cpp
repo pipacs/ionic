@@ -56,7 +56,8 @@ void Library::load() {
 
     QSettings settings;
     QString currentPath = settings.value("lib/nowreading").toString();
-    mNowReading = book(find(currentPath));
+    Book *found = find(currentPath);
+    mNowReading = found? found: noBook();
     emit endLoad();
     emit booksChanged();
     emit nowReadingChanged();
@@ -74,7 +75,7 @@ Book *Library::add(const QString &path) {
         qCritical() << "Library::add: Empty path";
         return noBook();
     }
-    if (find(path) != -1) {
+    if (find(path)) {
         qDebug() << "Book already exists in library";
         return noBook();
     }
@@ -87,20 +88,20 @@ Book *Library::add(const QString &path) {
     return book;
 }
 
-void Library::remove(Book *toRemove) {
+void Library::remove(Book *book) {
     TRACE;
-    if (!toRemove) {
+    if (!book) {
         return;
     }
-    if (toRemove == mNowReading) {
+    if (book == mNowReading) {
         mNowReading = noBook();
         emit nowReadingChanged();
     }
-    toRemove->remove();
-    mBooks.removeAt(find(toRemove));
+    book->remove();
+    mBooks.removeOne(book);
     save();
     emit booksChanged();
-    delete toRemove;
+    delete book;
 }
 
 Book *Library::nowReading() const {
@@ -110,7 +111,7 @@ Book *Library::nowReading() const {
 
 void Library::setNowReading(Book *book) {
     TRACE;
-    if (find(book) != -1) {
+    if (find(book)) {
         mNowReading = book;
     } else {
         mNowReading = noBook();
@@ -130,30 +131,30 @@ void Library::clear() {
     emit nowReadingChanged();
 }
 
-int Library::find(QString path) const {
+Book *Library::find(QString path) const {
     TRACE;
     if (path != "") {
         QString absolutePath = QFileInfo(path).absoluteFilePath();
         for (int i = 0; i < mBooks.size(); i++) {
             if (absolutePath == mBooks[i]->path()) {
-                return i;
+                return mBooks[i];
             }
         }
     }
     qDebug() << "Not found" << path;
-    return -1;
+    return 0;
 }
 
-int Library::find(const Book *book) const {
+Book *Library::find(Book *book) const {
     TRACE;
     if (book) {
         for (int i = 0; i < mBooks.size(); i++) {
             if (book == mBooks[i]) {
-                return i;
+                return book;
             }
         }
     }
-    return -1;
+    return 0;
 }
 
 void Library::onBookOpened(const QString &path) {

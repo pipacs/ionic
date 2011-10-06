@@ -15,10 +15,10 @@ const int COVER_WIDTH = 53;
 const int COVER_HEIGHT = 59;
 const int COVER_MAX = 512 * 1024;
 
-Book::Book(): QObject(0), path_(""), lastBookmark_(0), loaded_(false), valid_(false), isOpen_(false) {
+Book::Book(): QObject(0), path_(""), lastBookmark_(new Bookmark), loaded_(false), valid_(false), isOpen_(false) {
 }
 
-Book::Book(const QString &p, QObject *parent): QObject(parent), lastBookmark_(0), loaded_(false), isOpen_(false) {
+Book::Book(const QString &p, QObject *parent): QObject(parent), lastBookmark_(new Bookmark), loaded_(false), isOpen_(false) {
     setPath(p);
 }
 
@@ -69,9 +69,7 @@ bool Book::open() {
     if (!extract(QStringList())) {
         return false;
     }
-    if (!parse()) {
-        return false;
-    }
+    parse();
     setDateOpened(QDateTime::currentDateTime().toUTC());
     isOpen_ = true;
     save();
@@ -100,9 +98,7 @@ void Book::peek() {
     if (!extractMetaData()) {
         return;
     }
-    if (!parse()) {
-        return;
-    }
+    parse();
     save();
     close();
 }
@@ -167,13 +163,12 @@ bool Book::extract(const QStringList &excludedExtensions) {
     return ret;
 }
 
-bool Book::parse() {
+void Book::parse() {
     TRACE;
 
     load();
 
     // Parse OPS file
-    bool ret = false;
     QString opsFileName = opsPath();
     qDebug() << "Parsing OPS file" << opsFileName;
     QFile opsFile(opsFileName);
@@ -183,7 +178,7 @@ bool Book::parse() {
     XmlErrorHandler *errorHandler = new XmlErrorHandler();
     reader.setContentHandler(opsHandler);
     reader.setErrorHandler(errorHandler);
-    ret = reader.parse(source);
+    reader.parse(source);
     delete errorHandler;
     delete opsHandler;
     delete source;
@@ -229,7 +224,7 @@ bool Book::parse() {
         errorHandler = new XmlErrorHandler();
         reader.setContentHandler(ncxHandler);
         reader.setErrorHandler(errorHandler);
-        ret = reader.parse(source);
+        reader.parse(source);
         delete errorHandler;
         delete ncxHandler;
         delete source;
@@ -243,8 +238,6 @@ bool Book::parse() {
         size_ += content_[part].size;
     }
     emit sizeChanged();
-
-    return ret;
 }
 
 bool Book::clearDir(const QString &dir) {
@@ -312,7 +305,7 @@ void Book::load() {
     setRights(data["rights"].toString());
     setLastBookmark(data["lastpart"].toInt(), data["lastpos"].toReal());
     setCover(data["cover"].value<QImage>());
-    if (cover().isNull()) {
+    if (cover_.isNull()) {
         qDebug() << "No cover image";
     }
     int size = data["bookmarks"].toInt();
@@ -346,6 +339,9 @@ void Book::save() {
     data["lastpart"] = lastBookmark_->part();
     data["lastpos"] = lastBookmark_->pos();
     data["cover"] = cover_;
+    if (cover_.isNull()) {
+        qWarning() << "Book::save: Cover image is null";
+    }
     data["bookmarks"] = bookmarks_.size();
     for (int i = 0; i < bookmarks_.size(); i++) {
         data[QString("bookmark%1part").arg(i)] = bookmarks_[i]->part();
@@ -360,13 +356,8 @@ void Book::save() {
 void Book::setLastBookmark(int part, qreal position) {
     TRACE;
     qDebug() << "Part" << part << "position" << position;
-    setLastBookmark(new Bookmark(part, position));
-}
-
-void Book::setLastBookmark(Bookmark *bookmark) {
-    delete lastBookmark_;
-    lastBookmark_ = bookmark;
-    save();
+    lastBookmark_->setPart(part);
+    lastBookmark_->setPos(position);
     emit lastBookmarkChanged();
 }
 
@@ -584,14 +575,29 @@ QString Book::coverUrl() {
 
 QString Book::dateAdded() {
     load();
-    return dateAdded_.isValid()? dateAdded_.toString(Qt::SystemLocaleShortDate): QString("-");
+    return dateAdded_.isValid()? dateAdded_.toString(Qt::SystemLocaleShortDate): QString();
 }
 
 QString Book::dateOpened() {
     load();
-    return dateOpened_.isValid()? dateOpened_.toString(Qt::SystemLocaleShortDate): QString("-");
+    return dateOpened_.isValid()? dateOpened_.toString(Qt::SystemLocaleShortDate): QString();
 }
 
 QString Book::creatorsString() {
     return creators_.join(", ");
+}
+
+QImage Book::cover() {
+    TRACE;
+    load();
+    return cover_;
+}
+
+void Book::setCover(const QImage &cover) {
+    TRACE;
+    if (cover.isNull()) {
+        qWarning() << "Book::setCover: Null cover";
+    }
+    cover_ = cover;
+    emit coverChanged();
 }

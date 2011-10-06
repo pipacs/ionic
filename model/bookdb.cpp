@@ -4,24 +4,21 @@
 
 BookDb *theInstance;
 
-BookDb *BookDb::instance()
-{
+BookDb *BookDb::instance() {
     if (!theInstance) {
         theInstance = new BookDb;
     }
     return theInstance;
 }
 
-void BookDb::close()
-{
+void BookDb::close() {
     if (theInstance) {
         delete theInstance;
         theInstance = 0;
     }
 }
 
-BookDb::BookDb()
-{
+BookDb::BookDb() {
     TRACE;
     bool shouldCreate = false;
     QFileInfo info(Platform::instance()->dbPath());
@@ -35,32 +32,27 @@ BookDb::BookDb()
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(QDir::toNativeSeparators(Platform::instance()->dbPath()));
     if (!db.open()) {
-        qCritical() << "Could not open" << Platform::instance()->dbPath()
-                << ": Error" << db.lastError().text();
+        qCritical() << "Could not open" << Platform::instance()->dbPath() << ": Error" << db.lastError().text();
     }
     if (shouldCreate) {
         create();
     }
 }
 
-BookDb::~BookDb()
-{
+BookDb::~BookDb() {
+    TRACE;
     db.close();
 }
 
-void BookDb::create()
-{
+void BookDb::create() {
     TRACE;
     QSqlQuery query;
-    if (!query.exec("create table book "
-                    "(name text primary key, content blob)")) {
-        qCritical() << "Failed to create database:"
-                << query.lastError().text();
+    if (!query.exec("create table book (name text primary key, content blob)")) {
+        qCritical() << "Failed to create database:" << query.lastError().text();
     }
 }
 
-QVariantHash BookDb::load(const QString &book)
-{
+QVariantHash BookDb::load(const QString &book) {
     TRACE;
     qDebug() << book;
     QVariantHash ret;
@@ -81,8 +73,7 @@ QVariantHash BookDb::load(const QString &book)
     return ret;
 }
 
-void BookDb::save(const QString &book, const QVariantHash &data)
-{
+void BookDb::save(const QString &book, const QVariantHash &data) {
     TRACE;
     qDebug() << book;
     QByteArray bytes;
@@ -96,8 +87,7 @@ void BookDb::save(const QString &book, const QVariantHash &data)
     }
 }
 
-void BookDb::remove(const QString &book)
-{
+void BookDb::remove(const QString &book) {
     TRACE;
     qDebug() << book;
     QSqlQuery query("delete from book where name = ?");
@@ -107,8 +97,7 @@ void BookDb::remove(const QString &book)
     }
 }
 
-QStringList BookDb::books()
-{
+QStringList BookDb::books() {
     TRACE;
     QStringList ret;
     QSqlQuery query("select name from book");
@@ -124,8 +113,8 @@ QStringList BookDb::books()
     return ret;
 }
 
-void BookDb::removeAll()
-{
+void BookDb::removeAll() {
+    TRACE;
     foreach (QString book, books()) {
         remove(book);
     }

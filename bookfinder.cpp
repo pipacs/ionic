@@ -35,7 +35,7 @@ void BookFinderWorker::doFind() {
     // Count the number of new books
     Library *library = Library::instance();
     foreach (QString path, booksFound) {
-        if (library->find(path) == -1) {
+        if (!library->find(path)) {
             toAdd++;
         }
     }
@@ -43,7 +43,7 @@ void BookFinderWorker::doFind() {
     // Add new books to the library
     emit begin(toAdd);
     foreach (QString path, booksFound) {
-        if (library->find(path) == -1) {
+        if (!library->find(path)) {
             qDebug() << "New book" << path;
             Book *book = library->add(path);
             emit add(book->title());

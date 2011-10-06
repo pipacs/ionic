@@ -52,7 +52,7 @@ public:
     Book();
 
     /** Construct a book from an EPUB file. */
-    Book(const QString &fileName, QObject *parent = 0);
+    explicit Book(const QString &fileName, QObject *parent = 0);
 
     /** Destructor. */
     ~Book();
@@ -96,9 +96,6 @@ public:
     /** Set last bookmark. */
     void setLastBookmark(int part, qreal position);
 
-    /** Set last bookmark. */
-    void setLastBookmark(Bookmark *bookmark);
-
     /** Get last bookmark. */
     Bookmark *lastBookmark();
 
@@ -135,7 +132,6 @@ public:
     QString title() {load(); return title_;}
     QStringList parts() {load(); return parts_;}
     QHash<QString, ContentItem> content() {load(); return content_;}
-    QImage cover() {load(); return cover_;}
     QStringList creators() {load(); return creators_;}
     QString date() {load(); return date_;}
     QString publisher() {load(); return publisher_;}
@@ -161,7 +157,8 @@ public:
         emit contentChanged();
     }
     void clearContent() {content_.clear(); emit contentChanged();}
-    void setCover(const QImage &cover) {cover_ = cover; emit coverChanged();}
+    void setCover(const QImage &cover);
+    QImage cover();
     void addCreator(const QString &creator) {
         creators_.append(creator);
         emit creatorsChanged();
@@ -262,7 +259,7 @@ protected:
     bool extractMetaData();
 
     /** Parse extracted EPUB. */
-    bool parse();
+    void parse();
 
     /** Clear all book fields except path. */
     void clear();
