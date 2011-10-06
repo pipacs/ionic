@@ -45,8 +45,8 @@ void BookFinderWorker::doFind() {
     foreach (QString path, booksFound) {
         if (library->find(path) == -1) {
             qDebug() << "New book" << path;
-            library->add(path);
-            emit add(path);
+            Book *book = library->add(path);
+            emit add(book->title());
             added++;
         }
     }

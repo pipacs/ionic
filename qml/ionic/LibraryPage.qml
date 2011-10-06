@@ -23,7 +23,7 @@ Page {
     Component {
         id: delegate
         Item {
-            height: 120
+            height: Math.max(65, textName.height + textOpened.height + 11)
             width: parent.width
 
             BorderImage {
@@ -38,20 +38,19 @@ Page {
 
             Row {
                 Image {
-                    width: 70
-                    height: 120
+                    width: 53
+                    height: 59
                     source: coverUrl
                 }
                 Column {
-                    Text {
+                    Label {
+                        id: textName
                         text: name
-                        font.pixelSize: 26
-                        font.family: "Nokia Pure Text"
                     }
-                    Text {
+                    Label {
+                        id: textOpened
                         text: "Last read: " + dateOpened
-                        font.pixelSize: 20
-                        font.family: "Nokia Pure Text"
+                        font.pixelSize: platformStyle.fontPixelSize - 4
                     }
                 }
             }
@@ -88,7 +87,6 @@ Page {
     ProgressDialog {
         id: importDialog
         titleText: "Importing Books"
-        messageText: "Gathering books"
     }
 
     ToolBarLayout {
@@ -101,8 +99,8 @@ Page {
         ToolIcon {
             iconId: "toolbar-add"
             onClicked: {
-                // bookFinder.find()
                 importDialog.indeterminate = true
+                importDialog.messageText = "Gathering books"
                 importDialog.open()
                 bookFinder.find()
             }
@@ -134,6 +132,16 @@ Page {
 
     onDone: {
         console.log("* LibraryPage.onDone " + total)
-        importDialog.messageText = "Import complete, " + total + " book(s) imported"
+        importDialog.maximumValue = 1
+        importDialog.value = 1
+        var message
+        if (total === 0) {
+            message = "No new books"
+        } else if (total == 1) {
+            message = "1 book imported"
+        } else {
+            message = "" + total + " books imported"
+        }
+        importDialog.messageText = message
     }
 }

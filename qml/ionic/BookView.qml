@@ -67,7 +67,7 @@ Flickable {
         transformOrigin: Item.TopLeft
         pressGrabTime: 999
         settings.standardFontFamily: "Nokia Pure Text"
-        settings.defaultFontSize: 30
+        settings.defaultFontSize: 28
         settings.javaEnabled: false
         settings.javascriptCanAccessClipboard: false
         settings.javascriptCanOpenWindows: false

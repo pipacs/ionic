@@ -38,9 +38,8 @@ signals:
     void booksChanged();
 
 public slots:
-    Q_INVOKABLE bool add(const QString &path);
-    Q_INVOKABLE void remove(const QString &path);
-    Q_INVOKABLE void remove(int index);
+    Q_INVOKABLE Book *add(const QString &path);
+    Q_INVOKABLE void remove(Book *book);
     void onBookOpened(const QString &path);
 
 private:

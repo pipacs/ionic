@@ -16,13 +16,12 @@ Rectangle {
     anchors.left: parent.left
     anchors.right: parent.right
 
-    Text {
+    Label {
         anchors.fill: parent
         anchors.leftMargin: 19
-        anchors.topMargin: 15
+        anchors.topMargin: 17
         text: pageHeader.text
         font.pixelSize: 32
-        font.family: "Nokia Pure Text"
         color: "white"
     }
 

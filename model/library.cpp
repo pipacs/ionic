@@ -68,15 +68,15 @@ void Library::save() {
     settings.setValue("lib/nowreading", mNowReading->path());
 }
 
-bool Library::add(const QString &path) {
+Book *Library::add(const QString &path) {
     TRACE;
     if (path == "") {
         qCritical() << "Library::add: Empty path";
-        return false;
+        return noBook();
     }
     if (find(path) != -1) {
         qDebug() << "Book already exists in library";
-        return false;
+        return noBook();
     }
     Book *book = new Book(path);
     book->peek();
@@ -84,12 +84,11 @@ bool Library::add(const QString &path) {
     mBooks.append(book);
     save();
     emit booksChanged();
-    return true;
+    return book;
 }
 
-void Library::remove(int index) {
+void Library::remove(Book *toRemove) {
     TRACE;
-    Book *toRemove = book(index);
     if (!toRemove) {
         return;
     }
@@ -98,15 +97,10 @@ void Library::remove(int index) {
         emit nowReadingChanged();
     }
     toRemove->remove();
-    mBooks.removeAt(index);
+    mBooks.removeAt(find(toRemove));
     save();
     emit booksChanged();
     delete toRemove;
-}
-
-void Library::remove(const QString &path) {
-    TRACE;
-    remove(find(path));
 }
 
 Book *Library::nowReading() const {

@@ -34,26 +34,16 @@ Page {
             height: content.length? Math.max(31, textContent.height): 0
             width: parent.width
             Row {
-                // Image {
-                //     width: 70
-                //     height: 120
-                // }
-                // Column {
-                    Text {
-                        id: textLabel
-                        text: content.length? label: ""
-                        font.pixelSize: 22
-                        font.family: "Nokia Pure Text"
-                    }
-                    Text {
-                        id: textContent
-                        text: content
-                        font.pixelSize: 22
-                        font.family: "Nokia Pure Text"
-                        font.bold: true
-                        wrapMode: Text.Wrap
-                    }
-                // }
+                Label {
+                    id: textLabel
+                    text: content.length? label: ""
+                }
+                Label {
+                    id: textContent
+                    text: content
+                    font.bold: true
+                    wrapMode: Text.WordWrap
+                }
             }
         }
     }
@@ -88,6 +78,8 @@ Page {
         anchors.right: parent.right
         anchors.margins: 11
         source: book.coverUrl
+        width: 106
+        height: 118
     }
 
     ScrollDecorator {
