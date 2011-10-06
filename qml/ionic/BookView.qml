@@ -61,6 +61,7 @@ Flickable {
     anchors.right: parent.right
     pressDelay: 0
     flickableDirection: Flickable.VerticalFlick
+    focus: true
 
     WebView {
         id: webView
@@ -82,8 +83,7 @@ Flickable {
         preferredWidth: flickable.width
         preferredHeight: flickable.height
         contentsScale: 1
-        focus: false
-        enabled: false
+        enabled: true
 
         onLoadFailed: {
             flickable.interactive = true
@@ -105,15 +105,15 @@ Flickable {
         }
 
         onLoadStarted: {
-            console.log("* BookView onLoadStarted")
+            console.log("* BookView.WebView onLoadStarted")
             flickable.interactive = false
         }
 
         Keys.onPressed: {
-            if ((event.key == Qt.Key_VolumeUp) || (event.key == Qt.Key_Up)) {
+            console.log("* BookView.WebView.Keys.onPressed " + event.key)
+            if ((event.key == Qt.Key_VolumeUp) || (event.key == Qt.Key_Up) || (event.key == Qt.Key_PageUp)) {
                 goToPreviousPage()
-            }
-            if ((event.key == Qt.Key_VolumeDown) || (event.key == Qt.Key_Down)) {
+            } else if ((event.key == Qt.Key_VolumeDown) || (event.key == Qt.Key_Down) || (event.key == Qt.Key_PageDown)) {
                 goToNextPage()
             }
         }
