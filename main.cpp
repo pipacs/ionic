@@ -64,7 +64,11 @@ int main(int argc, char *argv[]) {
     bookFinderWorkerThread->setPriority(QThread::LowestPriority);
     viewer.rootContext()->setContextProperty("bookFinder", bookFinder);
     viewer.setMainQmlFile(QLatin1String("qml/ionic/main.qml"));
+    // viewer.setFocusPolicy(Qt::StrongFocus);
+    // viewer.setFocus();
     viewer.showExpanded();
+    // viewer.activateWindow();
+    // viewer.setFocus();
 
     // Acquire volume keys
     ResourcePolicy::ResourceSet* mySet = new ResourcePolicy::ResourceSet("player");

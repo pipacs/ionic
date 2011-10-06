@@ -61,12 +61,13 @@ Flickable {
     anchors.right: parent.right
     pressDelay: 0
     flickableDirection: Flickable.VerticalFlick
-    focus: true
+    // focus: true
+    // Keys.enabled: true
 
     WebView {
         id: webView
         transformOrigin: Item.TopLeft
-        pressGrabTime: 999
+        pressGrabTime: 9999
         // settings.standardFontFamily: "Nokia Pure Text"
         settings.defaultFontSize: 26
         settings.javaEnabled: false
@@ -83,7 +84,8 @@ Flickable {
         preferredWidth: flickable.width
         preferredHeight: flickable.height
         contentsScale: 1
-        enabled: true
+        // enabled: true
+        Keys.enabled: true
 
         onLoadFailed: {
             flickable.interactive = true

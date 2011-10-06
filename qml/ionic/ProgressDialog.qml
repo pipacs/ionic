@@ -47,7 +47,7 @@ Dialog {
 
     content: Item {
         id: name
-        height: childrenRect.height
+        // height: childrenRect.height
         width: parent.width
         Label {
             id: messageLabel
