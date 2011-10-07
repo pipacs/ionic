@@ -126,10 +126,14 @@ HEADERS += \
     trace.h \
     platform.h \
     model/bookmark.h \
-    model/coverprovider.h
+    model/coverprovider.h \
+    model/contentitem.h
 
 RESOURCES += \
     ionic.qrc
+
+
+
 
 
 

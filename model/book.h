@@ -9,8 +9,10 @@
 #include <QObject>
 #include <QTemporaryFile>
 #include <QDateTime>
+#include <QVariantMap>
 
 #include "bookmark.h"
+#include "contentitem.h"
 
 class QPixmap;
 
@@ -38,16 +40,9 @@ class Book: public QObject {
     Q_PROPERTY(QString dateOpened READ dateOpened NOTIFY dateOpenedChanged)
     Q_PROPERTY(Bookmark *lastBookmark READ lastBookmark NOTIFY lastBookmarkChanged)
     Q_PROPERTY(int partCount READ partCount)
+    Q_PROPERTY(QVariantMap content READ content NOTIFY contentChanged)
 
 public:
-
-    /** Content item: An individual, named part of the book. */
-    struct ContentItem {
-        QString href;
-        QString name;
-        qint64 size;
-    };
-
     /** Default constructor. */
     Book();
 
@@ -130,8 +125,11 @@ public:
     qreal getProgress(int part, qreal position);
 
     QString title() {load(); return title_;}
-    QStringList parts() {load(); return parts_;}
-    QHash<QString, ContentItem> content() {load(); return content_;}
+    QStringList parts() {return parts_;}
+
+    void addContent(const QString &key, const QString &name, const QString &href);
+    QVariantMap content();
+
     QStringList creators() {load(); return creators_;}
     QString date() {load(); return date_;}
     QString publisher() {load(); return publisher_;}
@@ -141,7 +139,7 @@ public:
     QString rights() {load(); return rights_;}
     QString tocPath() {load(); return tocPath_;}
     QString coverPath() {load(); return coverPath_;}
-    QStringList chapters() {load(); return chapters_;}
+    QStringList chapters() {return chapters_;}
     qint64 size() {load(); return size_;}
     QString dateAdded();
     QString dateOpened();
@@ -152,10 +150,6 @@ public:
         emit partsChanged();
     }
     void clearParts() {parts_.clear(); emit partsChanged();}
-    void addContent(const QString &key, ContentItem &item) {
-        content_[key] = item;
-        emit contentChanged();
-    }
     void clearContent() {content_.clear(); emit contentChanged();}
     void setCover(const QImage &cover);
     QImage cover();
@@ -275,7 +269,7 @@ protected:
 
     QString title_;                         //< Book title from EPUB.
     QStringList parts_;                     //< EPUB part list.
-    QHash<QString, ContentItem> content_;   //< Content items from EPUB.
+    QHash<QString, ContentItem *> content_; //< Content items from EPUB.
     QImage cover_;                          //< Cover image.
     QStringList creators_;                  //< Creators.
     QString date_;                          //< Date of creation.

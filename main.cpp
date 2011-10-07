@@ -5,6 +5,7 @@
 #include "qmlapplicationviewer.h"
 #include "trace.h"
 #include "settings.h"
+#include "model/contentitem.h"
 #include "model/book.h"
 #include "model/bookmark.h"
 #include "model/bookdb.h"
@@ -30,6 +31,8 @@ int main(int argc, char *argv[]) {
     // Register QML types
     qmlRegisterType<Bookmark>("com.pipacs.ionic.Bookmark", 1, 0, "Bookmark");
     qmlRegisterType<Book>("com.pipacs.ionic.Book", 1, 0, "Book");
+    qRegisterMetaType<ContentItem *>("ContentItem");
+    qmlRegisterType<ContentItem>("com.pipacs.ionic.ContentItem", 1, 0, "ContentItem");
     // qmlRegisterType<Library>("com.pipacs.ionic.Library", 1, 0, "Library");
 
     // Initialize library, load last book or default book

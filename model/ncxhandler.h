@@ -21,14 +21,10 @@ public:
             qDeleteAll(children);
         }
         void addToBook(Book &book) {
-            Book::ContentItem contentItem;
-            contentItem.href = href;
-            contentItem.name = QString(" ").repeated(depth) + name;
-            contentItem.size = 0;
-            book.addContent(id, contentItem);
+            QString name = QString(" ").repeated(depth) + name;
+            book.addContent(id, name, href);
             book.addChapter(id);
-            qDebug() << "TreeItem::addToBook" << id << contentItem.href
-                    << contentItem.name;
+            qDebug() << "TreeItem::addToBook" << id << href << name;
             foreach (TreeItem *child, children) {
                 child->addToBook(book);
             }
@@ -49,8 +45,7 @@ public:
         delete rootItem;
     }
 
-    bool endElement(const QString &namespaceUri, const QString &name,
-                    const QString &qName) {
+    bool endElement(const QString &namespaceUri, const QString &name, const QString &qName) {
         (void)namespaceUri;
         (void)qName;
         if (name == "text") {

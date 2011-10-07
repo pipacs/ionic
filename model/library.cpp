@@ -160,7 +160,7 @@ Book *Library::find(Book *book) const {
 void Library::onBookOpened(const QString &path) {
     TRACE;
     (void)path;
-    // FIXME: What is this supposed to do
+    // FIXME: Not needed anymore?
 }
 
 QDeclarativeListProperty<Book> Library::books() {

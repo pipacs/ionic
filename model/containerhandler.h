@@ -10,9 +10,7 @@ public:
         return true;
     }
 
-    bool startElement(const QString &namespaceUri, const QString &name,
-                      const QString &qName, const QXmlAttributes &attrs)
-    {
+    bool startElement(const QString &namespaceUri, const QString &name, const QString &qName, const QXmlAttributes &attrs) {
         (void)namespaceUri;
         (void)qName;
         if (name == "rootfile") {

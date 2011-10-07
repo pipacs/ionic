@@ -5,13 +5,9 @@ PageStackWindow {
     id: appWindow
     initialPage: mainPage
 
-    MainPage {
-        id: mainPage
-    }
-
-    LibraryPage {
-        id: libraryPage
-    }
+    MainPage {id: mainPage}
+    LibraryPage {id: libraryPage}
+    ChaptersPage {id: chaptersPage}
 
     ToolBarLayout {
         id: commonTools
@@ -19,17 +15,31 @@ PageStackWindow {
 
         ToolIcon {
             iconId: "toolbar-previous"
-            onClicked: {mainPage.goToPreviousPage()}
+            onClicked: {
+                myMenu.close()
+                mainPage.goToPreviousPage()
+            }
         }
         ToolIcon {
             iconId: "toolbar-next"
-            onClicked: {mainPage.goToNextPage()}
+            onClicked: {
+                myMenu.close()
+                mainPage.goToNextPage()
+            }
         }
         ToolIcon {
             iconId: "toolbar-list"
+            onClicked: {
+                myMenu.close()
+                chaptersPage.book = library.nowReading
+                pageStack.push(chaptersPage)
+            }
         }
         ToolIcon {
             iconId: "toolbar-favorite-mark"
+            onClicked: {
+                myMenu.close()
+            }
         }
         ToolIcon {
             platformIconId: "toolbar-view-menu"

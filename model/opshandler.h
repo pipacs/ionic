@@ -12,8 +12,7 @@ public:
         book.clearCreators();
     }
 
-    bool endElement(const QString &namespaceUri, const QString &name,
-                    const QString &qName) {
+    bool endElement(const QString &namespaceUri, const QString &name, const QString &qName) {
         (void)namespaceUri;
         (void)qName;
         if (currentText.size()) {
@@ -34,19 +33,16 @@ public:
         return true;
     }
 
-    bool startElement(const QString &namespaceUri, const QString &name,
-                      const QString &qName, const QXmlAttributes &attrs) {
+    bool startElement(const QString &namespaceUri, const QString &name, const QString &qName, const QXmlAttributes &attrs) {
         (void)namespaceUri;
         (void)qName;
         currentText = "";
 
         if (name == "item") {
-            Book::ContentItem item;
-            item.href = attrs.value("href");
-            item.name = QString("Part %1").arg(partCount + 1);
-            item.size = 0;
+            QString href = attrs.value("href");
+            QString name = QString("Part %1").arg(partCount + 1);
             QString key = attrs.value("id");
-            book.addContent(key, item);
+            book.addContent(key, name, href);
             partCount++;
         } else if (name == "itemref") {
             book.addPart(attrs.value("idref"));
