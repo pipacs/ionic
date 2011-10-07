@@ -7,6 +7,7 @@ import com.pipacs.ionic.Book 1.0
 
 Page {
     property Book book: emptyBook
+    property alias enableJump: jumpTool.visible
 
     tools: libraryTools
 
@@ -99,6 +100,7 @@ Page {
             }
         }
         ToolIcon {
+            id: jumpTool
             iconId: "toolbar-jump-to"
             onClicked: {
                 pageStack.pop(null)

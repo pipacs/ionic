@@ -9,6 +9,7 @@ PageStackWindow {
     LibraryPage {id: libraryPage}
     ChaptersPage {id: chaptersPage}
     AboutPage {id: aboutPage}
+    BookPage {id: thisBookPage; enableJump: false}
 
     ToolBarLayout {
         id: commonTools
@@ -53,6 +54,14 @@ PageStackWindow {
         id: myMenu
         visualParent: pageStack
         MenuLayout {
+            MenuItem {
+                text: "This book"
+                onClicked: {
+                    myMenu.close()
+                    thisBookPage.book = mainPage.book
+                    pageStack.push(thisBookPage)
+                }
+            }
             MenuItem {
                 text: "Library"
                 onClicked: {myMenu.close(); pageStack.push(libraryPage)}

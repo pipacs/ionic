@@ -21,13 +21,14 @@ Page {
             BorderImage {
                 id: background
                 anchors.fill: parent
-                // Fill page borders
                 anchors.leftMargin: -listView.anchors.leftMargin
                 anchors.rightMargin: -listView.anchors.rightMargin
                 visible: mouseArea.pressed
                 source: "image://theme/meegotouch-list-background-pressed-center"
             }
             Label {
+                width: chaptersTools.width - listView.anchors.leftMargin - listView.anchors.rightMargin
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 anchors.verticalCenter: parent.verticalCenter
                 id: chapterLabel
                 text: modelData
@@ -55,7 +56,7 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        // anchors.margins: platformStyle.margins
+        anchors.margins: 5
         clip: true
         focus: true
         model: book.chapterNames

@@ -8,6 +8,7 @@ import com.pipacs.ionic.Book 1.0
 Page {
     signal nowReadingChanged
     tools: commonTools
+    property alias book: bookView.book
 
     BookView {
         id: bookView
