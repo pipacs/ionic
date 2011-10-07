@@ -23,6 +23,7 @@ Rectangle {
         text: pageHeader.text
         font.pixelSize: 32
         color: "white"
+        elide: Text.ElideRight
     }
 
     Image {

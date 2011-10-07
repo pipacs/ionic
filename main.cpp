@@ -31,9 +31,6 @@ int main(int argc, char *argv[]) {
     // Register QML types
     qmlRegisterType<Bookmark>("com.pipacs.ionic.Bookmark", 1, 0, "Bookmark");
     qmlRegisterType<Book>("com.pipacs.ionic.Book", 1, 0, "Book");
-    qRegisterMetaType<ContentItem *>("ContentItem");
-    qmlRegisterType<ContentItem>("com.pipacs.ionic.ContentItem", 1, 0, "ContentItem");
-    // qmlRegisterType<Library>("com.pipacs.ionic.Library", 1, 0, "Library");
 
     // Initialize library, load last book or default book
     Library *library = Library::instance();
@@ -66,12 +63,13 @@ int main(int argc, char *argv[]) {
     bookFinderWorkerThread->start();
     bookFinderWorkerThread->setPriority(QThread::LowestPriority);
     viewer.rootContext()->setContextProperty("bookFinder", bookFinder);
+    QString version(ionicVersion);
+    viewer.rootContext()->setContextProperty("version", version);
     viewer.setMainQmlFile(QLatin1String("qml/ionic/main.qml"));
     // viewer.setFocusPolicy(Qt::StrongFocus);
     // viewer.setFocus();
-    viewer.showExpanded();
     // viewer.activateWindow();
-    // viewer.setFocus();
+    viewer.showExpanded();
 
     // Acquire volume keys
     ResourcePolicy::ResourceSet* mySet = new ResourcePolicy::ResourceSet("player");

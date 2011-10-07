@@ -10,18 +10,42 @@ Page {
 
     PageHeader {
         id: header
-        text: book.title
+        text: "Chapters: " + book.title
     }
 
     Component {
         id: delegate
         Item {
-            height: chapterLabel.height
+            height: chapterLabel.height + 15
             width: parent.width
-            Label {
-                id: chapterLabel
-                text: modelData.name
+            BorderImage {
+                id: background
+                anchors.fill: parent
+                // Fill page borders
+                anchors.leftMargin: -listView.anchors.leftMargin
+                anchors.rightMargin: -listView.anchors.rightMargin
+                visible: mouseArea.pressed
+                source: "image://theme/meegotouch-list-background-pressed-center"
             }
+            Label {
+                anchors.verticalCenter: parent.verticalCenter
+                id: chapterLabel
+                text: modelData
+                font.pixelSize: 30
+            }
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                onClicked: {
+                    console.log("* ChaptersPage.delegate.onClicked " + index)
+                    var part = book.partFromChapter(index);
+                    var urlFragment = book.fragmentFromChapter(index)
+                    console.log("*  Going to part " + part + ", fragment " + urlFragment)
+                    pageStack.pop(null)
+                    mainPage.goTo(part, 0, urlFragment)
+                }
+            }
+
         }
     }
 
@@ -34,8 +58,9 @@ Page {
         // anchors.margins: platformStyle.margins
         clip: true
         focus: true
-        model: book.content
+        model: book.chapterNames
         delegate: delegate
+        // delegate: ListDelegate
     }
 
     ScrollDecorator {

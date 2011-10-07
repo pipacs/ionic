@@ -32,7 +32,6 @@ Page {
         id: delegate
         Item {
             height: content.length? Math.max(31, textContent.height): 0
-            width: parent.width
             Row {
                 Label {
                     id: textLabel
@@ -42,8 +41,9 @@ Page {
                     id: textContent
                     text: content
                     font.bold: true
-                    // FIXME style: Text.Sunken
+                    // FIXME "style: Text.Sunken" gives an error
                     styleColor: "white"
+                    // FIXME: Word wrapping doesn't seem to work
                     wrapMode: Text.WordWrap
                 }
             }
@@ -51,6 +51,7 @@ Page {
     }
 
     property list<QtObject> bookModel: [
+        QtObject {property string label: "Title: "; property string content: book.title},
         QtObject {property string label: "Author: "; property string content: book.creatorsString},
         QtObject {property string label: "Date: "; property string content: book.date},
         QtObject {property string label: "Publisher: "; property string content: book.publisher},

@@ -30,6 +30,7 @@ Flickable {
 
     // Target reading position, within the current part of the book. After loading the part, BookView will jump to this position.
     property double targetPos: 0
+    property string urlFragment
 
     // Current part index
     property int part: 0
@@ -158,7 +159,7 @@ Flickable {
         }
         flickable.part -= 1
         flickable.targetPos = 1
-        webView.url = flickable.book.url(flickable.part)
+        webView.url = flickable.book.urlFromPart(flickable.part)
     }
 
     function goToNextPart() {
@@ -167,7 +168,7 @@ Flickable {
         }
         flickable.part += 1
         flickable.targetPos = 0
-        webView.url = flickable.book.url(flickable.part)
+        webView.url = flickable.book.urlFromPart(flickable.part)
     }
 
     // Update book's last reading position

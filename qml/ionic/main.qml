@@ -56,7 +56,7 @@ PageStackWindow {
                 text: "Library"
                 onClicked: {myMenu.close(); pageStack.push(libraryPage)}
             }
-            MenuItem {text: "Settings"}
+            // MenuItem {text: "Settings"}
             MenuItem {text: "About"}
         }
     }

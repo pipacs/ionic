@@ -45,9 +45,7 @@ Page {
     onNowReadingChanged: {
         console.log("* MainPage.onNowReadingChanged")
         bookView.book = library.nowReading
-        bookView.targetPos = bookView.book.lastBookmark.pos
-        bookView.part = bookView.book.lastBookmark.part
-        bookView.url = bookView.book.url(bookView.part)
+        goTo(bookView.book.lastBookmark.part, bookView.book.lastBookmark.pos, "")
     }
 
     function goToPreviousPage() {
@@ -56,5 +54,13 @@ Page {
 
     function goToNextPage() {
         bookView.goToNextPage()
+    }
+
+    function goTo(part, targetPos, urlFragment) {
+        console.log("* MainPage.goTo")
+        bookView.targetPos = targetPos
+        bookView.part = part
+        bookView.urlFragment = urlFragment
+        bookView.url = bookView.book.urlFromPart(part)
     }
 }

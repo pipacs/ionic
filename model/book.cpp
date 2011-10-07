@@ -25,9 +25,6 @@ Book::Book(const QString &p, QObject *parent): QObject(parent), lastBookmark_(ne
 Book::~Book() {
     close();
     delete lastBookmark_;
-    foreach (ContentItem *item, content_) {
-        delete item;
-    }
 }
 
 void Book::setPath(const QString &p) {
@@ -197,7 +194,7 @@ void Book::parse() {
     coverKeys << "cover-image" << "img-cover-jpeg" << "cover";
     foreach (QString key, coverKeys) {
         if (content_.contains(key)) {
-            coverPath = QDir(rootPath()).absoluteFilePath(content_[key]->href);
+            coverPath = QDir(rootPath()).absoluteFilePath(content_[key].href);
             break;
         }
     }
@@ -211,11 +208,11 @@ void Book::parse() {
     // of contents
     QString ncxFileName;
     if (content_.contains("ncx")) {
-        ncxFileName = content_["ncx"]->href;
+        ncxFileName = content_["ncx"].href;
     } else if (content_.contains("ncxtoc")) {
-        ncxFileName = content_["ncxtoc"]->href;
+        ncxFileName = content_["ncxtoc"].href;
     } else if (content_.contains("toc")) {
-        ncxFileName = content_["toc"]->href;
+        ncxFileName = content_["toc"].href;
     } else {
         qDebug() << "No NCX table of contents";
     }
@@ -236,9 +233,9 @@ void Book::parse() {
     // Calculate book part sizes and total size
     size_ = 0;
     foreach (QString part, parts_) {
-        QFileInfo info(QDir(rootPath()).absoluteFilePath(content_[part]->href));
-        content_[part]->size = info.size();
-        size_ += content_[part]->size;
+        QFileInfo info(QDir(rootPath()).absoluteFilePath(content_[part].href));
+        content_[part].size = info.size();
+        size_ += content_[part].size;
     }
     emit contentChanged();
     emit sizeChanged();
@@ -454,11 +451,11 @@ int Book::chapterFromPart(int index) {
     int ret = -1;
 
     QString partId = parts_[index];
-    QString partHref = content_[partId]->href;
+    QString partHref = content_[partId].href;
 
     for (int i = 0; i < chapters_.size(); i++) {
         QString id = chapters_[i];
-        QString href = content_[id]->href;
+        QString href = content_[id].href;
         int hashPos = href.indexOf("#");
         if (hashPos != -1) {
             href = href.left(hashPos);
@@ -473,43 +470,54 @@ int Book::chapterFromPart(int index) {
     return ret;
 }
 
-int Book::partFromChapter(int index, QString &fragment) {
+int Book::partFromChapter(int index) {
     TRACE;
     load();
-    fragment.clear();
     QString id = chapters_[index];
-    QString href = content_[id]->href;
+    QString href = content_[id].href;
     int hashPos = href.indexOf("#");
     if (hashPos != -1) {
-        fragment = href.mid(hashPos);
         href = href.left(hashPos);
     }
 
     qDebug() << "Chapter" << index;
     qDebug() << " id" << id;
     qDebug() << " href" << href;
-    qDebug() << " fragment" << fragment;
 
     for (int i = 0; i < parts_.size(); i++) {
         QString partId = parts_[i];
-        if (content_[partId]->href == href) {
+        if (content_[partId].href == href) {
             qDebug() << "Part index for" << href << "is" << i;
             return i;
         }
     }
 
     qWarning() << "Book::partFromChapter: Could not find part index for" << href;
-    return -1;
+    return 0;
 }
 
-QString Book::url(int part) {
+QString Book::fragmentFromChapter(int index) {
+    TRACE;
+    load();
+    QString fragment;
+    QString id = chapters_[index];
+    QString href = content_[id].href;
+    int hashPos = href.indexOf("#");
+    if (hashPos != -1) {
+        fragment = href.indexOf("#");
+    }
+    qDebug() << fragment;
+    return fragment;
+}
+
+QString Book::urlFromPart(int part) {
     TRACE;
     open();
     if (part >= parts_.count()) {
         return QString();
     }
     QString partName = parts_[part];
-    QString fullPath = QDir(rootPath_).absoluteFilePath(content_[partName]->href);
+    QString fullPath = QDir(rootPath_).absoluteFilePath(content_[partName].href);
     QString ret = QUrl::fromLocalFile(fullPath).toString();
     qDebug() << "Return" << ret;
     return ret;
@@ -522,10 +530,10 @@ qreal Book::getProgress(int part, qreal position) {
     qreal partSize = 0;
     for (int i = 0; i < part; i++) {
         key = parts_[i];
-        partSize += content_[key]->size;
+        partSize += content_[key].size;
     }
     key = parts_[part];
-    partSize += content_[key]->size * position;
+    partSize += content_[key].size * position;
     return partSize / (qreal)size_;
 }
 
@@ -606,16 +614,19 @@ void Book::setCover(const QImage &cover) {
     emit coverChanged();
 }
 
-void Book::addContent(const QString &key, const QString &name, const QString &href) {
-    ContentItem *newItem = new ContentItem(name, href);
-    content_[key] = newItem;
+void Book::addContent(const QString &id, const QString &name, const QString &href) {
+    TRACE;
+    qDebug() << id << name << href;
+    content_[id] = ContentItem(name, href);
     emit contentChanged();
 }
 
-QVariantMap Book::content() {
-    QVariantMap ret;
-    foreach(QString key, content_.keys()) {
-        ret[key] = QVariant::fromValue(content_[key]);
+QStringList Book::chapterNames() const {
+    TRACE;
+    QStringList ret;
+    foreach (QString chapterId, chapters_) {
+        ret.append(content_[chapterId].name);
+        qDebug() << content_[chapterId].name;
     }
     return ret;
 }

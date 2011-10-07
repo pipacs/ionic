@@ -40,7 +40,7 @@ class Book: public QObject {
     Q_PROPERTY(QString dateOpened READ dateOpened NOTIFY dateOpenedChanged)
     Q_PROPERTY(Bookmark *lastBookmark READ lastBookmark NOTIFY lastBookmarkChanged)
     Q_PROPERTY(int partCount READ partCount)
-    Q_PROPERTY(QVariantMap content READ content NOTIFY contentChanged)
+    Q_PROPERTY(QStringList chapterNames READ chapterNames NOTIFY contentChanged)
 
 public:
     /** Default constructor. */
@@ -118,8 +118,14 @@ public:
     /** Get chapter index from part index. */
     int chapterFromPart(int index);
 
-    /** Get part index and URL fragment from chapter index. */
-    int partFromChapter(int index, QString &fragment);
+    /** Get part index from chapter index. */
+    Q_INVOKABLE int partFromChapter(int chapterIndex);
+
+    /** Get the URL fragment from chapter index. */
+    Q_INVOKABLE QString fragmentFromChapter(int chapterIndex);
+
+    /** Get the URL corresponding to a given part. */
+    Q_INVOKABLE QString urlFromPart(int partIndex);
 
     /** Get progress (0..1) corresponding to part index and part position. */
     qreal getProgress(int part, qreal position);
@@ -127,8 +133,11 @@ public:
     QString title() {load(); return title_;}
     QStringList parts() {return parts_;}
 
-    void addContent(const QString &key, const QString &name, const QString &href);
-    QVariantMap content();
+    /** Add a new content item with the given ID. */
+    void addContent(const QString &id, const QString &name, const QString &href);
+
+    /** Return displayable chapter names. */
+    QStringList chapterNames() const;
 
     QStringList creators() {load(); return creators_;}
     QString date() {load(); return date_;}
@@ -213,9 +222,6 @@ public:
     /** Is this a valid book? */
     bool isValid() const;
 
-    /** Get the URL corresponding to a given part. */
-    Q_INVOKABLE QString url(int part);
-
     /** Get the number of parts. */
     int partCount();
 
@@ -269,7 +275,7 @@ protected:
 
     QString title_;                         //< Book title from EPUB.
     QStringList parts_;                     //< EPUB part list.
-    QHash<QString, ContentItem *> content_; //< Content items from EPUB.
+    QHash<QString, ContentItem> content_;   //< Content items from EPUB.
     QImage cover_;                          //< Cover image.
     QStringList creators_;                  //< Creators.
     QString date_;                          //< Date of creation.
