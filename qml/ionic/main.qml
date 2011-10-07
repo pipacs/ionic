@@ -8,6 +8,7 @@ PageStackWindow {
     MainPage {id: mainPage}
     LibraryPage {id: libraryPage}
     ChaptersPage {id: chaptersPage}
+    AboutPage {id: aboutPage}
 
     ToolBarLayout {
         id: commonTools
@@ -57,7 +58,10 @@ PageStackWindow {
                 onClicked: {myMenu.close(); pageStack.push(libraryPage)}
             }
             // MenuItem {text: "Settings"}
-            MenuItem {text: "About"}
+            MenuItem {
+                text: "About"
+                onClicked: {myMenu.close(); pageStack.push(aboutPage)}
+            }
         }
     }
 }
