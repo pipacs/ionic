@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
     viewer.showExpanded();
 
     // Acquire volume keys
-    ResourcePolicy::ResourceSet* mySet = new ResourcePolicy::ResourceSet("player");
+    ResourcePolicy::ResourceSet *mySet = new ResourcePolicy::ResourceSet("player");
     mySet->addResourceObject(new ResourcePolicy::ScaleButtonResource);
     mySet->acquire();
     // FIXME: Install event filter to release volume keys when main view is not in front

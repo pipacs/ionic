@@ -9,7 +9,7 @@
 #include <QObject>
 #include <QTemporaryFile>
 #include <QDateTime>
-#include <QVariantMap>
+#include <QDeclarativeListProperty>
 
 #include "bookmark.h"
 #include "contentitem.h"
@@ -42,6 +42,7 @@ class Book: public QObject {
     Q_PROPERTY(int partCount READ partCount)
     Q_PROPERTY(QStringList chapterNames READ chapterNames NOTIFY contentChanged)
     Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
+    Q_PROPERTY(QDeclarativeListProperty<Bookmark> bookmarks READ bookmarks NOTIFY bookmarksChanged)
 
 public:
     /** Default constructor. */
@@ -105,7 +106,7 @@ public:
     void deleteBookmark(int index);
 
     /** List bookmarks. */
-    QList<Bookmark *> bookmarks();
+    QDeclarativeListProperty<Bookmark> bookmarks();
 
     /**
      * Get friendly name.
@@ -254,6 +255,7 @@ signals:
     void shortNameChanged();
     void lastBookmarkChanged();
     void validChanged();
+    void bookmarksChanged();
 
 protected:
     /** Extract EPUB as ZIP. */

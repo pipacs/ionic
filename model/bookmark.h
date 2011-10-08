@@ -2,12 +2,8 @@
 #define BOOKMARK_H
 
 #include <QObject>
-#include "trace.h"
 
-/**
-Bookmark: A location in the book identified by a part (volume) index and
-a relative position in volume.
-*/
+/** Bookmark: A location in the book identified by a part (volume) index and a relative position in part. */
 class Bookmark: public QObject {
     Q_OBJECT
     Q_PROPERTY(int part READ part WRITE setPart NOTIFY partChanged)
@@ -18,14 +14,11 @@ public:
     Bookmark(): QObject(0), part_(0), pos_(0), note_("") {
     }
 
-    Bookmark(int part, qreal pos, const QString &note = QString(),
-        QObject *parent = 0): QObject(parent), part_(part), pos_(pos),
-        note_(note) {
+    Bookmark(int part, qreal pos, const QString &note = QString(), QObject *parent = 0): QObject(parent), part_(part), pos_(pos), note_(note) {
     }
 
     bool operator<(const Bookmark &other) const {
-        return (part_ == other.part_)?
-            (pos_ < other.pos_): (part_ < other.part_);
+        return (part_ == other.part_)? (pos_ < other.pos_): (part_ < other.part_);
     }
 
     int part() const {return part_;}

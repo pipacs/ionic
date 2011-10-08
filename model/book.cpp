@@ -317,6 +317,7 @@ void Book::load() {
         QString note = data[QString("bookmark%1note").arg(i)].toString();
         bookmarks_.append(new Bookmark(part, pos, note));
     }
+    emit bookmarksChanged();
     setDateAdded(data["dateadded"].toDateTime());
     setDateOpened(data["dateopened"].toDateTime());
 }
@@ -376,6 +377,7 @@ void Book::addBookmark(int part, qreal position, const QString &note) {
     load();
     bookmarks_.append(new Bookmark(part, position, note));
     qSort(bookmarks_.begin(), bookmarks_.end());
+    emit bookmarksChanged();
     save();
 }
 
@@ -383,20 +385,21 @@ void Book::setBookmarkNote(int index, const QString &note) {
     load();
     if (index >= 0 && index < bookmarks_.length()) {
         bookmarks_[index]->setNote(note);
+        emit bookmarksChanged();
+        save();
     }
-    save();
-
 }
 
 void Book::deleteBookmark(int index) {
     load();
     bookmarks_.removeAt(index);
+    emit bookmarksChanged();
     save();
 }
 
-QList<Bookmark *> Book::bookmarks() {
+QDeclarativeListProperty<Bookmark> Book::bookmarks() {
     load();
-    return bookmarks_;
+    return QDeclarativeListProperty<Bookmark>(this, bookmarks_);
 }
 
 QString Book::opsPath() {
