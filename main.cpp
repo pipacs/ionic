@@ -40,7 +40,6 @@ int main(int argc, char *argv[]) {
     if (!current->isValid()) {
         if (!library->bookCount()) {
             library->add(":/books/2BR02B.epub");
-            library->add(":/books/hacker-monthly-2.epub");
         }
         library->setNowReading(library->book(0));
     }

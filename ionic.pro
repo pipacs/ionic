@@ -74,7 +74,6 @@ OTHER_FILES += \
     pkg/version.txt \
     pkg/acknowledgements.txt \
     books/2BR02B.epub \
-    books/hacker-monthly-2.epub \
     icons/view-normal.png \
     icons/view-fullscreen.png \
     icons/system-file-manager.png \
@@ -131,6 +130,7 @@ HEADERS += \
 
 RESOURCES += \
     ionic.qrc
+
 
 
 
