@@ -109,6 +109,7 @@ Page {
         }
         ToolIcon {
             iconId: "toolbar-delete"
+            enabled: book.valid
             onClicked: {
                 deleteQuery.open()
             }

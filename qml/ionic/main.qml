@@ -17,6 +17,7 @@ PageStackWindow {
 
         ToolIcon {
             iconId: "toolbar-previous"
+            enabled: library.nowReading.valid
             onClicked: {
                 myMenu.close()
                 mainPage.goToPreviousPage()
@@ -24,6 +25,7 @@ PageStackWindow {
         }
         ToolIcon {
             iconId: "toolbar-next"
+            enabled: library.nowReading.valid
             onClicked: {
                 myMenu.close()
                 mainPage.goToNextPage()
@@ -31,6 +33,7 @@ PageStackWindow {
         }
         ToolIcon {
             iconId: "toolbar-list"
+            enabled: library.nowReading.valid
             onClicked: {
                 myMenu.close()
                 chaptersPage.book = library.nowReading
@@ -39,6 +42,7 @@ PageStackWindow {
         }
         ToolIcon {
             iconId: "toolbar-favorite-mark"
+            enabled: library.nowReading.valid
             onClicked: {
                 myMenu.close()
             }
@@ -56,9 +60,10 @@ PageStackWindow {
         MenuLayout {
             MenuItem {
                 text: "This book"
+                enabled: library.nowReading.valid
                 onClicked: {
                     myMenu.close()
-                    thisBookPage.book = mainPage.book
+                    thisBookPage.book = library.nowReading
                     pageStack.push(thisBookPage)
                 }
             }

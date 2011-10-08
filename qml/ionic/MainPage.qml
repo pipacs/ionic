@@ -8,7 +8,6 @@ import com.pipacs.ionic.Book 1.0
 Page {
     signal nowReadingChanged
     tools: commonTools
-    property alias book: bookView.book
 
     BookView {
         id: bookView
@@ -45,8 +44,7 @@ Page {
 
     onNowReadingChanged: {
         console.log("* MainPage.onNowReadingChanged")
-        bookView.book = library.nowReading
-        goTo(bookView.book.lastBookmark.part, bookView.book.lastBookmark.pos, "")
+        goTo(library.nowReading.lastBookmark.part, library.nowReading.lastBookmark.pos, "")
     }
 
     function goToPreviousPage() {
@@ -62,6 +60,6 @@ Page {
         bookView.targetPos = targetPos
         bookView.part = part
         bookView.urlFragment = urlFragment
-        bookView.url = bookView.book.urlFromPart(part)
+        bookView.url = library.nowReading.urlFromPart(part)
     }
 }

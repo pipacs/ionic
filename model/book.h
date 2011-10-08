@@ -41,6 +41,7 @@ class Book: public QObject {
     Q_PROPERTY(Bookmark *lastBookmark READ lastBookmark NOTIFY lastBookmarkChanged)
     Q_PROPERTY(int partCount READ partCount)
     Q_PROPERTY(QStringList chapterNames READ chapterNames NOTIFY contentChanged)
+    Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
 
 public:
     /** Default constructor. */
@@ -252,6 +253,7 @@ signals:
     void nameChanged();
     void shortNameChanged();
     void lastBookmarkChanged();
+    void validChanged();
 
 protected:
     /** Extract EPUB as ZIP. */

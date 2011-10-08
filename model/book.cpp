@@ -38,6 +38,7 @@ void Book::setPath(const QString &p) {
         valid_ = true;
     }
     emit pathChanged();
+    emit validChanged();
 }
 
 QString Book::path() const {
@@ -576,7 +577,6 @@ QImage Book::makeCover(const QImage &image) {
 }
 
 int Book::partCount() {
-    TRACE;
     load();
     return parts_.count();
 }
@@ -600,13 +600,11 @@ QString Book::creatorsString() {
 }
 
 QImage Book::cover() {
-    TRACE;
     load();
     return cover_;
 }
 
 void Book::setCover(const QImage &cover) {
-    TRACE;
     if (cover.isNull()) {
         qWarning() << "Book::setCover: Null cover";
     }
@@ -622,11 +620,9 @@ void Book::addContent(const QString &id, const QString &name, const QString &hre
 }
 
 QStringList Book::chapterNames() const {
-    TRACE;
     QStringList ret;
     foreach (QString chapterId, chapters_) {
         ret.append(content_[chapterId].name);
-        qDebug() << content_[chapterId].name;
     }
     return ret;
 }

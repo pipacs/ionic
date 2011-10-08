@@ -25,9 +25,6 @@ import QtWebKit 1.0
 import com.pipacs.ionic.Book 1.0
 
 Flickable {
-    // Book to display
-    property Book book: emptyBook
-
     // Target reading position, within the current part of the book. After loading the part, BookView will jump to this position.
     property double targetPos: 0
     property string urlFragment
@@ -159,26 +156,27 @@ Flickable {
         }
         flickable.part -= 1
         flickable.targetPos = 1
-        webView.url = flickable.book.urlFromPart(flickable.part)
+        webView.url = library.nowReading.urlFromPart(flickable.part)
     }
 
     function goToNextPart() {
-        if (flickable.part >= (flickable.book.partCount - 1)) {
+        if (flickable.part >= (library.nowReading.partCount - 1)) {
             return;
         }
         flickable.part += 1
         flickable.targetPos = 0
-        webView.url = flickable.book.urlFromPart(flickable.part)
+        webView.url = library.nowReading.urlFromPart(flickable.part)
     }
 
     // Update book's last reading position
     function updateLastBookmark() {
         var currentPos = flickable.contentY / webView.contentsSize.height
-        if ((Math.abs(flickable.book.lastBookmark.pos - currentPos) > 0.0005) || (flickable.book.lastBookmark.part != flickable.part)) {
+        var book = library.nowReading
+        if ((Math.abs(book.lastBookmark.pos - currentPos) > 0.0005) || (book.lastBookmark.part != flickable.part)) {
             console.log("* webView.updateLastBookmark: Needs update")
-            flickable.book.lastBookmark.pos = currentPos
-            flickable.book.lastBookmark.part = flickable.part
-            flickable.book.save()
+            book.lastBookmark.pos = currentPos
+            book.lastBookmark.part = flickable.part
+            book.save()
         }
     }
 

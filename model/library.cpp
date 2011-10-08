@@ -7,6 +7,7 @@ static Book *noBook() {
     static Book *instance;
     if (!instance) {
         instance = new Book();
+        instance->setTitle("(no book)");
     }
     return instance;
 }
@@ -90,6 +91,9 @@ void Library::remove(Book *book) {
     if (!book) {
         return;
     }
+    if (!book->isValid()) {
+        return;
+    }
     if (book == mNowReading) {
         mNowReading = noBook();
         emit nowReadingChanged();
@@ -102,7 +106,6 @@ void Library::remove(Book *book) {
 }
 
 Book *Library::nowReading() const {
-    TRACE;
     return mNowReading;
 }
 
