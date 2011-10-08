@@ -381,15 +381,6 @@ void Book::addBookmark(int part, qreal position, const QString &note) {
     save();
 }
 
-void Book::setBookmarkNote(int index, const QString &note) {
-    load();
-    if (index >= 0 && index < bookmarks_.length()) {
-        bookmarks_[index]->setNote(note);
-        emit bookmarksChanged();
-        save();
-    }
-}
-
 void Book::deleteBookmark(int index) {
     load();
     bookmarks_.removeAt(index);

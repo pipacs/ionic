@@ -10,6 +10,7 @@ PageStackWindow {
     ChaptersPage {id: chaptersPage}
     AboutPage {id: aboutPage}
     BookPage {id: thisBookPage; enableJump: false}
+    BookmarksPage {id: bookmarksPage}
 
     ToolBarLayout {
         id: commonTools
@@ -45,6 +46,8 @@ PageStackWindow {
             enabled: library.nowReading.valid
             onClicked: {
                 myMenu.close()
+                bookmarksPage.book = library.nowReading
+                pageStack.push(bookmarksPage)
             }
         }
         ToolIcon {

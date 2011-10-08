@@ -97,13 +97,10 @@ public:
     Bookmark *lastBookmark();
 
     /** Add bookmark. */
-    void addBookmark(int part, qreal position, const QString &note);
-
-    /** Change a given bookmark's note text */
-    void setBookmarkNote(int index, const QString &note);
+    Q_INVOKABLE void addBookmark(int part, qreal position, const QString &note);
 
     /** Delete bookmark. */
-    void deleteBookmark(int index);
+    Q_INVOKABLE void deleteBookmark(int index);
 
     /** List bookmarks. */
     QDeclarativeListProperty<Bookmark> bookmarks();
