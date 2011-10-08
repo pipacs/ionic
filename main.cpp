@@ -31,6 +31,7 @@ int main(int argc, char *argv[]) {
     // Register QML types
     qmlRegisterType<Bookmark>("com.pipacs.ionic.Bookmark", 1, 0, "Bookmark");
     qmlRegisterType<Book>("com.pipacs.ionic.Book", 1, 0, "Book");
+    qmlRegisterType<Library>("com.pipacs.ionic.Library", 1, 0, "Library");
 
     // Initialize library, load last book or default book
     Library *library = Library::instance();

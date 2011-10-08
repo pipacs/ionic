@@ -7,7 +7,7 @@ Rectangle {
     id: pageHeader
 
     property string text: "Page Title"
-    property bool pickable: false   // Set to true to show a combobox indicator
+    property bool clickable: false   // Set to true to show a combobox indicator
     signal clicked
 
     height: 65
@@ -32,7 +32,7 @@ Rectangle {
         anchors.rightMargin: 19
         anchors.topMargin: 19
         source: "image://theme/meegotouch-combobox-indicator-inverted"
-        visible: pageHeader.pickable
+        visible: pageHeader.clickable
     }
 
     MouseArea {

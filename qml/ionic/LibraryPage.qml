@@ -17,7 +17,28 @@ Page {
 
     PageHeader {
         id: header
-        text: "Library"
+        text: sortByModel.get(library.sortBy).header
+        clickable: true
+        onClicked: {
+            sortByDialog.open()
+        }
+    }
+
+    SelectionDialog {
+        id: sortByDialog
+        titleText: "Sort books by"
+        selectedIndex: library.sortBy
+
+        model: ListModel {
+            id: sortByModel
+            ListElement {name: "Title"; header: "Library: By title"}
+            ListElement {name: "Author"; header: "Library: By author"}
+            ListElement {name: "Date added"; header: "Library: By date added"}
+            ListElement {name: "Date last read"; header: "Library: By date last read"}
+        }
+        onAccepted: {
+            library.sortBy = sortByDialog.selectedIndex
+        }
     }
 
     Component {

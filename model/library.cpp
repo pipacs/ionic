@@ -13,7 +13,7 @@ static Book *noBook() {
 
 static Library *theInstance = 0;
 
-Library::Library(QObject *parent): QObject(parent), mNowReading(noBook()) {
+Library::Library(QObject *parent): QObject(parent), mNowReading(noBook()), mSortBy(SortByTitle) {
 }
 
 Library::~Library() {
@@ -44,13 +44,9 @@ void Library::load() {
     TRACE;
     clear();
     QStringList books = BookDb::instance()->books();
-    emit beginLoad(books.size());
 
     foreach(QString path, books) {
-        emit loading(path);
         Book *book = new Book(path);
-        connect(book, SIGNAL(opened(const QString &)), this, SLOT(onBookOpened(const QString &)));
-        // book->load();
         mBooks.append(book);
     }
 
@@ -58,8 +54,8 @@ void Library::load() {
     QString currentPath = settings.value("lib/nowreading").toString();
     Book *found = find(currentPath);
     mNowReading = found? found: noBook();
-    emit endLoad();
-    emit booksChanged();
+    mSortBy = (SortBy)settings.value("lib/sortby", QVariant((int)SortByTitle)).toInt();
+    sort();
     emit nowReadingChanged();
 }
 
@@ -67,6 +63,7 @@ void Library::save() {
     TRACE;
     QSettings settings;
     settings.setValue("lib/nowreading", mNowReading->path());
+    settings.setValue("lib/sortby", (int)mSortBy);
 }
 
 Book *Library::add(const QString &path) {
@@ -84,7 +81,7 @@ Book *Library::add(const QString &path) {
     book->setDateAdded(QDateTime::currentDateTime().toUTC());
     mBooks.append(book);
     save();
-    emit booksChanged();
+    sort();
     return book;
 }
 
@@ -157,12 +154,6 @@ Book *Library::find(Book *book) const {
     return 0;
 }
 
-void Library::onBookOpened(const QString &path) {
-    TRACE;
-    (void)path;
-    // FIXME: Not needed anymore?
-}
-
 QDeclarativeListProperty<Book> Library::books() {
     TRACE;
     return QDeclarativeListProperty<Book>(this, mBooks);
@@ -170,4 +161,65 @@ QDeclarativeListProperty<Book> Library::books() {
 
 int Library::bookCount() {
     return mBooks.count();
+}
+
+void Library::setSortBy(SortBy order) {
+    if (mSortBy != order) {
+        mSortBy = order;
+        emit sortByChanged();
+        sort();
+        save();
+    }
+}
+
+Library::SortBy Library::sortBy() const {
+    return mSortBy;
+}
+
+void Library::sort() {
+    switch (mSortBy) {
+    case SortByAuthor: qSort(mBooks.begin(), mBooks.end(), lessThanByAuthor); break;
+    case SortByDateAdded: qSort(mBooks.begin(), mBooks.end(), lessThanByDateAdded); break;
+    case SortByDateOpened: qSort(mBooks.begin(), mBooks.end(), lessThanByDateOpened); break;
+    default: qSort(mBooks.begin(), mBooks.end(), lessThanByTitle);
+    }
+    emit booksChanged();
+}
+
+bool Library::lessThanByTitle(const Book *cb1, const Book *cb2) {
+    Book *b1 = const_cast<Book *>(cb1);
+    Book *b2 = const_cast<Book *>(cb2);
+    return b1->title() < b2->title();
+}
+
+bool Library::lessThanByAuthor(const Book *cb1, const Book *cb2) {
+    Book *b1 = const_cast<Book *>(cb1);
+    Book *b2 = const_cast<Book *>(cb2);
+    QString author1 = b1->creators().join(", ");
+    QString author2 = b2->creators().join(", ");
+    if (author1 == author2) {
+        return b1->title() < b2->title();
+    } else {
+        return author1 < author2;
+    }
+}
+
+bool Library::lessThanByDateAdded(const Book *cb1, const Book *cb2) {
+    Book *b1 = const_cast<Book *>(cb1);
+    Book *b2 = const_cast<Book *>(cb2);
+    if (b1->dateAdded() == b2->dateAdded()) {
+        return b1->title() < b2->title();
+    } else {
+        return b1->dateAdded() < b2->dateAdded();
+    }
+}
+
+bool Library::lessThanByDateOpened(const Book *cb1, const Book *cb2) {
+    Book *b1 = const_cast<Book *>(cb1);
+    Book *b2 = const_cast<Book *>(cb2);
+    if (b1->dateOpened() == b2->dateOpened()) {
+        return b1->title() < b2->title();
+    } else {
+        return b1->dateOpened() < b2->dateOpened();
+    }
 }

@@ -585,12 +585,12 @@ QString Book::coverUrl() {
     return QString("image://covers/%1").arg(path());
 }
 
-QString Book::dateAdded() {
+QString Book::dateAddedStr() {
     load();
     return dateAdded_.isValid()? dateAdded_.toString(Qt::SystemLocaleShortDate): QString();
 }
 
-QString Book::dateOpened() {
+QString Book::dateOpenedStr() {
     load();
     return dateOpened_.isValid()? dateOpened_.toString(Qt::SystemLocaleShortDate): QString();
 }

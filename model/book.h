@@ -36,8 +36,8 @@ class Book: public QObject {
     Q_PROPERTY(QString rights READ rights NOTIFY rightsChanged)
     Q_PROPERTY(QStringList chapters READ chapters NOTIFY chaptersChanged)
     Q_PROPERTY(qint64 size READ size NOTIFY sizeChanged)
-    Q_PROPERTY(QString dateAdded READ dateAdded NOTIFY dateAddedChanged)
-    Q_PROPERTY(QString dateOpened READ dateOpened NOTIFY dateOpenedChanged)
+    Q_PROPERTY(QString dateAdded READ dateAddedStr NOTIFY dateAddedChanged)
+    Q_PROPERTY(QString dateOpened READ dateOpenedStr NOTIFY dateOpenedChanged)
     Q_PROPERTY(Bookmark *lastBookmark READ lastBookmark NOTIFY lastBookmarkChanged)
     Q_PROPERTY(int partCount READ partCount)
     Q_PROPERTY(QStringList chapterNames READ chapterNames NOTIFY contentChanged)
@@ -150,8 +150,10 @@ public:
     QString coverPath() {load(); return coverPath_;}
     QStringList chapters() {return chapters_;}
     qint64 size() {load(); return size_;}
-    QString dateAdded();
-    QString dateOpened();
+    QString dateAddedStr();
+    QString dateOpenedStr();
+    QDateTime dateAdded() {load(); return dateAdded_;}
+    QDateTime dateOpened() {load(); return dateOpened_;}
 
     void setTitle(const QString &title) {title_ = title; emit titleChanged();}
     void addPart(const QString &part) {
@@ -288,8 +290,6 @@ protected:
     QString coverPath_;                     //< Path to cover HTML file.
     QStringList chapters_;                  //< Main navigation items.
     qint64 size_;                           //< Size of all parts.
-    QDateTime dateAdded_;                   //< Date book added to library.
-    QDateTime dateOpened_;                  //< Date book was last read.
     QString path_;                          //< Path to EPUB file.
     Bookmark *lastBookmark_;                //< Last position read.
     QList<Bookmark *> bookmarks_;           //< List of bookmarks.
@@ -298,6 +298,9 @@ protected:
     bool loaded_;                           //< True, if loaded from database.
     bool valid_;                            //< True, if the book represents a valid EPUB file.
     bool isOpen_;                           //< True, if the book is open.
+    QDateTime dateAdded_;                   //< Date book added to library.
+    QDateTime dateOpened_;                  //< Date book was last read.
+
 };
 
 #endif // BOOK_H
