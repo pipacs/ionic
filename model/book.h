@@ -127,7 +127,7 @@ public:
     Q_INVOKABLE QString urlFromPart(int partIndex);
 
     /** Get progress (0..1) corresponding to part index and part position. */
-    qreal getProgress(int part, qreal position);
+    Q_INVOKABLE qreal getProgress(int part, qreal position);
 
     QString title() {load(); return title_;}
     QStringList parts() {return parts_;}
@@ -275,6 +275,11 @@ protected:
 
     /** Make a cover image from an image. */
     QImage makeCover(const QImage &image);
+
+    /** Comparator for sorting bookmark pointers. */
+    static bool compareBookmarks(Bookmark *b1, Bookmark *b2) {
+        return *b1 < *b2;
+    }
 
     QString title_;                         //< Book title from EPUB.
     QStringList parts_;                     //< EPUB part list.

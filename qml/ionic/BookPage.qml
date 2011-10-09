@@ -79,7 +79,7 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.margins: 11
+        anchors.margins: 5
         clip: true
         focus: true
         model: bookModel

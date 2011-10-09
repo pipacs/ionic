@@ -18,6 +18,7 @@ Page {
         id: delegate
         Item {
             height: 60
+            width: parent.width
             BorderImage {
                 id: background
                 anchors.fill: parent
@@ -30,7 +31,7 @@ Page {
                 Column {
                     Label {
                         font.pixelSize: 28
-                        text: "Part " + part + ", position " + book.bookmarks[index].pos
+                        text: "At " + Math.floor(book.getProgress(part, book.bookmarks[index].pos) * 100) + "%"
                     }
                     Label {
                         font.pixelSize: 24
@@ -43,6 +44,8 @@ Page {
                 anchors.fill: parent
                 onClicked: {
                     console.log("* BookmarksPage.delegate.onClicked " + index)
+                    pageStack.pop(null)
+                    mainPage.goTo(book.bookmarks[index].part, book.bookmarks[index].pos, "")
                 }
             }
         }
@@ -54,7 +57,7 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.margins: 11
+        anchors.margins: 5
         clip: true
         focus: true
         model: book.bookmarks

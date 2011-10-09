@@ -3,5 +3,6 @@
         <file>books/2BR02B.epub</file>
         <file>ionic80.png</file>
         <file>icons/book.png</file>
+        <file>icons/star.png</file>
     </qresource>
 </RCC>

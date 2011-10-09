@@ -106,7 +106,8 @@ OTHER_FILES += \
     icons/bookmark.png \
     icons/book.png \
     icons/back.png \
-    icons/add.png
+    icons/add.png \
+    icons/star.png
 
 HEADERS += \
     model/book.h \
@@ -130,6 +131,7 @@ HEADERS += \
 
 RESOURCES += \
     ionic.qrc
+
 
 
 

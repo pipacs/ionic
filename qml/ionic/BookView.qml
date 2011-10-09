@@ -21,6 +21,9 @@
 
 import QtQuick 1.0
 import QtWebKit 1.0
+import com.nokia.meego 1.0
+import com.nokia.extras 1.0
+import com.pipacs.ionic.Book 1.0
 
 import com.pipacs.ionic.Book 1.0
 
@@ -65,7 +68,7 @@ Flickable {
     WebView {
         id: webView
         transformOrigin: Item.TopLeft
-        pressGrabTime: 9999
+        // pressGrabTime: 9999
         // settings.standardFontFamily: "Nokia Pure Text"
         settings.defaultFontSize: 26
         settings.javaEnabled: false
@@ -84,13 +87,16 @@ Flickable {
         contentsScale: 1
         // enabled: true
         Keys.enabled: true
+        property bool loading: false
 
         onLoadFailed: {
+            loading = false
             flickable.interactive = true
             flickable.targetPos = 0
         }
 
         onLoadFinished: {
+            loading = false
             flickable.interactive = true
             var newY = webView.contentsSize.height * flickable.targetPos
             if (flickable.targetPos == 1) {
@@ -105,7 +111,7 @@ Flickable {
         }
 
         onLoadStarted: {
-            console.log("* BookView.WebView onLoadStarted")
+            loading = true
             flickable.interactive = false
         }
 
@@ -124,6 +130,25 @@ Flickable {
             loadStarted.connect(flickable.loadStarted)
             loadFailed.connect(flickable.loadFailed)
             loadFinished.connect(flickable.loadFinished)
+        }
+    }
+
+    // Show bookmarks, using the bookmark list as model
+    Repeater {
+        model: library.nowReading.bookmarks
+        delegate: Component {
+            Item {
+                x: 0
+                y: webView.contentsSize.height * library.nowReading.bookmarks[index].pos
+                width: parent.width
+                height: 50
+                visible: !webView.loading && (library.nowReading.bookmarks[index].part == flickable.part)
+                Image {
+                    source: "qrc:/icons/star.png"
+                    opacity: 0.5
+                    anchors.right: parent.right
+                }
+            }
         }
     }
 

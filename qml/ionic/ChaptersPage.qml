@@ -46,7 +46,6 @@ Page {
                     mainPage.goTo(part, 0, urlFragment)
                 }
             }
-
         }
     }
 
