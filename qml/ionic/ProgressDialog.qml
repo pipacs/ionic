@@ -47,20 +47,23 @@ Dialog {
 
     content: Item {
         id: name
-        // height: childrenRect.height
         width: parent.width
-        Label {
-            id: messageLabel
-            anchors.top: parent.bottom
-            height: importDialog.platformStyle.titleBarHeight
-            color: "white"
-            text: "Gathering books"
-        }
-        ProgressBar {
-            anchors.top: messageLabel.bottom
-            id: progressBar
-            width: parent.width
-            indeterminate: true
+        Column {
+            Label {
+                text: ""
+                height: importDialog.platformStyle.titleBarHeight
+            }
+            Label {
+                id: messageLabel
+                height: importDialog.platformStyle.titleBarHeight
+                color: "white"
+                text: "Gathering books"
+            }
+            ProgressBar {
+                id: progressBar
+                width: name.width
+                indeterminate: true
+            }
         }
     }
 }
