@@ -98,16 +98,7 @@ Flickable {
         onLoadFinished: {
             loading = false
             flickable.interactive = true
-            var newY = webView.contentsSize.height * flickable.targetPos
-            if (flickable.targetPos == 1) {
-                newY -= flickable.height
-            }
-            if (newY < 0) {
-                newY = 0
-            }
-            flickable.contentY = newY
-            flickable.targetPos = 0
-            updateLastBookmark()
+            bookView.jump()
         }
 
         onLoadStarted: {
@@ -203,6 +194,20 @@ Flickable {
             book.lastBookmark.part = flickable.part
             book.save()
         }
+    }
+
+    // Jump to a new location specified in flickable.targetPos
+    function jump() {
+        var newY = webView.contentsSize.height * flickable.targetPos
+        if (flickable.targetPos == 1) {
+            newY -= flickable.height
+        }
+        if (newY < 0) {
+            newY = 0
+        }
+        flickable.contentY = newY
+        flickable.targetPos = 0
+        updateLastBookmark()
     }
 
     Timer {

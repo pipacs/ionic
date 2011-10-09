@@ -521,7 +521,9 @@ QString Book::urlFromPart(int part) {
 
 qreal Book::getProgress(int part, qreal position) {
     load();
-    Q_ASSERT(part < parts.size());
+    if ((part < 0) || (part >= parts_.count())) {
+        return 0;
+    }
     QString key;
     qreal partSize = 0;
     for (int i = 0; i < part; i++) {

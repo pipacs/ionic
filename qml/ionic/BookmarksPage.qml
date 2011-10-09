@@ -78,8 +78,42 @@ Page {
         ToolIcon {
             iconId: "toolbar-add"
             onClicked: {
-                book.addBookmark(book.lastBookmark.part, book.lastBookmark.pos, "Boo!")
+                addBookmark.open()
             }
+        }
+    }
+
+    Sheet {
+        id: addBookmark
+
+        acceptButtonText: "OK"
+        rejectButtonText: "Cancel"
+        content: Flickable {
+            anchors.fill: parent
+            anchors.leftMargin: 10
+            anchors.topMargin: 10
+            contentWidth: col2.width
+            contentHeight: col2.height
+            flickableDirection: Flickable.VerticalFlick
+            Column {
+                id: col2
+                anchors.top: parent.top
+                spacing: 10
+                Label {
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    text: "Bookmark at " + Math.floor(book.getProgress(book.lastBookmark.part, book.lastBookmark.pos) * 100) + "% of \"" + book.title + "\"\n\nNotes:"
+                }
+                TextField {
+                    id: note
+                    anchors {left: parent.left; right: parent.right}
+                    // placeholderText: ""
+                    Keys.onReturnPressed: {parent.focus = true}
+                }
+            }
+        }
+
+        onAccepted: {
+            book.addBookmark(book.lastBookmark.part, book.lastBookmark.pos, note.text)
         }
     }
 }

@@ -60,6 +60,12 @@ Page {
         bookView.targetPos = targetPos
         bookView.part = part
         bookView.urlFragment = urlFragment
-        bookView.url = library.nowReading.urlFromPart(part)
+        var newUrl = library.nowReading.urlFromPart(part)
+        if (newUrl == bookView.url) {
+            // Force a jump to the new position
+            bookView.jump()
+        } else {
+            bookView.url = newUrl
+        }
     }
 }
