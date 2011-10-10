@@ -610,8 +610,6 @@ void Book::setCover(const QImage &cover) {
 }
 
 void Book::addContent(const QString &id, const QString &name, const QString &href) {
-    TRACE;
-    qDebug() << id << name << href;
     content_[id] = ContentItem(name, href);
     emit contentChanged();
 }
@@ -622,4 +620,11 @@ QStringList Book::chapterNames() const {
         ret.append(content_[chapterId].name);
     }
     return ret;
+}
+
+void Book::setBookmarkNote(int index, const QString &note) {
+    if (index >= 0 && index < bookmarks_.count()) {
+        bookmarks_[index]->setNote(note);
+        emit bookmarksChanged();
+    }
 }

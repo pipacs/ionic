@@ -131,7 +131,7 @@ Flickable {
             Item {
                 x: 0
                 y: webView.contentsSize.height * library.nowReading.bookmarks[index].pos
-                width: parent.width
+                width: Screen.width - 10
                 height: 50
                 visible: !webView.loading && (library.nowReading.bookmarks[index].part == flickable.part)
                 Image {

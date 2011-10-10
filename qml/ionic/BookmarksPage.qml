@@ -31,11 +31,11 @@ Page {
                 Column {
                     Label {
                         font.pixelSize: 28
-                        text: "At " + Math.floor(book.getProgress(part, book.bookmarks[index].pos) * 100) + "%"
+                        text: "At " + Math.floor(book.getProgress(book.bookmarks[index].part, book.bookmarks[index].pos) * 100) + "%"
                     }
                     Label {
                         font.pixelSize: 24
-                        text: note
+                        text: book.bookmarks[index].note
                     }
                 }
             }
@@ -43,9 +43,12 @@ Page {
                 id: mouseArea
                 anchors.fill: parent
                 onClicked: {
-                    console.log("* BookmarksPage.delegate.onClicked " + index)
                     pageStack.pop(null)
                     mainPage.goTo(book.bookmarks[index].part, book.bookmarks[index].pos, "")
+                }
+                onPressAndHold: {
+                    contextMenu.index = index
+                    contextMenu.open()
                 }
             }
         }
@@ -68,6 +71,29 @@ Page {
         flickableItem: listView
     }
 
+    ContextMenu {
+        id: contextMenu
+        property int index
+        MenuLayout {
+            MenuItem {
+                text: "Edit"
+                onClicked: {
+                    editBookmark.book = book
+                    editBookmark.part = book.bookmarks[contextMenu.index].part
+                    editBookmark.position = book.bookmarks[contextMenu.index].pos
+                    editBookmark.note = book.bookmarks[contextMenu.index].note
+                    editBookmark.index = contextMenu.index
+                    editBookmark.open()
+                }
+            }
+            MenuItem {
+                text: "Delete"
+                onClicked: {
+                }
+            }
+        }
+    }
+
     ToolBarLayout {
         id: bookmarksTools
         visible: true
@@ -78,42 +104,28 @@ Page {
         ToolIcon {
             iconId: "toolbar-add"
             onClicked: {
+                addBookmark.book = book
+                addBookmark.part = book.lastBookmark.part
+                addBookmark.position = book.lastBookmark.position
+                addBookmark.note = ""
                 addBookmark.open()
             }
         }
     }
 
-    Sheet {
+    BookmarkEditor {
         id: addBookmark
-
-        acceptButtonText: "OK"
-        rejectButtonText: "Cancel"
-        content: Flickable {
-            anchors.fill: parent
-            anchors.leftMargin: 10
-            anchors.topMargin: 10
-            contentWidth: col2.width
-            contentHeight: col2.height
-            flickableDirection: Flickable.VerticalFlick
-            Column {
-                id: col2
-                anchors.top: parent.top
-                spacing: 10
-                Label {
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    text: "Bookmark at " + Math.floor(book.getProgress(book.lastBookmark.part, book.lastBookmark.pos) * 100) + "% of \"" + book.title + "\"\n\nNotes:"
-                }
-                TextField {
-                    id: note
-                    anchors {left: parent.left; right: parent.right}
-                    // placeholderText: ""
-                    Keys.onReturnPressed: {parent.focus = true}
-                }
-            }
-        }
-
         onAccepted: {
-            book.addBookmark(book.lastBookmark.part, book.lastBookmark.pos, note.text)
+            book.addBookmark(book.lastBookmark.part, book.lastBookmark.pos, note)
+        }
+    }
+
+    BookmarkEditor {
+        id: editBookmark
+        onAccepted: {
+            console.log("* BookmarksPage.editBookmark.onAccepted: Setting " + index + " to \"" + note + "\"")
+            book.setBookmarkNote(index, note)
         }
     }
 }
+

@@ -99,6 +99,9 @@ public:
     /** Add bookmark. */
     Q_INVOKABLE void addBookmark(int part, qreal position, const QString &note);
 
+    /** Set the note of a bookmark. */
+    Q_INVOKABLE void setBookmarkNote(int index, const QString &note);
+
     /** Delete bookmark. */
     Q_INVOKABLE void deleteBookmark(int index);
 
