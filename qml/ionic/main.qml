@@ -5,6 +5,7 @@ import com.nokia.extras 1.0
 PageStackWindow {
     id: appWindow
     initialPage: mainPage
+    showStatusBar: false
 
     MainPage {id: mainPage}
     LibraryPage {id: libraryPage}
@@ -15,13 +16,14 @@ PageStackWindow {
     BookmarksPage {
         id: bookmarksPage
         onBookmarkAdded: {
-            // FIXME: infoBanner's default location is wrong
-            // infoBookmarkAdded.show()
+            // FIXME: infoBanner's default location is wrong if the system status bar is shown
+            infoBookmarkAdded.show()
         }
     }
 
     InfoBanner {
         id: infoBookmarkAdded
+        width: parent.width - 17
         text: "Bookmarked current position"
     }
 

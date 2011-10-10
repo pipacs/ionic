@@ -374,6 +374,8 @@ Bookmark *Book::lastBookmark() {
 }
 
 void Book::addBookmark(int part, qreal position, const QString &note) {
+    TRACE;
+    qDebug() << "To" << title() << "at part" << part << "position" << position << "note" << note;
     load();
     bookmarks_.append(new Bookmark(part, position, note));
     qSort(bookmarks_.begin(), bookmarks_.end(), compareBookmarks);
