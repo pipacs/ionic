@@ -77,7 +77,7 @@ PageStackWindow {
         visualParent: pageStack
         MenuLayout {
             MenuItem {
-                text: "This book"
+                text: "Book details"
                 enabled: library.nowReading.valid
                 onClicked: {
                     myMenu.close()
