@@ -80,11 +80,11 @@ Page {
             MenuItem {
                 text: "Edit"
                 onClicked: {
+                    var bookmark = book.bookmarks[contextMenu.index]
                     editBookmark.book = book
-                    editBookmark.part = book.bookmarks[contextMenu.index].part
-                    editBookmark.position = book.bookmarks[contextMenu.index].position
-                    editBookmark.note = book.bookmarks[contextMenu.index].note
                     editBookmark.index = contextMenu.index
+                    editBookmark.description = "Bookmark at " + getProgress(bookmark) + " in \"" + book.title + "\""
+                    editBookmark.note = book.bookmarks[contextMenu.index].note
                     editBookmark.open()
                 }
             }
@@ -109,10 +109,7 @@ Page {
             iconId: "toolbar-add"
             onClicked: {
                 console.log("* BookmarksPage.addTool.onClicked: Add bookmark at part " + book.lastBookmark.part + ", position " + book.lastBookmark.position)
-                addBookmark.book = book
-                addBookmark.part = book.lastBookmark.part
-                addBookmark.position = book.lastBookmark.position
-                addBookmark.note = ""
+                addBookmark.description = "Bookmark at " + getProgress(book.lastBookmark) + " in \"" + book.title + "\""
                 addBookmark.open()
             }
         }

@@ -6,11 +6,10 @@ import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
 Sheet {
-    property int part
-    property int position
-    property alias note: noteText.text
+    property alias note: noteField.text
+    property alias description: label.text
     property Book book: emptyBook
-    property int index
+    property int index: 0
 
     acceptButtonText: "OK"
     rejectButtonText: "Cancel"
@@ -27,19 +26,17 @@ Sheet {
             anchors.top: parent.top
             spacing: 10
             Label {
+                id: label
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                text: "Bookmark at " + getProgress(book, part, position) + " of \"" + book.title + "\"\n\nNotes:"
+            }
+            Label {
+                text: "\nNote:"
             }
             TextField {
-                id: noteText
+                id: noteField
                 anchors {left: parent.left; right: parent.right}
                 Keys.onReturnPressed: {parent.focus = true}
             }
         }
-    }
-
-    function getProgress(book, part, position) {
-        var progress = Math.floor(book.getProgress(part, position) * 100.)
-        return "" + progress + "%"
     }
 }
