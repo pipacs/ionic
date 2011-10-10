@@ -103,7 +103,7 @@ public:
     Q_INVOKABLE void setBookmarkNote(int index, const QString &note);
 
     /** Delete bookmark. */
-    Q_INVOKABLE void deleteBookmark(int index);
+    Q_INVOKABLE void deleteBookmark(Bookmark *bookmark);
 
     /** List bookmarks. */
     QDeclarativeListProperty<Bookmark> bookmarks();

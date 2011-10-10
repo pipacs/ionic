@@ -28,7 +28,7 @@ Sheet {
             spacing: 10
             Label {
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                text: "Bookmark at " + Math.floor(book.getProgress(part, position) * 100) + "% of \"" + book.title + "\"\n\nNotes:"
+                text: "Bookmark at " + getProgress(book, part, position) + " of \"" + book.title + "\"\n\nNotes:"
             }
             TextField {
                 id: noteText
@@ -36,5 +36,10 @@ Sheet {
                 Keys.onReturnPressed: {parent.focus = true}
             }
         }
+    }
+
+    function getProgress(book, part, position) {
+        var progress = Math.floor(book.getProgress(part, position) * 100.)
+        return "" + progress + "%"
     }
 }

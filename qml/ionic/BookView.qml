@@ -88,6 +88,7 @@ Flickable {
         // enabled: true
         Keys.enabled: true
         property bool loading: false
+        z: 0
 
         onLoadFailed: {
             loading = false
@@ -126,14 +127,16 @@ Flickable {
 
     // Show bookmarks, using the bookmark list as model
     Repeater {
+        z: 1
         model: library.nowReading.bookmarks
         delegate: Component {
             Item {
                 x: 0
-                y: webView.contentsSize.height * library.nowReading.bookmarks[index].pos
+                y: webView.contentsSize.height * library.nowReading.bookmarks[index].position
                 width: Screen.width - 10
                 height: 50
-                visible: !webView.loading && (library.nowReading.bookmarks[index].part == flickable.part)
+                //visible: !webView.loading && (library.nowReading.bookmarks[index].part == flickable.part)
+
                 Image {
                     source: "qrc:/icons/star.png"
                     opacity: 0.5
@@ -186,11 +189,11 @@ Flickable {
 
     // Update book's last reading position
     function updateLastBookmark() {
-        var currentPos = flickable.contentY / webView.contentsSize.height
+        var currentPosition = flickable.contentY / webView.contentsSize.height
         var book = library.nowReading
-        if ((Math.abs(book.lastBookmark.pos - currentPos) > 0.0005) || (book.lastBookmark.part != flickable.part)) {
+        if ((Math.abs(book.lastBookmark.position - currentPosition) > 0.0005) || (book.lastBookmark.part != flickable.part)) {
             console.log("* webView.updateLastBookmark: Needs update")
-            book.lastBookmark.pos = currentPos
+            book.lastBookmark.position = currentPosition
             book.lastBookmark.part = flickable.part
             book.save()
         }

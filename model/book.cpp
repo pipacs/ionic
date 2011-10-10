@@ -341,7 +341,7 @@ void Book::save() {
     data["source"] = source_;
     data["rights"] = rights_;
     data["lastpart"] = lastBookmark_->part();
-    data["lastpos"] = lastBookmark_->pos();
+    data["lastpos"] = lastBookmark_->position();
     data["cover"] = cover_;
     if (cover_.isNull()) {
         qWarning() << "Book::save: Cover image is null";
@@ -349,7 +349,7 @@ void Book::save() {
     data["bookmarks"] = bookmarks_.size();
     for (int i = 0; i < bookmarks_.size(); i++) {
         data[QString("bookmark%1part").arg(i)] = bookmarks_[i]->part();
-        data[QString("bookmark%1pos").arg(i)] = bookmarks_[i]->pos();
+        data[QString("bookmark%1pos").arg(i)] = bookmarks_[i]->position();
         data[QString("bookmark%1note").arg(i)] = bookmarks_[i]->note();
     }
     data["dateadded"] = dateAdded_;
@@ -361,14 +361,13 @@ void Book::setLastBookmark(int part, qreal position) {
     TRACE;
     qDebug() << "Part" << part << "position" << position;
     lastBookmark_->setPart(part);
-    lastBookmark_->setPos(position);
+    lastBookmark_->setPosition(position);
     emit lastBookmarkChanged();
 }
 
 Bookmark *Book::lastBookmark() {
     load();
     if (!lastBookmark_) {
-        qDebug() << "Creating initial last bookmark";
         setLastBookmark(0, 0);
     }
     return lastBookmark_;
@@ -378,15 +377,16 @@ void Book::addBookmark(int part, qreal position, const QString &note) {
     load();
     bookmarks_.append(new Bookmark(part, position, note));
     qSort(bookmarks_.begin(), bookmarks_.end(), compareBookmarks);
-    emit bookmarksChanged();
     save();
+    emit bookmarksChanged();
 }
 
-void Book::deleteBookmark(int index) {
+void Book::deleteBookmark(Bookmark *bookmark) {
     load();
-    bookmarks_.removeAt(index);
-    emit bookmarksChanged();
-    save();
+    if (bookmarks_.removeOne(bookmark)) {
+        save();
+        emit bookmarksChanged();
+    }
 }
 
 QDeclarativeListProperty<Bookmark> Book::bookmarks() {
@@ -522,6 +522,7 @@ QString Book::urlFromPart(int part) {
 qreal Book::getProgress(int part, qreal position) {
     load();
     if ((part < 0) || (part >= parts_.count())) {
+        qWarning() << "Book::getProgress: Invalid part ID" << part;
         return 0;
     }
     QString key;
@@ -532,6 +533,7 @@ qreal Book::getProgress(int part, qreal position) {
     }
     key = parts_[part];
     partSize += content_[key].size * position;
+    qDebug() << "Book::getProgress: part" << part << "position" << position << "size so far" << partSize << "total size" << size_;
     return partSize / (qreal)size_;
 }
 
@@ -623,8 +625,10 @@ QStringList Book::chapterNames() const {
 }
 
 void Book::setBookmarkNote(int index, const QString &note) {
+    load();
     if (index >= 0 && index < bookmarks_.count()) {
         bookmarks_[index]->setNote(note);
         emit bookmarksChanged();
+        save();
     }
 }

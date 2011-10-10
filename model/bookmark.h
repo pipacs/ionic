@@ -7,7 +7,7 @@
 class Bookmark: public QObject {
     Q_OBJECT
     Q_PROPERTY(int part READ part WRITE setPart NOTIFY partChanged)
-    Q_PROPERTY(qreal pos READ pos WRITE setPos NOTIFY posChanged)
+    Q_PROPERTY(qreal position READ position WRITE setPosition NOTIFY positionChanged)
     Q_PROPERTY(QString note READ note WRITE setNote NOTIFY noteChanged)
 
 public:
@@ -23,14 +23,14 @@ public:
 
     int part() const {return part_;}
     void setPart(int p) {part_ = p; emit partChanged();}
-    qreal pos() const {return pos_;}
-    void setPos(const qreal p) {pos_ = p; emit posChanged();}
+    qreal position() const {return pos_;}
+    void setPosition(const qreal p) {pos_ = p; emit positionChanged();}
     QString note() const {return note_;}
     void setNote(const QString &n) {note_ = n; emit noteChanged();}
 
 signals:
     void partChanged();
-    void posChanged();
+    void positionChanged();
     void noteChanged();
 
 private:

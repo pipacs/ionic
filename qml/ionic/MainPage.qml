@@ -44,7 +44,7 @@ Page {
 
     onNowReadingChanged: {
         console.log("* MainPage.onNowReadingChanged")
-        goTo(library.nowReading.lastBookmark.part, library.nowReading.lastBookmark.pos, "")
+        goTo(library.nowReading.lastBookmark.part, library.nowReading.lastBookmark.position, "")
     }
 
     function goToPreviousPage() {

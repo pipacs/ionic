@@ -6,6 +6,7 @@ import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
 Page {
+    id: page
     property Book book: emptyBook
     tools: bookmarksTools
 
@@ -31,7 +32,7 @@ Page {
                 Column {
                     Label {
                         font.pixelSize: 28
-                        text: "At " + Math.floor(book.getProgress(book.bookmarks[index].part, book.bookmarks[index].pos) * 100) + "%"
+                        text: "At " + getProgress(book.bookmarks[index])
                     }
                     Label {
                         font.pixelSize: 24
@@ -44,7 +45,7 @@ Page {
                 anchors.fill: parent
                 onClicked: {
                     pageStack.pop(null)
-                    mainPage.goTo(book.bookmarks[index].part, book.bookmarks[index].pos, "")
+                    mainPage.goTo(book.bookmarks[index].part, book.bookmarks[index].position, "")
                 }
                 onPressAndHold: {
                     contextMenu.index = index
@@ -80,7 +81,7 @@ Page {
                 onClicked: {
                     editBookmark.book = book
                     editBookmark.part = book.bookmarks[contextMenu.index].part
-                    editBookmark.position = book.bookmarks[contextMenu.index].pos
+                    editBookmark.position = book.bookmarks[contextMenu.index].position
                     editBookmark.note = book.bookmarks[contextMenu.index].note
                     editBookmark.index = contextMenu.index
                     editBookmark.open()
@@ -89,6 +90,8 @@ Page {
             MenuItem {
                 text: "Delete"
                 onClicked: {
+                    deleteQuery.bookmark = book.bookmarks[contextMenu.index]
+                    deleteQuery.open()
                 }
             }
         }
@@ -104,6 +107,7 @@ Page {
         ToolIcon {
             iconId: "toolbar-add"
             onClicked: {
+                console.log("* BookmarksPage.addTool.onClicked: Add bookmark at part " + book.lastBookmark.part + ", position " + book.lastBookmark.position)
                 addBookmark.book = book
                 addBookmark.part = book.lastBookmark.part
                 addBookmark.position = book.lastBookmark.position
@@ -116,7 +120,10 @@ Page {
     BookmarkEditor {
         id: addBookmark
         onAccepted: {
-            book.addBookmark(book.lastBookmark.part, book.lastBookmark.pos, note)
+            book.addBookmark(book.lastBookmark.part, book.lastBookmark.position, note)
+            pageStack.pop(null)
+            infoBanner.text = "Bookmarked current position"
+            infoBanner.show()
         }
     }
 
@@ -126,6 +133,31 @@ Page {
             console.log("* BookmarksPage.editBookmark.onAccepted: Setting " + index + " to \"" + note + "\"")
             book.setBookmarkNote(index, note)
         }
+    }
+
+    QueryDialog {
+        property Bookmark bookmark
+        id: deleteQuery
+        icon: "qrc:/ionic80.png"
+        titleText: "Delete bookmark"
+        message: "Are you sure to delete bookmark at " + getProgress(bookmark) + "?"
+        acceptButtonText: "Yes"
+        rejectButtonText: "No"
+        onAccepted: {
+            book.deleteBookmark(bookmark)
+        }
+    }
+
+    InfoBanner {
+        id: infoBanner
+    }
+
+    function getProgress(bookmark) {
+        if (!bookmark) {
+            return "0%"
+        }
+        var progress = Math.floor(book.getProgress(bookmark.part, bookmark.position) * 100.)
+        return "" + progress + "%"
     }
 }
 
