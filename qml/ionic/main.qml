@@ -1,5 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
+import com.nokia.extras 1.0
 
 PageStackWindow {
     id: appWindow
@@ -10,7 +11,19 @@ PageStackWindow {
     ChaptersPage {id: chaptersPage}
     AboutPage {id: aboutPage}
     BookPage {id: thisBookPage; enableJump: false}
-    BookmarksPage {id: bookmarksPage}
+
+    BookmarksPage {
+        id: bookmarksPage
+        onBookmarkAdded: {
+            // FIXME: infoBanner's default location is wrong
+            // infoBookmarkAdded.show()
+        }
+    }
+
+    InfoBanner {
+        id: infoBookmarkAdded
+        text: "Bookmarked current position"
+    }
 
     ToolBarLayout {
         id: commonTools

@@ -68,8 +68,7 @@ Flickable {
     WebView {
         id: webView
         transformOrigin: Item.TopLeft
-        // pressGrabTime: 9999
-        // settings.standardFontFamily: "Nokia Pure Text"
+        pressGrabTime: 9999
         settings.defaultFontSize: 26
         settings.javaEnabled: false
         settings.javascriptCanAccessClipboard: false
@@ -85,10 +84,8 @@ Flickable {
         preferredWidth: flickable.width
         preferredHeight: flickable.height
         contentsScale: 1
-        // enabled: true
         Keys.enabled: true
         property bool loading: false
-        z: 0
 
         onLoadFailed: {
             loading = false
@@ -130,18 +127,14 @@ Flickable {
         z: 1
         model: library.nowReading.bookmarks
         delegate: Component {
-            Item {
-                x: 0
+            Image {
+                x: webView.width - 50
                 y: webView.contentsSize.height * library.nowReading.bookmarks[index].position
-                width: Screen.width - 10
+                width: 50
                 height: 50
-                //visible: !webView.loading && (library.nowReading.bookmarks[index].part == flickable.part)
-
-                Image {
-                    source: "qrc:/icons/star.png"
-                    opacity: 0.5
-                    anchors.right: parent.right
-                }
+                visible: !webView.loading && (library.nowReading.bookmarks[index].part == flickable.part)
+                source: "qrc:/icons/star.png"
+                opacity: 0.75
             }
         }
     }

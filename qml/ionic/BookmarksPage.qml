@@ -8,6 +8,7 @@ import com.pipacs.ionic.Book 1.0
 Page {
     id: page
     property Book book: emptyBook
+    signal bookmarkAdded
     tools: bookmarksTools
 
     PageHeader {
@@ -122,8 +123,7 @@ Page {
         onAccepted: {
             book.addBookmark(book.lastBookmark.part, book.lastBookmark.position, note)
             pageStack.pop(null)
-            infoBanner.text = "Bookmarked current position"
-            infoBanner.show()
+            bookmarkAdded()
         }
     }
 
@@ -146,10 +146,6 @@ Page {
         onAccepted: {
             book.deleteBookmark(bookmark)
         }
-    }
-
-    InfoBanner {
-        id: infoBanner
     }
 
     function getProgress(bookmark) {
