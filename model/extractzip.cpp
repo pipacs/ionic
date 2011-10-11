@@ -8,8 +8,7 @@
 #define WRITEBUFFERSIZE (8192)
 #define MAXFILENAME (256)
 
-int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions)
-{
+int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions) {
     char fileNameInZip[MAXFILENAME];
     char *fileNameWithoutPath;
     char *p;
@@ -21,11 +20,9 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions)
     bool ret = true;
     unz_file_info64 fileInfo;
 
-    err = unzGetCurrentFileInfo64(uf, &fileInfo, fileNameInZip,
-                                  sizeof(fileNameInZip), NULL, 0, NULL, 0);
+    err = unzGetCurrentFileInfo64(uf, &fileInfo, fileNameInZip, sizeof(fileNameInZip), NULL, 0, NULL, 0);
     if (err != UNZ_OK) {
-        qDebug() << "doExtractCurrentFile: Error" << err
-                << "in unzGetCurrentFileInfo";
+        qDebug() << "doExtractCurrentFile: Error" << err << "in unzGetCurrentFileInfo";
         return err;
     }
 
@@ -46,8 +43,7 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions)
 
     if ((*fileNameWithoutPath) == '\0') {
         dir.mkdir(fileNameInZip);
-    }
-    else {
+    } else {
         QString name(fileNameInZip);
         for (int i = 0; i < excludedExtensions.length(); i++) {
             if (name.endsWith(excludedExtensions[i], Qt::CaseInsensitive)) {
@@ -65,8 +61,7 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions)
 
         err = unzOpenCurrentFilePassword(uf, 0);
         if (err != UNZ_OK) {
-            qDebug() << "doExtractCurrentFile: Error" << err
-                    << "in unzOpenCurrentFilePassword";
+            qDebug() << "doExtractCurrentFile: Error" << err << "in unzOpenCurrentFilePassword";
             ret = false;
         }
 
@@ -75,8 +70,7 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions)
             ret = f->open(QIODevice::WriteOnly);
 
             /* some zipfile don't contain directory alone before file */
-            if (!ret && (fileNameWithoutPath != (char *)fileNameInZip))
-            {
+            if (!ret && (fileNameWithoutPath != (char *)fileNameInZip)) {
                 char c = *(fileNameWithoutPath-1);
                 *(fileNameWithoutPath - 1) = '\0';
                 dir.mkpath(writeFileName);
@@ -87,8 +81,7 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions)
             }
 
             if (!ret) {
-                qDebug() << "doExtractCurrentFile: Error opening"
-                        << writeFileName;
+                qDebug() << "doExtractCurrentFile: Error opening" << writeFileName;
             }
         }
 
@@ -96,14 +89,12 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions)
             do {
                 err = unzReadCurrentFile(uf, buf, bufSize);
                 if (err < 0) {
-                    qDebug() << "doExtractCurrentFile: Error" << err
-                            << "in unzReadCurrentFile";
+                    qDebug() << "doExtractCurrentFile: Error" << err << "in unzReadCurrentFile";
                     break;
                 }
                 if (err > 0) {
                     if (f->write((char *)buf, err) != err) {
-                        qDebug() << "doExtractCurrentFile:"
-                                << "Error in writing extracted file";
+                        qDebug() << "doExtractCurrentFile:" << "Error in writing extracted file";
                         err = UNZ_ERRNO;
                         break;
                     }
@@ -117,8 +108,7 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions)
         if (err == UNZ_OK) {
             err = unzCloseCurrentFile(uf);
             if (err != UNZ_OK) {
-                qDebug() << "doExtractCurrentFile: Error" << err
-                       << "with zipfile in unzCloseCurrentFile";
+                qDebug() << "doExtractCurrentFile: Error" << err << "with zipfile in unzCloseCurrentFile";
             }
         }
         else {
@@ -131,8 +121,7 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions)
     return err;
 }
 
-bool doExtract(unzFile uf, const QStringList &excludedExtensions)
-{
+bool doExtract(unzFile uf, const QStringList &excludedExtensions) {
     uLong i;
     unz_global_info64 gi;
     int err;
@@ -159,8 +148,7 @@ bool doExtract(unzFile uf, const QStringList &excludedExtensions)
     return true;
 }
 
-bool extractZip(const QString &zipFile, const QStringList &excludedExtensions)
-{
+bool extractZip(const QString &zipFile, const QStringList &excludedExtensions) {
     unzFile uf;
     bool ret = false;
 
