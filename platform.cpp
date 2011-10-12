@@ -83,13 +83,11 @@ void Platform::restart(char *argv[]) {
 #endif
 }
 
-QString Platform::version()
-{
+QString Platform::version() {
     return QString(DORIAN_VERSION);
 }
 
-QString Platform::downloadDir()
-{
+QString Platform::downloadDir() {
 #ifdef Q_OS_SYMBIAN
     if (QDir("E:/").exists()) {
         return "E:/Books";
@@ -100,8 +98,7 @@ QString Platform::downloadDir()
 #endif
 }
 
-QString Platform::defaultFont()
-{
+QString Platform::defaultFont() {
 #if defined(Q_WS_MAEMO_5) || defined(Q_WS_X11) || defined(Q_WS_HARMATTAN)
     return QString("Serif");
 #elif defined(Q_WS_MAC)

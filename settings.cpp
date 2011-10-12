@@ -28,8 +28,7 @@ void Settings::setValue(const QString &key, const QVariant &value) {
     emit valueChanged(key);
 }
 
-QVariant Settings::value(const QString &key, const QVariant &defaultValue) const
-{
+QVariant Settings::value(const QString &key, const QVariant &defaultValue) const {
     QSettings s;
     return s.value(QString("settings/") + key, defaultValue);
 }
