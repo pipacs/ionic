@@ -634,3 +634,8 @@ void Book::setBookmarkNote(int index, const QString &note) {
         save();
     }
 }
+
+QString Book::rights() {
+    load();
+    return rights_.replace(QRegExp("\\s{3,}"), " ").replace(QRegExp("^\\s+"), "");
+}

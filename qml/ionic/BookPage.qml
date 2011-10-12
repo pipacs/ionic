@@ -32,8 +32,9 @@ Page {
     Component {
         id: delegate
         Item {
-            height: content.length? Math.max(31, textContent.height): 0
-            Row {
+            height: content.length? (column.height + 5): 0
+            Column {
+                id: column
                 Label {
                     id: textLabel
                     text: content.length? label: ""
@@ -42,10 +43,8 @@ Page {
                     id: textContent
                     text: content
                     font.bold: true
-                    // FIXME "style: Text.Sunken" gives an error
-                    styleColor: "white"
-                    // FIXME: Word wrapping doesn't seem to work
-                    wrapMode: Text.WordWrap
+                    width: libraryTools.width - listView.anchors.leftMargin - listView.anchors.rightMargin - image.width - image.anchors.leftMargin - image.anchors.rightMargin
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
             }
         }
@@ -65,6 +64,7 @@ Page {
     ]
 
     Image {
+        id: image
         anchors.top: header.bottom
         anchors.right: parent.right
         anchors.margins: 11

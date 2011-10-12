@@ -147,7 +147,7 @@ public:
     QString datePublished() {load(); return datePublished_;}
     QString subject() {load(); return subject_;}
     QString source() {load(); return source_;}
-    QString rights() {load(); return rights_;}
+    QString rights();
     QString tocPath() {load(); return tocPath_;}
     QString coverPath() {load(); return coverPath_;}
     QStringList chapters() {return chapters_;}
