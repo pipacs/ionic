@@ -80,7 +80,6 @@ Page {
                 id: mouseArea
                 anchors.fill: parent
                 onClicked: {
-                    console.log("* Item.onClicked " + index)
                     bookPage.book = library.books[index]
                     pageStack.push(bookPage)
                 }

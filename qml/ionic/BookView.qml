@@ -126,8 +126,14 @@ Flickable {
     Repeater {
         z: 1
         model: library.nowReading.bookmarks
-        delegate: Component {
+        delegate: bookmarkDelegate
+    }
+
+    Component {
+        id: bookmarkDelegate
+        Item {
             Image {
+                id: star
                 x: webView.width - 50
                 y: webView.contentsSize.height * library.nowReading.bookmarks[index].position
                 width: 50
@@ -135,6 +141,13 @@ Flickable {
                 visible: !webView.loading && (library.nowReading.bookmarks[index].part == flickable.part)
                 source: "qrc:/icons/star.png"
                 opacity: 0.75
+            }
+            MouseArea {
+                anchors.fill: star
+                enabled: star.visible
+                onPressAndHold: {
+                    console.log("* Bookmark image press-and-hold")
+                }
             }
         }
     }

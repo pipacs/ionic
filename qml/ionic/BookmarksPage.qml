@@ -108,7 +108,6 @@ Page {
         ToolIcon {
             iconId: "toolbar-add"
             onClicked: {
-                console.log("* BookmarksPage.addTool.onClicked: Add bookmark at part " + book.lastBookmark.part + ", position " + book.lastBookmark.position)
                 addBookmark.book = book
                 addBookmark.description = "Bookmark at " + getProgress(book.lastBookmark) + " in \"" + book.title + "\""
                 addBookmark.open()
