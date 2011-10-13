@@ -12,6 +12,7 @@ PageStackWindow {
     ChaptersPage {id: chaptersPage}
     AboutPage {id: aboutPage}
     BookPage {id: thisBookPage; enableJump: false}
+    SettingsPage {id: settingsPage}
 
     BookmarksPage {
         id: bookmarksPage
@@ -67,8 +68,8 @@ PageStackWindow {
         }
         ToolIcon {
             platformIconId: "toolbar-view-menu"
-            anchors.right: (parent === undefined) ? undefined : parent.right
-            onClicked: (myMenu.status == DialogStatus.Closed) ? myMenu.open() : myMenu.close()
+            anchors.right: (parent === undefined)? undefined: parent.right
+            onClicked: (myMenu.status == DialogStatus.Closed)? myMenu.open(): myMenu.close()
         }
     }
 
@@ -89,7 +90,10 @@ PageStackWindow {
                 text: "Library"
                 onClicked: {myMenu.close(); pageStack.push(libraryPage)}
             }
-            // MenuItem {text: "Settings"}
+            MenuItem {
+                text: "Settings"
+                onClicked: {myMenu.close(); pageStack.push(settingsPage)}
+            }
             MenuItem {
                 text: "About"
                 onClicked: {myMenu.close(); pageStack.push(aboutPage)}
