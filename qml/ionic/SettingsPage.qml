@@ -37,33 +37,60 @@ Page {
             CheckBox {
                 id: useVolumeKeys
                 text: "Navigate with volume keys"
-                checked: settings.useVolumeKeys
+                checked: prefs.useVolumeKeys
+                onClicked: {prefs.useVolumeKeys = checked}
             }
             CheckBox {
                 id: useSwipe
                 text: "Navigate with swipe"
-                checked: settings.useSwipe
+                checked: prefs.useSwipe
                 enabled: useVolumeKeys.checked
+                onClicked: {prefs.useSwipe = checked}
             }
             Label {text: "Zoom level:"}
             Slider {
                 id: zoom
+                property bool firstUpdate: true
                 stepSize: 10
                 valueIndicatorVisible: true
                 minimumValue: 80
                 maximumValue: 250
-                value: settings.zoom
+                value: prefs.zoom
+                onValueChanged: {
+                    if (firstUpdate) {
+                        // Work around a slider bug: The first valueChanged notification is sent too early
+                        firstUpdate = false
+                    } else {
+                        prefs.zoom = value
+                    }
+                }
             }
             Label {text: "Style:"}
             ButtonRow {
-                Button {text: "Day"}
-                Button {text: "Night"}
-                Button {text: "Sand"}
+                Button {
+                    text: "Day"
+                    checked: prefs.style == "day"
+                    onClicked: {prefs.style = "day"}
+                }
+                Button {
+                    text: "Night"
+                    checked: prefs.style == "night"
+                    onClicked: {prefs.style = "night"}
+                }
+                Button {
+                    text: "Sand"
+                    checked: prefs.style == "sand"
+                    onClicked: {prefs.style = "sand"}
+                }
             }
         }
     }
 
     ScrollDecorator {
         flickableItem: flickable
+    }
+
+    Component.onCompleted: {
+        zoom.value = prefs.zoom
     }
 }

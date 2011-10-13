@@ -69,7 +69,8 @@ Flickable {
         id: webView
         transformOrigin: Item.TopLeft
         pressGrabTime: 9999
-        settings.defaultFontSize: 26
+        settings.defaultFontSize: 26 + (prefs.zoom - 100) / 10
+        settings.minimumFontSize: 22
         settings.javaEnabled: false
         settings.javascriptCanAccessClipboard: false
         settings.javascriptCanOpenWindows: false

@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.engine()->addImageProvider(QString("covers"), new CoverProvider);
     viewer.rootContext()->setContextProperty("library", library);
-    viewer.rootContext()->setContextProperty("settings", Settings::instance());
+    viewer.rootContext()->setContextProperty("prefs", Settings::instance());
     Book *emptyBook = new Book();
     viewer.rootContext()->setContextProperty("emptyBook", emptyBook);
     BookFinder *bookFinder = new BookFinder();

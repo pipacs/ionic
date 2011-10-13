@@ -29,14 +29,11 @@ void Settings::setValue(const QString &key, const QVariant &value) {
 }
 
 QVariant Settings::value(const QString &key, const QVariant &defaultValue) const {
-    TRACE;
     QSettings s;
-    qDebug() << key << ":" << s.value(QString("settings/") + key, defaultValue);
     return s.value(QString("settings/") + key, defaultValue);
 }
 
 void Settings::apply() {
-    TRACE;
     QSettings s;
     foreach (QString key, s.allKeys()) {
         if (key.startsWith("settings/")) {

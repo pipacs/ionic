@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include "trace.h"
 
 class QString;
 
@@ -14,7 +15,7 @@ class Settings: public QObject {
     Q_OBJECT
     Q_PROPERTY(bool useVolumeKeys READ useVolumeKeys WRITE setUseVolumeKeys NOTIFY valueChanged)
     Q_PROPERTY(bool useSwipe READ useSwipe WRITE setUseSwipe NOTIFY valueChanged)
-    Q_PROPERTY(int zoom READ zoom WRITE setZoom NOTIFY valueChanged)
+    Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY valueChanged)
     Q_PROPERTY(QString style READ style WRITE setStyle NOTIFY valueChanged)
 
 public:
@@ -28,9 +29,9 @@ public:
     void setUseVolumeKeys(bool v) {setValue("usevolumekeys", v);}
     bool useSwipe() {return value("useswipe").toBool();}
     void setUseSwipe(bool v) {setValue("useswipe", v);}
-    int zoom() {return value("zoom").toInt();}
-    void setZoom(int v) {setValue("zoom", v);}
-    QString style() {return value("style").toString();}
+    qreal zoom() {return value("zoom", 100).toReal();}
+    void setZoom(qreal v) {setValue("zoom", v);}
+    QString style() {return value("style", "day").toString();}
     void setStyle(const QString &v) {setValue("style", v);}
 
 signals:
