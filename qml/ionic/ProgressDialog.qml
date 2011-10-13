@@ -50,14 +50,13 @@ Dialog {
         width: parent.width
         Column {
             Label {
-                text: ""
-                height: importDialog.platformStyle.titleBarHeight
-            }
-            Label {
                 id: messageLabel
                 height: importDialog.platformStyle.titleBarHeight
                 color: "white"
                 text: "Gathering books"
+                font.pixelSize: 24
+                elide: Text.ElideRight
+                verticalAlignment: Text.AlignBottom
             }
             ProgressBar {
                 id: progressBar

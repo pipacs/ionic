@@ -44,7 +44,7 @@ Page {
     Component {
         id: delegate
         Item {
-            height: Math.max(65, textName.height + textOpened.height + 11)
+            height: Math.max(65, textName.height + textOpened.height + 15)
             width: parent.width
 
             BorderImage {
@@ -125,9 +125,9 @@ Page {
                 bookFinder.find()
             }
         }
-        ToolIcon {
-            iconId: "toolbar-search"
-        }
+        // ToolIcon {
+        //     iconId: "toolbar-search"
+        // }
     }
 
     Component.onCompleted: {
