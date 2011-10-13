@@ -8,26 +8,31 @@ import com.pipacs.ionic.Book 1.0
 Page {
     tools: settingsTools
 
-    PageHeader {
-        id: header
-        text: "Settings"
+    ToolBarLayout {
+        id: settingsTools
+        visible: true
+        ToolIcon {
+            iconId: "toolbar-back"
+            onClicked: {
+                pageStack.pop()
+            }
+        }
     }
 
     Flickable {
         id: flickable
-        anchors.top: header.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
+        anchors.fill: parent
         anchors.margins: 5
-        contentWidth: Math.max(parent.width, column.width)
-        contentHeight: Math.max(parent.height, column.height)
+        anchors.topMargin: 15
+        anchors.leftMargin: 15
+        contentWidth: column.width
+        contentHeight: column.height
         flickableDirection: Flickable.VerticalFlick
         clip: true
 
         Column {
             id: column
-            spacing: 5
+            spacing: 30
 
             CheckBox {
                 id: useVolumeKeys
@@ -40,21 +45,25 @@ Page {
                 checked: settings.useSwipe
                 enabled: useVolumeKeys.checked
             }
+            Label {text: "Zoom level:"}
+            Slider {
+                id: zoom
+                stepSize: 10
+                valueIndicatorVisible: true
+                minimumValue: 80
+                maximumValue: 250
+                value: settings.zoom
+            }
+            Label {text: "Style:"}
+            ButtonRow {
+                Button {text: "Day"}
+                Button {text: "Night"}
+                Button {text: "Sand"}
+            }
         }
     }
 
     ScrollDecorator {
         flickableItem: flickable
-    }
-
-    ToolBarLayout {
-        id: settingsTools
-        visible: true
-        ToolIcon {
-            iconId: "toolbar-back"
-            onClicked: {
-                pageStack.pop()
-            }
-        }
     }
 }
