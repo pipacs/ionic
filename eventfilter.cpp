@@ -31,6 +31,19 @@ bool EventFilter::eventFilter(QObject *obj, QEvent *event) {
             qDebug() << "EventFilter::eventFilter: Acquiring volume keys";
             resourceSet->acquire();
         }
+    } else if (event->type() == QEvent::ActivationChange) {
+        qDebug() << "EventFilter::eventFilter: ActivationChange";
+        if (active) {
+            active = false;
+            qDebug() << "EventFilter::eventFilter: Releasing volume keys";
+            resourceSet->release();
+        } else {
+            active = true;
+            if (captureVolumeKeys) {
+                qDebug() << "EventFilter::eventFilter: Acquiring volume keys";
+                resourceSet->acquire();
+            }
+        }
     } else if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         int key = keyEvent->key();
@@ -54,5 +67,7 @@ void EventFilter::onSettingChanged(const QString &key) {
             qDebug() << "Releasing volume keys";
             resourceSet->release();
         }
+    } else {
+        qDebug() << "Not active";
     }
 }
