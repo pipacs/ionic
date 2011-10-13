@@ -64,6 +64,7 @@ Flickable {
     flickableDirection: Flickable.VerticalFlick
     // focus: true
     // Keys.enabled: true
+    interactive: prefs.useSwipe
 
     WebView {
         id: webView
@@ -90,19 +91,16 @@ Flickable {
 
         onLoadFailed: {
             loading = false
-            flickable.interactive = true
             flickable.targetPos = 0
         }
 
         onLoadFinished: {
             loading = false
-            flickable.interactive = true
             bookView.jump()
         }
 
         onLoadStarted: {
             loading = true
-            flickable.interactive = false
         }
 
         Keys.onPressed: {

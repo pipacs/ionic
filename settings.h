@@ -27,7 +27,7 @@ public:
 
     bool useVolumeKeys() {return value("usevolumekeys").toBool();}
     void setUseVolumeKeys(bool v) {setValue("usevolumekeys", v);}
-    bool useSwipe() {return value("useswipe").toBool();}
+    bool useSwipe() {return value("useswipe", true).toBool();}
     void setUseSwipe(bool v) {setValue("useswipe", v);}
     qreal zoom() {return value("zoom", 100).toReal();}
     void setZoom(qreal v) {setValue("zoom", v);}

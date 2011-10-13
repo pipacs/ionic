@@ -57,6 +57,9 @@ bool EventFilter::eventFilter(QObject *obj, QEvent *event) {
 
 void EventFilter::onSettingChanged(const QString &key) {
     TRACE;
+    if (key != "usevolumekeys") {
+        return;
+    }
     captureVolumeKeys = Settings::instance()->value(key).toBool();
     qDebug() << "Capture volume keys?" << captureVolumeKeys;
     if (active) {

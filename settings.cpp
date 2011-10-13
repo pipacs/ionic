@@ -24,6 +24,7 @@ void Settings::close() {
 
 void Settings::setValue(const QString &key, const QVariant &value) {
     QSettings s;
+    qDebug() << "Settings::setValue" << key << value;
     s.setValue(QString("settings/") + key, value);
     emit valueChanged(key);
 }

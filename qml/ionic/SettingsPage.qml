@@ -44,7 +44,7 @@ Page {
                 id: useSwipe
                 text: "Navigate with swipe"
                 checked: prefs.useSwipe
-                enabled: useVolumeKeys.checked
+                // enabled: useVolumeKeys.checked
                 onClicked: {prefs.useSwipe = checked}
             }
             Label {text: "Zoom level:"}
