@@ -105,7 +105,6 @@ void Book::peek() {
 }
 
 void Book::close() {
-    Trace t("Book::close");
     clearContent();
     clearParts();
     QDir::setCurrent(QDir::rootPath());

@@ -53,7 +53,8 @@ SOURCES += main.cpp \
     settings.cpp \
     trace.cpp \
     platform.cpp \
-    model/coverprovider.cpp
+    model/coverprovider.cpp \
+    eventfilter.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -127,10 +128,13 @@ HEADERS += \
     platform.h \
     model/bookmark.h \
     model/coverprovider.h \
-    model/contentitem.h
+    model/contentitem.h \
+    eventfilter.h
 
 RESOURCES += \
     ionic.qrc
+
+
 
 
 

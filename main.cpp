@@ -1,6 +1,5 @@
 #include <QtGui/QApplication>
 #include <QtDeclarative>
-#include <policy/resource-set.h>
 
 #include "qmlapplicationviewer.h"
 #include "trace.h"
@@ -12,6 +11,7 @@
 #include "model/library.h"
 #include "model/coverprovider.h"
 #include "bookfinder.h"
+#include "eventfilter.h"
 
 static const char *ionicVersion =
 #include "pkg/version.txt"
@@ -71,11 +71,9 @@ int main(int argc, char *argv[]) {
     // viewer.activateWindow();
     viewer.showExpanded();
 
-    // Acquire volume keys
-    ResourcePolicy::ResourceSet *mySet = new ResourcePolicy::ResourceSet("player");
-    mySet->addResourceObject(new ResourcePolicy::ScaleButtonResource);
-    mySet->acquire();
-    // FIXME: Install event filter to release volume keys when main view is not in front
+    // Install event filter to capture/release volume keys
+    EventFilter *eventFilter = new EventFilter(&viewer);
+    viewer.installEventFilter(eventFilter);
 
     int ret = app.exec();
 
