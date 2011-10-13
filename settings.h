@@ -15,6 +15,7 @@ class Settings: public QObject {
     Q_PROPERTY(bool useVolumeKeys READ useVolumeKeys WRITE setUseVolumeKeys NOTIFY valueChanged)
     Q_PROPERTY(bool useSwipe READ useSwipe WRITE setUseSwipe NOTIFY valueChanged)
     Q_PROPERTY(int zoom READ zoom WRITE setZoom NOTIFY valueChanged)
+    Q_PROPERTY(QString style READ style WRITE setStyle NOTIFY valueChanged)
 
 public:
     static Settings *instance();
@@ -29,6 +30,8 @@ public:
     void setUseSwipe(bool v) {setValue("useswipe", v);}
     int zoom() {return value("zoom").toInt();}
     void setZoom(int v) {setValue("zoom", v);}
+    QString style() {return value("style").toString();}
+    void setStyle(const QString &v) {setValue("style", v);}
 
 signals:
     void valueChanged(const QString &key);
