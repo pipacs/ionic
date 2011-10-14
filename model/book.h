@@ -123,8 +123,8 @@ public:
     /** Get part index from chapter index. */
     Q_INVOKABLE int partFromChapter(int chapterIndex);
 
-    /** Get the URL fragment from chapter index. */
-    Q_INVOKABLE QString fragmentFromChapter(int chapterIndex);
+    /** Get full URL, including the fragment part, from chapter index. */
+    Q_INVOKABLE QString urlFromChapter(int chapterIndex);
 
     /** Get the URL corresponding to a given part. */
     Q_INVOKABLE QString urlFromPart(int partIndex);

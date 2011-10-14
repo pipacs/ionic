@@ -29,8 +29,7 @@ import com.pipacs.ionic.Book 1.0
 
 Flickable {
     // Target reading position, within the current part of the book. After loading the part, BookView will jump to this position.
-    property double targetPos: 0
-    property string urlFragment
+    property double targetPos: -1
 
     // Current part index
     property int part: 0
@@ -75,7 +74,7 @@ Flickable {
         settings.javaEnabled: false
         settings.javascriptCanAccessClipboard: false
         settings.javascriptCanOpenWindows: false
-        settings.javascriptEnabled: false
+        settings.javascriptEnabled: true
         settings.linksIncludedInFocusChain: false
         settings.localContentCanAccessRemoteUrls: false
         settings.localStorageDatabaseEnabled: false
@@ -91,10 +90,11 @@ Flickable {
 
         onLoadFailed: {
             loading = false
-            flickable.targetPos = 0
+            flickable.targetPos = -1
         }
 
         onLoadFinished: {
+            console.log("* BookView.WebView.onLoadFinished")
             loading = false
             bookView.jump()
         }
@@ -114,7 +114,6 @@ Flickable {
 
         // Forward signals on completion
         Component.onCompleted: {
-            console.log("* webView onCompleted")
             loadStarted.connect(flickable.loadStarted)
             loadFailed.connect(flickable.loadFailed)
             loadFinished.connect(flickable.loadFinished)
@@ -197,25 +196,28 @@ Flickable {
         var currentPosition = flickable.contentY / webView.contentsSize.height
         var book = library.nowReading
         if ((Math.abs(book.lastBookmark.position - currentPosition) > 0.0005) || (book.lastBookmark.part != flickable.part)) {
-            console.log("* webView.updateLastBookmark: Needs update")
+            console.log("* BookView.WebView.updateLastBookmark: Needs update")
             book.lastBookmark.position = currentPosition
             book.lastBookmark.part = flickable.part
             book.save()
         }
     }
 
-    // Jump to a new location specified in flickable.targetPos
+    // Jump to a new location specified in flickable.targetPos or flickable.targetUrlFragment
     function jump() {
-        var newY = webView.contentsSize.height * flickable.targetPos
-        if (flickable.targetPos == 1) {
-            newY -= flickable.height
+        console.log("* BookView.WebView.jump targetPos " + flickable.targetPos)
+        if (flickable.targetPos != -1) {
+            var newY = webView.contentsSize.height * flickable.targetPos
+            if (flickable.targetPos == 1) {
+                newY -= flickable.height
+            }
+            if (newY < 0) {
+                newY = 0
+            }
+            flickable.contentY = newY
+            flickable.targetPos = -1
+            updateLastBookmark()
         }
-        if (newY < 0) {
-            newY = 0
-        }
-        flickable.contentY = newY
-        flickable.targetPos = 0
-        updateLastBookmark()
     }
 
     Timer {

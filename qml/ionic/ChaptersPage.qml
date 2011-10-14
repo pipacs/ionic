@@ -40,10 +40,10 @@ Page {
                 onClicked: {
                     console.log("* ChaptersPage.delegate.onClicked " + index)
                     var part = book.partFromChapter(index);
-                    var urlFragment = book.fragmentFromChapter(index)
-                    console.log("*  Going to part " + part + ", fragment " + urlFragment)
+                    var url = book.urlFromChapter(index)
+                    console.log("*  Going to part " + part + ", url " + url)
                     pageStack.pop(null)
-                    mainPage.goTo(part, 0, urlFragment)
+                    mainPage.goTo(part, -1, url)
                 }
             }
         }
@@ -60,7 +60,6 @@ Page {
         focus: true
         model: book.chapterNames
         delegate: delegate
-        // delegate: ListDelegate
     }
 
     ScrollDecorator {

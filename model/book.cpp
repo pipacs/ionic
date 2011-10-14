@@ -493,18 +493,14 @@ int Book::partFromChapter(int index) {
     return 0;
 }
 
-QString Book::fragmentFromChapter(int index) {
+QString Book::urlFromChapter(int index) {
     TRACE;
     load();
-    QString fragment;
     QString id = chapters_[index];
-    QString href = content_[id].href;
-    int hashPos = href.indexOf("#");
-    if (hashPos != -1) {
-        fragment = href.indexOf("#");
-    }
-    qDebug() << fragment;
-    return fragment;
+    QString fullPath = QDir(rootPath_).absoluteFilePath(content_[id].href);
+    QString ret = QUrl::fromLocalFile(fullPath).toString();
+    qDebug() << "Return" << ret;
+    return ret;
 }
 
 QString Book::urlFromPart(int part) {
