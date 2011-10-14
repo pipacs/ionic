@@ -70,17 +70,17 @@ Page {
                 Button {
                     text: "Day"
                     checked: prefs.style == "day"
-                    onClicked: {prefs.style = "day"}
+                    onClicked: {prefs.style = "day"; mainPage.setStyle("day")}
                 }
                 Button {
                     text: "Night"
                     checked: prefs.style == "night"
-                    onClicked: {prefs.style = "night"}
+                    onClicked: {prefs.style = "night"; mainPage.setStyle("night")}
                 }
                 Button {
                     text: "Sand"
                     checked: prefs.style == "sand"
-                    onClicked: {prefs.style = "sand"}
+                    onClicked: {prefs.style = "sand"; mainPage.setStyle("sand")}
                 }
             }
         }

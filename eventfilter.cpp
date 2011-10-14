@@ -2,14 +2,14 @@
 #include <QKeyEvent>
 
 #include "eventfilter.h"
-#include "settings.h"
+#include "preferences.h"
 #include "trace.h"
 
 EventFilter::EventFilter(QObject *parent): QObject(parent), active(false) {
     TRACE;
     resourceSet = new ResourcePolicy::ResourceSet("player");
     resourceSet->addResourceObject(new ResourcePolicy::ScaleButtonResource);
-    Settings *settings = Settings::instance();
+    settings = new Preferences;
     captureVolumeKeys = settings->value("usevolumekeys").toBool();
     connect(settings, SIGNAL(valueChanged(QString)), this, SLOT(onSettingChanged(QString)));
 }
@@ -60,7 +60,7 @@ void EventFilter::onSettingChanged(const QString &key) {
     if (key != "usevolumekeys") {
         return;
     }
-    captureVolumeKeys = Settings::instance()->value(key).toBool();
+    captureVolumeKeys = settings->value(key).toBool();
     qDebug() << "Capture volume keys?" << captureVolumeKeys;
     if (active) {
         if (captureVolumeKeys) {

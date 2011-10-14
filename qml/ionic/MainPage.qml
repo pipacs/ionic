@@ -11,7 +11,7 @@ Page {
 
     BookView {
         id: bookView
-        anchors {top: parent.top; left: parent.left; right: parent.right; bottom: parent.bottom}
+        anchors.fill: parent
         onLoadStarted: {
             spinner.visible = true
             spinner.running = true
@@ -66,9 +66,13 @@ Page {
             bookView.jump()
         } else {
             console.log("*  Loading new url")
-            bookView.url = url
+            bookView.load(url)
             // BookView itself will force a jump, after loading url
             // Loading an url with a fragment is however not supported by WebView. So we always end up on the top of the page, even if the chapter URL points to somewhere in the middle. See https://bugs.webkit.org/show_bug.cgi?id=48415
         }
+    }
+
+    function setStyle(style) {
+        bookView.setStyle(style)
     }
 }

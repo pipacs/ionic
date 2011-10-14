@@ -1,5 +1,5 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef PREFERENCES_H
+#define PREFERENCES_H
 
 #include <QObject>
 #include <QVariant>
@@ -11,7 +11,7 @@ class QString;
  * Shallow wrapper for QSettings.
  * Emits valueChanged signals when a setting value has changed, provides some settings as QML properties.
  */
-class Settings: public QObject {
+class Preferences: public QObject {
     Q_OBJECT
     Q_PROPERTY(bool useVolumeKeys READ useVolumeKeys WRITE setUseVolumeKeys NOTIFY valueChanged)
     Q_PROPERTY(bool useSwipe READ useSwipe WRITE setUseSwipe NOTIFY valueChanged)
@@ -19,7 +19,8 @@ class Settings: public QObject {
     Q_PROPERTY(QString style READ style WRITE setStyle NOTIFY valueChanged)
 
 public:
-    static Settings *instance();
+    Preferences();
+    static Preferences *instance();
     static void close();
     QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
     void setValue(const QString &key, const QVariant &value);
@@ -38,7 +39,6 @@ signals:
     void valueChanged(const QString &key);
 
 protected:
-    Settings();
 };
 
-#endif // SETTINGS_H
+#endif // PREFERENCES_H

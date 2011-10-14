@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <policy/resource-set.h>
+#include "preferences.h"
 
 class EventFilter: public QObject {
     Q_OBJECT
@@ -16,6 +17,7 @@ protected:
     bool captureVolumeKeys;
     bool active;
     ResourcePolicy::ResourceSet *resourceSet;
+    Preferences *settings;
 };
 
 #endif // EVENTFILTER_H

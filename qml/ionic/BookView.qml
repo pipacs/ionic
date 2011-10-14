@@ -24,8 +24,7 @@ import QtWebKit 1.0
 import com.nokia.meego 1.0
 import com.nokia.extras 1.0
 import com.pipacs.ionic.Book 1.0
-
-import com.pipacs.ionic.Book 1.0
+import com.pipacs.ionic.Preferences 1.0
 
 Flickable {
     // Target reading position, within the current part of the book. After loading the part, BookView will jump to this position.
@@ -86,17 +85,21 @@ Flickable {
         preferredHeight: flickable.height
         contentsScale: 1
         Keys.enabled: true
+
         property bool loading: false
 
         onLoadFailed: {
             loading = false
             flickable.targetPos = -1
+            styleCover.visible = false
         }
 
         onLoadFinished: {
             console.log("* BookView.WebView.onLoadFinished")
+            setStyle(prefs.style)
             loading = false
             bookView.jump()
+            styleCover.visible = false
         }
 
         onLoadStarted: {
@@ -150,6 +153,15 @@ Flickable {
         }
     }
 
+    Rectangle {
+        id: styleCover
+        anchors.fill: parent
+        border.width: 0
+        color: "red"
+        visible: false
+        z: 1
+    }
+
     function goToPreviousPage() {
         if (flickable.contentY == 0) {
             goToPreviousPart()
@@ -179,7 +191,7 @@ Flickable {
         }
         flickable.part -= 1
         flickable.targetPos = 1
-        webView.url = library.nowReading.urlFromPart(flickable.part)
+        load(library.nowReading.urlFromPart(flickable.part))
     }
 
     function goToNextPart() {
@@ -188,7 +200,7 @@ Flickable {
         }
         flickable.part += 1
         flickable.targetPos = 0
-        webView.url = library.nowReading.urlFromPart(flickable.part)
+        load(library.nowReading.urlFromPart(flickable.part))
     }
 
     // Update book's last reading position
@@ -196,7 +208,7 @@ Flickable {
         var currentPosition = flickable.contentY / webView.contentsSize.height
         var book = library.nowReading
         if ((Math.abs(book.lastBookmark.position - currentPosition) > 0.0005) || (book.lastBookmark.part != flickable.part)) {
-            console.log("* BookView.WebView.updateLastBookmark: Needs update")
+            console.log("* BookView.updateLastBookmark: Needs update")
             book.lastBookmark.position = currentPosition
             book.lastBookmark.part = flickable.part
             book.save()
@@ -205,7 +217,7 @@ Flickable {
 
     // Jump to a new location specified in flickable.targetPos or flickable.targetUrlFragment
     function jump() {
-        console.log("* BookView.WebView.jump targetPos " + flickable.targetPos)
+        console.log("* BookView.jump targetPos " + flickable.targetPos)
         if (flickable.targetPos != -1) {
             var newY = webView.contentsSize.height * flickable.targetPos
             if (flickable.targetPos == 1) {
@@ -218,6 +230,26 @@ Flickable {
             flickable.targetPos = -1
             updateLastBookmark()
         }
+    }
+
+    // Set style
+    function setStyle(style) {
+        var styles = new Object
+        styles.day = "document.body.style.background = '#FFFFFB';document.body.style.color = '#000000'"
+        styles.night = "document.body.style.background = '#000009';document.body.style.color = '#FFFFFF'"
+        styles.sand = "document.body.style.background = '#EDC9AF';document.body.style.color = '#000000'"
+        var backgrounds = new Object
+        backgrounds.day = "#FFFFFB"
+        backgrounds.night = "#000009"
+        backgrounds.sand = "#EDC9AF"
+        console.log("* BookView.setStyle " + style + " -> " + styles[style] + ", color " + backgrounds[style])
+        styleCover.color = backgrounds[style]
+        webView.evaluateJavaScript(styles[style])
+    }
+
+    function load(url) {
+        styleCover.visible = true;
+        webView.url = url
     }
 
     Timer {

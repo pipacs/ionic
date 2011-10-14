@@ -50,11 +50,11 @@ SOURCES += main.cpp \
     model/unzip/unzip.c \
     model/unzip/ioapi.c \
     model/library.cpp \
-    settings.cpp \
     trace.cpp \
     platform.cpp \
     model/coverprovider.cpp \
-    eventfilter.cpp
+    eventfilter.cpp \
+    preferences.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -122,17 +122,26 @@ HEADERS += \
     model/unzip/ioapi.h \
     model/library.h \
     model/ncxhandler.h \
-    settings.h \
     model/xmlerrorhandler.h \
     trace.h \
     platform.h \
     model/bookmark.h \
     model/coverprovider.h \
     model/contentitem.h \
-    eventfilter.h
+    eventfilter.h \
+    preferences.h
 
 RESOURCES += \
     ionic.qrc
+
+
+
+
+
+
+
+
+
 
 
 

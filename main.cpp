@@ -3,7 +3,7 @@
 
 #include "qmlapplicationviewer.h"
 #include "trace.h"
-#include "settings.h"
+#include "preferences.h"
 #include "model/contentitem.h"
 #include "model/book.h"
 #include "model/bookmark.h"
@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
     // Set up tracing
-    Settings *settings = Settings::instance();
+    Preferences *settings = Preferences::instance();
     Trace::level = (QtMsgType)settings->value("tracelevel", (int)QtDebugMsg).toInt();
     Trace::setFileName(settings->value("tracefilename").toString());
     qInstallMsgHandler(Trace::messageHandler);
@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
     qmlRegisterType<Bookmark>("com.pipacs.ionic.Bookmark", 1, 0, "Bookmark");
     qmlRegisterType<Book>("com.pipacs.ionic.Book", 1, 0, "Book");
     qmlRegisterType<Library>("com.pipacs.ionic.Library", 1, 0, "Library");
+    qmlRegisterType<Preferences>("com.pipacs.ionic.Preferences", 1, 0, "Preferences");
 
     // Initialize library, load last book or default book
     Library *library = Library::instance();
@@ -49,7 +50,7 @@ int main(int argc, char *argv[]) {
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.engine()->addImageProvider(QString("covers"), new CoverProvider);
     viewer.rootContext()->setContextProperty("library", library);
-    viewer.rootContext()->setContextProperty("prefs", Settings::instance());
+    viewer.rootContext()->setContextProperty("prefs", settings);
     Book *emptyBook = new Book();
     viewer.rootContext()->setContextProperty("emptyBook", emptyBook);
     BookFinder *bookFinder = new BookFinder();
@@ -86,7 +87,7 @@ int main(int argc, char *argv[]) {
     delete emptyBook;
     Library::close();
     BookDb::close();
-    Settings::close();
+    Preferences::close();
 
     return ret;
 }
