@@ -119,7 +119,9 @@ OTHER_FILES += \
     screenshots/2011-10-15_21-58-05.png \
     screenshots/2011-10-15_21-56-29.png \
     screenshots/2011-10-15_21-56-10.png \
-    screenshots/2011-10-15_21-55-19.png
+    screenshots/2011-10-15_21-55-19.png \
+    LICENSE.txt \
+    README.markdown
 
 HEADERS += \
     model/book.h \
@@ -145,6 +147,8 @@ HEADERS += \
 
 RESOURCES += \
     ionic.qrc
+
+
 
 
 
