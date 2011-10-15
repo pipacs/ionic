@@ -129,10 +129,14 @@ HEADERS += \
     model/coverprovider.h \
     model/contentitem.h \
     eventfilter.h \
-    preferences.h
+    preferences.h \
+    splash.h
 
 RESOURCES += \
     ionic.qrc
+
+
+
 
 
 

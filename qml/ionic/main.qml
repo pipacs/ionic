@@ -33,7 +33,7 @@ PageStackWindow {
         visible: true
 
         ToolIcon {
-            iconId: "toolbar-previous"
+            iconId: "toolbar-up" // toolbar-previous"
             enabled: library.nowReading.valid
             onClicked: {
                 myMenu.close()
@@ -41,7 +41,7 @@ PageStackWindow {
             }
         }
         ToolIcon {
-            iconId: "toolbar-next"
+            iconId: "toolbar-down" // toolbar-next"
             enabled: library.nowReading.valid
             onClicked: {
                 myMenu.close()

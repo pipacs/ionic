@@ -157,7 +157,7 @@ Flickable {
         id: styleCover
         anchors.fill: parent
         border.width: 0
-        color: "red"
+        color: "white"
         visible: false
         z: 1
     }
@@ -235,11 +235,11 @@ Flickable {
     // Set style
     function setStyle(style) {
         var styles = new Object
-        styles.day = "document.body.style.background = '#FFFFFB';document.body.style.color = '#000000'"
-        styles.night = "document.body.style.background = '#000009';document.body.style.color = '#FFFFFF'"
-        styles.sand = "document.body.style.background = '#EDC9AF';document.body.style.color = '#000000'"
+        styles.day = "document.body.style.background = '#FFFFFF'; document.body.style.color = '#000000'"
+        styles.night = "document.body.style.background = '#000009'; document.body.style.color = '#FFFFFF'"
+        styles.sand = "document.body.style.background = '#EDC9AF'; document.body.style.color = '#000000'"
         var backgrounds = new Object
-        backgrounds.day = "#FFFFFB"
+        backgrounds.day = "#FFFFFF"
         backgrounds.night = "#000009"
         backgrounds.sand = "#EDC9AF"
         console.log("* BookView.setStyle " + style + " -> " + styles[style] + ", color " + backgrounds[style])

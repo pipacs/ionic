@@ -12,6 +12,7 @@
 #include "model/coverprovider.h"
 #include "bookfinder.h"
 #include "eventfilter.h"
+#include "splash.h"
 
 static const char *ionicVersion =
 #include "pkg/version.txt"
@@ -20,6 +21,10 @@ static const char *ionicVersion =
 int main(int argc, char *argv[]) {
     // Set up application
     QApplication app(argc, argv);
+    app.setApplicationName("Ionic");
+    app.setApplicationVersion(ionicVersion);
+    app.setOrganizationDomain("pipacs.com");
+    app.setOrganizationName("pipacs.com");
 
     // Set up tracing
     Preferences *settings = Preferences::instance();
@@ -27,6 +32,11 @@ int main(int argc, char *argv[]) {
     Trace::setFileName(settings->value("tracefilename").toString());
     qInstallMsgHandler(Trace::messageHandler);
     qDebug() << "Ionic version " << ionicVersion;
+
+    // Show splash screen
+    Splash splash;
+    splash.show();
+    app.processEvents();
 
     // Register QML types
     qmlRegisterType<Bookmark>("com.pipacs.ionic.Bookmark", 1, 0, "Bookmark");
@@ -76,6 +86,8 @@ int main(int argc, char *argv[]) {
     EventFilter *eventFilter = new EventFilter(&viewer);
     viewer.installEventFilter(eventFilter);
 
+    // splash.finishLater();
+    splash.close();
     int ret = app.exec();
 
     // Delete singletons

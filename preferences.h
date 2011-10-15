@@ -20,7 +20,6 @@ class Preferences: public QObject {
     Q_PROPERTY(int orientation READ orientation WRITE setOrientation NOTIFY valueChanged)
 
 public:
-    Preferences();
     static Preferences *instance();
     static void close();
     QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
@@ -42,6 +41,7 @@ signals:
     void valueChanged(const QString &key);
 
 protected:
+    Preferences();
 };
 
 #endif // PREFERENCES_H

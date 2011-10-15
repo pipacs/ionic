@@ -9,7 +9,7 @@ EventFilter::EventFilter(QObject *parent): QObject(parent), active(false) {
     TRACE;
     resourceSet = new ResourcePolicy::ResourceSet("player");
     resourceSet->addResourceObject(new ResourcePolicy::ScaleButtonResource);
-    settings = new Preferences;
+    settings = Preferences::instance();
     captureVolumeKeys = settings->value("usevolumekeys").toBool();
     connect(settings, SIGNAL(valueChanged(QString)), this, SLOT(onSettingChanged(QString)));
 }

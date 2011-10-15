@@ -4,5 +4,6 @@
         <file>ionic80.png</file>
         <file>icons/book.png</file>
         <file>icons/star.png</file>
+        <file>icons/splash.png</file>
     </qresource>
 </RCC>
