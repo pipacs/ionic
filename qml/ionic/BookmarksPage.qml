@@ -47,7 +47,7 @@ Page {
                 anchors.fill: parent
                 onClicked: {
                     pageStack.pop(null)
-                    mainPage.goTo(book.bookmarks[index].part, book.bookmarks[index].position, "")
+                    mainPage.goTo(book.bookmarks[index].part, book.bookmarks[index].position, "#")
                 }
                 onPressAndHold: {
                     contextMenu.index = index
