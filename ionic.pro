@@ -108,7 +108,18 @@ OTHER_FILES += \
     icons/book.png \
     icons/back.png \
     icons/add.png \
-    icons/star.png
+    icons/star.png \
+    screenshots/ovi-screenshot-full-0.png \
+    screenshots/ovi-screenshot-2.png \
+    screenshots/ovi-screenshot-1.png \
+    screenshots/ovi-screenshot-0.png \
+    screenshots/2011-10-15_23-45-58.png \
+    screenshots/2011-10-15_21-59-28.png \
+    screenshots/2011-10-15_21-58-47.png \
+    screenshots/2011-10-15_21-58-05.png \
+    screenshots/2011-10-15_21-56-29.png \
+    screenshots/2011-10-15_21-56-10.png \
+    screenshots/2011-10-15_21-55-19.png
 
 HEADERS += \
     model/book.h \
@@ -134,6 +145,7 @@ HEADERS += \
 
 RESOURCES += \
     ionic.qrc
+
 
 
 
