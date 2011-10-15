@@ -5,6 +5,7 @@ import com.pipacs.ionic.Book 1.0
 
 Page {
     tools: aboutTools
+    orientationLock: prefs.orientation
 
     Flickable {
         anchors.left: parent.left

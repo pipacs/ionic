@@ -7,6 +7,8 @@ import com.pipacs.ionic.Book 1.0
 
 Page {
     tools: libraryTools
+    orientationLock: prefs.orientation
+
     signal begin(int total)
     signal add(string title)
     signal done(int total)

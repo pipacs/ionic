@@ -7,6 +7,7 @@ Page {
     property Book book: emptyBook
 
     tools: chaptersTools
+    orientationLock: prefs.orientation
 
     PageHeader {
         id: header

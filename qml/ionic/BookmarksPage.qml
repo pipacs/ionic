@@ -10,6 +10,7 @@ Page {
     property Book book: emptyBook
     signal bookmarkAdded
     tools: bookmarksTools
+    orientationLock: prefs.orientation
 
     PageHeader {
         id: header

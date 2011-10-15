@@ -17,6 +17,7 @@ class Preferences: public QObject {
     Q_PROPERTY(bool useSwipe READ useSwipe WRITE setUseSwipe NOTIFY valueChanged)
     Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY valueChanged)
     Q_PROPERTY(QString style READ style WRITE setStyle NOTIFY valueChanged)
+    Q_PROPERTY(int orientation READ orientation WRITE setOrientation NOTIFY valueChanged)
 
 public:
     Preferences();
@@ -34,6 +35,8 @@ public:
     void setZoom(qreal v) {setValue("zoom", v);}
     QString style() {return value("style", "day").toString();}
     void setStyle(const QString &v) {setValue("style", v);}
+    int orientation() {return value("orientation", 0).toInt();}
+    void setOrientation(int v) {setValue("orientation", v);}
 
 signals:
     void valueChanged(const QString &key);

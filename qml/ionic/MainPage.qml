@@ -7,7 +7,9 @@ import com.pipacs.ionic.Book 1.0
 
 Page {
     signal nowReadingChanged
+
     tools: commonTools
+    orientationLock: prefs.orientation
 
     BookView {
         id: bookView

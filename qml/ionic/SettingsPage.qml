@@ -7,6 +7,7 @@ import com.pipacs.ionic.Book 1.0
 
 Page {
     tools: settingsTools
+    orientationLock: prefs.orientation
 
     ToolBarLayout {
         id: settingsTools
@@ -81,6 +82,24 @@ Page {
                     text: "Sand"
                     checked: prefs.style == "sand"
                     onClicked: {prefs.style = "sand"; mainPage.setStyle("sand")}
+                }
+            }
+            Label {text: "Orientation:"}
+            ButtonRow {
+                Button {
+                    text: "Auto"
+                    checked: prefs.orientation == PageOrientation.Automatic
+                    onClicked: {prefs.orientation = PageOrientation.Automatic; console.log("* SettingsPage " + PageOrientation.Automatic)}
+                }
+                Button {
+                    text: "Portrait"
+                    checked: prefs.orientation == PageOrientation.LockPortrait
+                    onClicked: {prefs.orientation = PageOrientation.LockPortrait}
+                }
+                Button {
+                    text: "Landscape"
+                    checked: prefs.orientation == PageOrientation.LockLandscape
+                    onClicked: {prefs.orientation = PageOrientation.LockLandscape}
                 }
             }
         }

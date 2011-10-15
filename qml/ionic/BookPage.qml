@@ -10,6 +10,7 @@ Page {
     property alias enableJump: jumpTool.visible
 
     tools: libraryTools
+    orientationLock: prefs.orientation
 
     PageHeader {
         id: header
