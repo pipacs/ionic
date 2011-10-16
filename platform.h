@@ -1,34 +1,37 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
+#include <QObject>
 #include <QString>
 #include <QSize>
 
 class QWidget;
 
 /** Platform abstractions. */
-class Platform
-{
+class Platform: public QObject {
+    Q_OBJECT
+    Q_PROPERTY(int brightness READ brightness WRITE setBrightness NOTIFY brightnessChanged)
+    Q_PROPERTY(bool blanking READ blanking WRITE setBlanking NOTIFY blankingChanged)
+    Q_PROPERTY(QString version READ version CONSTANT)
+
 public:
     static Platform *instance();
     static void close();
 
+    int brightness() const;
+    void setBrightness(int value);
+    bool blanking() const;
+    void setBlanking(bool value);
     QString dbPath();
-    QString icon(const QString &name, const QString &externsion = ".png");
     void restart(char *argv[]);
     QString version();
     QString downloadDir();
-    QString defaultFont();
-    static int defaultZoom();
-    QString defaultOrientation();
-    void setOrientation(QWidget *widget, const QString &orientation);
     void information(const QString &label, QWidget *parent = 0);
-    void showBusy(QWidget *w, bool isBusy);
     QString traceFileName();
-    static int softKeyHeight();
-    static int toolBarIconHeight();
-    static QSize size();
-    static QSize availableSize();
+
+signals:
+    void brightnessChanged();
+    void blankingChanged();
 };
 
 #endif // PLATFORM_H

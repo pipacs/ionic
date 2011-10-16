@@ -13,16 +13,13 @@
 #include "bookfinder.h"
 #include "eventfilter.h"
 #include "splash.h"
-
-static const char *ionicVersion =
-#include "pkg/version.txt"
-;
+#include "platform.h"
 
 int main(int argc, char *argv[]) {
     // Set up application
     QApplication app(argc, argv);
     app.setApplicationName("Ionic");
-    app.setApplicationVersion(ionicVersion);
+    app.setApplicationVersion(Platform::instance()->version());
     app.setOrganizationDomain("pipacs.com");
     app.setOrganizationName("pipacs.com");
 
@@ -31,7 +28,7 @@ int main(int argc, char *argv[]) {
     Trace::level = (QtMsgType)settings->value("tracelevel", (int)QtDebugMsg).toInt();
     Trace::setFileName(settings->value("tracefilename").toString());
     qInstallMsgHandler(Trace::messageHandler);
-    qDebug() << "Ionic version " << ionicVersion;
+    qDebug() << "Ionic version " << Platform::instance()->version();
 
     // Show splash screen
     Splash splash;
@@ -73,9 +70,7 @@ int main(int argc, char *argv[]) {
     bookFinderWorker->connect(bookFinderWorker, SIGNAL(done(int)), bookFinder, SIGNAL(done(int)));
     bookFinderWorkerThread->start();
     bookFinderWorkerThread->setPriority(QThread::LowestPriority);
-    viewer.rootContext()->setContextProperty("bookFinder", bookFinder);
-    QString version(ionicVersion);
-    viewer.rootContext()->setContextProperty("version", version);
+    viewer.rootContext()->setContextProperty("platform", Platform::instance());
     viewer.setMainQmlFile(QLatin1String("qml/ionic/main.qml"));
     // viewer.setFocusPolicy(Qt::StrongFocus);
     // viewer.setFocus();
@@ -86,7 +81,7 @@ int main(int argc, char *argv[]) {
     EventFilter *eventFilter = new EventFilter(&viewer);
     viewer.installEventFilter(eventFilter);
 
-    // splash.finishLater();
+    // Close splash screen, start application
     splash.close();
     int ret = app.exec();
 

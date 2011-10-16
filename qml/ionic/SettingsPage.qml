@@ -102,6 +102,24 @@ Page {
                     onClicked: {prefs.orientation = PageOrientation.LockLandscape}
                 }
             }
+            Label {text: "Brightness:"}
+            Slider {
+                id: brightness
+                property bool firstUpdate: true
+                stepSize: 1
+                valueIndicatorVisible: true
+                minimumValue: 1
+                maximumValue: 5
+                value: platform.brightness
+                onValueChanged: {
+                    if (firstUpdate) {
+                        // Work around a slider bug: The first valueChanged notification is sent too early
+                        firstUpdate = false
+                    } else {
+                        platform.brightness = value
+                    }
+                }
+            }
         }
     }
 
