@@ -18,7 +18,7 @@ class Preferences: public QObject {
     Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY valueChanged)
     Q_PROPERTY(QString style READ style WRITE setStyle NOTIFY valueChanged)
     Q_PROPERTY(int orientation READ orientation WRITE setOrientation NOTIFY valueChanged)
-
+    Q_PROPERTY(bool preventBlanking READ preventBlanking WRITE setPreventBlanking NOTIFY valueChanged)
 public:
     static Preferences *instance();
     static void close();
@@ -36,6 +36,8 @@ public:
     void setStyle(const QString &v) {setValue("style", v);}
     int orientation() {return value("orientation", 0).toInt();}
     void setOrientation(int v) {setValue("orientation", v);}
+    bool preventBlanking() {return value("preventblanking", false).toBool();}
+    void setPreventBlanking(bool v) {setValue("preventblanking", v);}
 
 signals:
     void valueChanged(const QString &key);

@@ -16,7 +16,14 @@ static const char *IONIC_VERSION =
 
 static Platform *theInstance;
 
-int Platform::brightness() const {
+Platform::Platform(): QObject(), displayState(0) {
+}
+
+Platform::~Platform() {
+    delete displayState;
+}
+
+int Platform::brightness() {
     int result = 3;
     QProcess gconftool;
     gconftool.start("gconftool-2", QStringList() << "-g" << "/system/osso/dsm/display/display_brightness");
@@ -37,14 +44,6 @@ void Platform::setBrightness(int value) {
     qDebug() << "Setting brightness: " << args;
     gconftool.start("gconftool-2", args);
     gconftool.waitForFinished();
-}
-
-bool Platform::blanking() const {
-    return false;
-}
-
-void Platform::setBlanking(bool value) {
-    (void)value;
 }
 
 Platform *Platform::instance() {
@@ -79,4 +78,11 @@ QString Platform::downloadDir() {
 
 QString Platform::traceFileName() {
     return QDir::home().absoluteFilePath(IONIC_LOG);
+}
+
+void Platform::pauseBlanking() {
+    if (!displayState) {
+        displayState = new MeeGo::QmDisplayState;
+    }
+    (void)displayState->setBlankingPause();
 }

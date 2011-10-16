@@ -37,7 +37,8 @@ unix:!symbian {
 unix:!symbian:!maemo5 {
     # Sorry Dennis
     DEFINES += Q_WS_HARMATTAN
-    CONFIG +=  link_pkgconfig
+    CONFIG += link_pkgconfig
+    CONFIG += qmsystem2
     PKGCONFIG += libresourceqt1
 }
 

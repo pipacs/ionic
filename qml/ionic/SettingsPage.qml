@@ -102,6 +102,12 @@ Page {
                     onClicked: {prefs.orientation = PageOrientation.LockLandscape}
                 }
             }
+            CheckBox {
+                id: preventBlanking
+                text: "Prevent display blanking"
+                checked: prefs.preventBlanking
+                onClicked: {prefs.preventBlanking = checked}
+            }
             Label {text: "Brightness:"}
             Slider {
                 id: brightness
@@ -125,6 +131,17 @@ Page {
 
     ScrollDecorator {
         flickableItem: flickable
+    }
+
+    Timer {
+        interval: 5000
+        running: true
+        repeat: true
+        onTriggered: {
+            if (prefs.preventBlanking) {
+                platform.pauseBlanking()
+            }
+        }
     }
 
     Component.onCompleted: {

@@ -95,6 +95,7 @@ int main(int argc, char *argv[]) {
     Library::close();
     BookDb::close();
     Preferences::close();
+    Platform::close();
 
     return ret;
 }
