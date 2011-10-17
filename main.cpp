@@ -70,6 +70,7 @@ int main(int argc, char *argv[]) {
     bookFinderWorker->connect(bookFinderWorker, SIGNAL(done(int)), bookFinder, SIGNAL(done(int)));
     bookFinderWorkerThread->start();
     bookFinderWorkerThread->setPriority(QThread::LowestPriority);
+    viewer.rootContext()->setContextProperty("bookFinder", bookFinder);
     viewer.rootContext()->setContextProperty("platform", Platform::instance());
     viewer.setMainQmlFile(QLatin1String("qml/ionic/main.qml"));
     // viewer.setFocusPolicy(Qt::StrongFocus);
