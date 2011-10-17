@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<package xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="id">
+  <metadata>
+    <dc:rights>Public domain in the USA.</dc:rights>
+    <dc:identifier id="id" opf:scheme="URI">http://www.gutenberg.org/ebooks/21279</dc:identifier>
+    <dc:creator opf:file-as="Vonnegut, Kurt">Kurt Vonnegut</dc:creator>
+    <dc:title>2 B R 0 2 B</dc:title>
+    <dc:language xsi:type="dcterms:RFC4646">en</dc:language>
+    <dc:date opf:event="publication">2007-05-03</dc:date>
+    <dc:date opf:event="conversion">2010-02-16T18:11:00.184015+00:00</dc:date>
+    <dc:source>http://www.gutenberg.org/files/21279/21279-h/21279-h.htm</dc:source>
+    <meta content="item5" name="cover"/>
+  </metadata>
+  <manifest>
+    <item href="pgepub.css" id="item1" media-type="text/css"/>
+    <item href="0.css" id="item2" media-type="text/css"/>
+    <item href="1.css" id="item3" media-type="text/css"/>
+    <item href="www.gutenberg.org@files@21279@21279-h@21279-h-0.htm" id="item4" media-type="application/xhtml+xml"/>
+    <item href="cover.jpg" id="item5" media-type="image/jpeg"/>
+    <item href="project.htm" id="item6" media-type="application/xhtml+xml"/>
+    <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="item4" linear="yes"/>
+    <itemref idref="item6" linear="yes"/>
+  </spine>
+  <guide>
+    <reference href="cover.jpg" type="cover" title="Cover Image"/>
+  </guide>
+</package>

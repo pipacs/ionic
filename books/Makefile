@@ -1,0 +1,3 @@
+2BR02B.epub: 2BR02B 2BR02B/21279 2BR02B/META-INF
+	cd 2BR02B; zip -r ../2BR02B.zip *
+	mv 2BR02B.zip 2BR02B.epub

@@ -44,7 +44,7 @@ Page {
                     var url = book.urlFromChapter(index)
                     console.log("*  Going to part " + part + ", url " + url)
                     pageStack.pop(null)
-                    mainPage.goTo(part, -1, url)
+                    mainPage.goTo(part, 0, url)
                 }
             }
         }

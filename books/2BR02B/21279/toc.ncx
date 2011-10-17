@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ncx PUBLIC '-//NISO//DTD ncx 2005-1//EN' 
+              'http://www.daisy.org/z3986/2005/ncx-2005-1.dtd'>
+
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="en">
+  <head>
+    <meta content="http://www.gutenberg.org/ebooks/21279" name="dtb:uid"/>
+    <meta content="1" name="dtb:depth"/>
+    <meta content="Project Gutenberg EPUB-Maker v0.02 by Marcello Perathoner &lt;webmaster@gutenberg.org&gt;" name="dtb:generator"/>
+    <meta content="0" name="dtb:totalPageCount"/>
+    <meta content="0" name="dtb:maxPageNumber"/>
+  </head>
+  <docTitle>
+    <text>2 B R 0 2 B</text>
+  </docTitle>
+  <navMap>
+    <navPoint id="np-1" playOrder="1">
+      <navLabel>
+        <text>2 B R 0 2 B</text>
+      </navLabel>
+      <content src="www.gutenberg.org@files@21279@21279-h@21279-h-0.htm"/>
+    </navPoint>
+    <navPoint id="np-2" playOrder="2">
+      <navLabel>
+        <text>Project Gutenberg Information</text>
+      </navLabel>
+      <content src="project.htm"/>
+    </navPoint>
+  </navMap>
+</ncx>

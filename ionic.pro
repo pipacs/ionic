@@ -122,7 +122,18 @@ OTHER_FILES += \
     screenshots/2011-10-15_21-56-10.png \
     screenshots/2011-10-15_21-55-19.png \
     LICENSE.txt \
-    README.markdown
+    README.markdown \
+    books/2BR02B/mimetype \
+    books/2BR02B/21279/www.gutenberg.org@files@21279@21279-h@21279-h-0.htm \
+    books/2BR02B/21279/toc.ncx \
+    books/2BR02B/21279/project.htm \
+    books/2BR02B/21279/pgepub.css \
+    books/2BR02B/21279/cover.jpg \
+    books/2BR02B/21279/content.opf \
+    books/2BR02B/21279/1.css \
+    books/2BR02B/21279/0.css \
+    books/2BR02B/META-INF/container.xml \
+    books/Makefile
 
 HEADERS += \
     model/book.h \
@@ -148,6 +159,12 @@ HEADERS += \
 
 RESOURCES += \
     ionic.qrc
+
+
+
+
+
+
 
 
 
