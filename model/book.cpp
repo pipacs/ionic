@@ -499,6 +499,11 @@ QString Book::urlFromChapter(int index) {
     QString id = chapters_[index];
     QString fullPath = QDir(rootPath_).absoluteFilePath(content_[id].href);
     QString ret = QUrl::fromLocalFile(fullPath).toString();
+    // FIXME: Get rid of the fragment part as the QML WebView cannot handle it
+    int fragmentStart = ret.indexOf("#");
+    if (fragmentStart != -1) {
+        ret = ret.remove(fragmentStart, ret.length());
+    }
     qDebug() << "Return" << ret;
     return ret;
 }
