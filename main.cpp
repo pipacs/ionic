@@ -41,6 +41,11 @@ int main(int argc, char *argv[]) {
     qmlRegisterType<Library>("com.pipacs.ionic.Library", 1, 0, "Library");
     qmlRegisterType<Preferences>("com.pipacs.ionic.Preferences", 1, 0, "Preferences");
 
+    // Do book database management in a separate thread
+    BookDbWorkerThread *bookDbWorkerThread = new BookDbWorkerThread;
+    BookDb::instance()->worker()->moveToThread(bookDbWorkerThread);
+    bookDbWorkerThread->start(QThread::LowestPriority);
+
     // Initialize library, load last book or default book
     Library *library = Library::instance();
     library->load();
@@ -52,16 +57,7 @@ int main(int argc, char *argv[]) {
         library->setNowReading(library->book(0));
     }
 
-    // Set up and show QML widget with main.qml
-
-    QmlApplicationViewer viewer;
-    viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-    viewer.engine()->addImageProvider(QString("covers"), new CoverProvider);
-    viewer.rootContext()->setContextProperty("library", library);
-    viewer.rootContext()->setContextProperty("prefs", settings);
-    Book *emptyBook = new Book();
-    viewer.rootContext()->setContextProperty("emptyBook", emptyBook);
-
+    // Do book import in a separate thread
     BookFinder *bookFinder = new BookFinder;
     BookFinderWorker *bookFinderWorker = new BookFinderWorker;
     BookFinderWorkerThread *bookFinderWorkerThread = new BookFinderWorkerThread;
@@ -71,18 +67,18 @@ int main(int argc, char *argv[]) {
     bookFinderWorker->connect(bookFinderWorker, SIGNAL(add(QString)), bookFinder, SIGNAL(add(QString)));
     bookFinderWorker->connect(bookFinderWorker, SIGNAL(done(int)), bookFinder, SIGNAL(done(int)));
     bookFinderWorkerThread->start(QThread::LowestPriority);
+
+    // Set up and show QML widget with main.qml
+    QmlApplicationViewer viewer;
+    viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
+    viewer.engine()->addImageProvider(QString("covers"), new CoverProvider);
+    viewer.rootContext()->setContextProperty("library", library);
+    viewer.rootContext()->setContextProperty("prefs", settings);
+    Book *emptyBook = new Book();
+    viewer.rootContext()->setContextProperty("emptyBook", emptyBook);
     viewer.rootContext()->setContextProperty("bookFinder", bookFinder);
-
-    BookDb *bookDb = BookDb::instance();
-    BookDbWorkerThread *bookDbWorkerThread = new BookDbWorkerThread;
-    bookDb->worker()->moveToThread(bookDbWorkerThread);
-    bookDbWorkerThread->start(QThread::LowestPriority);
-
     viewer.rootContext()->setContextProperty("platform", Platform::instance());
     viewer.setMainQmlFile(QLatin1String("qml/ionic/main.qml"));
-    // viewer.setFocusPolicy(Qt::StrongFocus);
-    // viewer.setFocus();
-    // viewer.activateWindow();
     viewer.showExpanded();
 
     // Install event filter to capture/release volume keys
@@ -94,21 +90,17 @@ int main(int argc, char *argv[]) {
     int ret = app.exec();
 
     // Delete singletons
-
     bookFinderWorkerThread->quit();
     bookFinderWorkerThread->wait();
     delete bookFinderWorkerThread;
     delete bookFinderWorker;
     delete bookFinder;
-
     delete emptyBook;
     Library::close();
-
     bookDbWorkerThread->quit();
     bookDbWorkerThread->wait();
     delete bookDbWorkerThread;
     BookDb::close();
-
     Preferences::close();
     Platform::close();
 
