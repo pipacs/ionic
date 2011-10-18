@@ -55,7 +55,8 @@ SOURCES += main.cpp \
     model/coverprovider.cpp \
     eventfilter.cpp \
     preferences.cpp \
-    platform.cpp
+    platform.cpp \
+    model/bookdbworker.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -155,7 +156,10 @@ HEADERS += \
     model/contentitem.h \
     eventfilter.h \
     preferences.h \
-    splash.h
+    splash.h \
+    model/bookdbworker.h
 
 RESOURCES += \
     ionic.qrc
+
+

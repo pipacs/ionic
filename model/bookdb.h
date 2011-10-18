@@ -4,35 +4,12 @@
 #include <QObject>
 #include <QVariantHash>
 #include <QtSql>
-#include <QMutex>
+#include <QStringList>
 
-class QString;
-
-/** Do the real work of storing/retrieving book meta-data. */
-class BookDbWorker: public QObject {
-    Q_OBJECT
-
-public:
-    BookDbWorker();
-    ~BookDbWorker();
-
-public slots:
-    QVariantHash doLoad(const QString &book);
-    void doSave(const QString &book, const QVariantHash &data);
-    void doRemove(const QString &book);
-    void doRemoveAll();
-    QStringList doListBooks();
-
-private:
-    void create();
-    QSqlDatabase db;
-    mutable QMutex mutex;
-};
+#include "bookdbworker.h"
 
 /** Facade for storing/retrieving book meta-data. */
-class BookDb: public QObject {
-    Q_OBJECT
-
+class BookDb {
 public:
     static BookDb *instance();
     static void close();
@@ -43,16 +20,10 @@ public:
     QStringList books();
     BookDbWorker *worker();
 
-private:
+protected:
     BookDb();
     ~BookDb();
     BookDbWorker *worker_;
-};
-
-/** BookDb worker thread. */
-class BookDbWorkerThread: public QThread {
-public:
-    void run() {exec();}
 };
 
 #endif // BOOKDB_H

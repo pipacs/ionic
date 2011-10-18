@@ -52,12 +52,4 @@ signals:
     void done(int count);
 };
 
-/** Book finder worker thread. */
-class BookFinderWorkerThread: public QThread {
-public:
-    void run() {
-        exec();
-    }
-};
-
 #endif // BOOKFINDER_H

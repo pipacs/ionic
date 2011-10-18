@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
     qmlRegisterType<Preferences>("com.pipacs.ionic.Preferences", 1, 0, "Preferences");
 
     // Do book database management in a separate thread
-    BookDbWorkerThread *bookDbWorkerThread = new BookDbWorkerThread;
+    QThread *bookDbWorkerThread = new QThread;
     BookDb::instance()->worker()->moveToThread(bookDbWorkerThread);
     bookDbWorkerThread->start(QThread::LowestPriority);
 
@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
     // Do book import in a separate thread
     BookFinder *bookFinder = new BookFinder;
     BookFinderWorker *bookFinderWorker = new BookFinderWorker;
-    BookFinderWorkerThread *bookFinderWorkerThread = new BookFinderWorkerThread;
+    QThread *bookFinderWorkerThread = new QThread;
     bookFinderWorker->moveToThread(bookFinderWorkerThread);
     bookFinder->connect(bookFinder, SIGNAL(findRequested()), bookFinderWorker, SLOT(doFind()));
     bookFinderWorker->connect(bookFinderWorker, SIGNAL(begin(int)), bookFinder, SIGNAL(begin(int)));
