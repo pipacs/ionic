@@ -18,7 +18,69 @@ void BookDb::close() {
     }
 }
 
-BookDb::BookDb() {
+BookDb::BookDb(): QObject() {
+    worker_ = new BookDbWorker();
+}
+
+BookDb::~BookDb() {
+    delete worker_;
+}
+
+BookDbWorker *BookDb::worker() {
+    return worker_;
+}
+
+QVariantHash BookDb::load(const QString &book) {
+    QVariantHash ret;
+    if (!QMetaObject::invokeMethod(
+            worker_,
+            "doLoad",
+            Q_RETURN_ARG(QVariantHash, ret),
+            Q_ARG(QString, book))) {
+        qCritical() << "BookDb::load: Invoking remote loader failed";
+    }
+    return ret;
+}
+
+void BookDb::save(const QString &book, const QVariantHash &data) {
+    if (!QMetaObject::invokeMethod(
+            worker_,
+            "doSave",
+            Q_ARG(QString, book),
+            Q_ARG(QVariantHash, data))) {
+        qCritical() << "BookDb::save: Invoking remote loader failed";
+    }
+}
+
+void BookDb::remove(const QString &book) {
+    if (!QMetaObject::invokeMethod(
+            worker_,
+            "doRemove",
+            Q_ARG(QString, book))) {
+        qCritical() << "BookDb::remove: Invoking remote loader failed";
+    }
+}
+
+void BookDb::removeAll() {
+    if (!QMetaObject::invokeMethod(
+            worker_,
+            "doRemoveAll")) {
+        qCritical() << "BookDb::removeAll: Invoking remote loader failed";
+    }
+}
+
+QStringList BookDb::books() {
+    QStringList ret;
+    if (!QMetaObject::invokeMethod(
+            worker_,
+            "doListBooks",
+            Q_RETURN_ARG(QStringList, ret))) {
+        qCritical() << "BookDb::books: Invoking remote loader failed";
+    }
+    return ret;
+}
+
+BookDbWorker::BookDbWorker() {
     TRACE;
     bool shouldCreate = false;
     QFileInfo info(Platform::instance()->dbPath());
@@ -39,12 +101,12 @@ BookDb::BookDb() {
     }
 }
 
-BookDb::~BookDb() {
+BookDbWorker::~BookDbWorker() {
     TRACE;
     db.close();
 }
 
-void BookDb::create() {
+void BookDbWorker::create() {
     TRACE;
     QSqlQuery query;
     if (!query.exec("create table book (name text primary key, content blob)")) {
@@ -52,7 +114,7 @@ void BookDb::create() {
     }
 }
 
-QVariantHash BookDb::load(const QString &book) {
+QVariantHash BookDbWorker::doLoad(const QString &book) {
     TRACE;
     qDebug() << book;
     QVariantHash ret;
@@ -73,7 +135,7 @@ QVariantHash BookDb::load(const QString &book) {
     return ret;
 }
 
-void BookDb::save(const QString &book, const QVariantHash &data) {
+void BookDbWorker::doSave(const QString &book, const QVariantHash &data) {
     TRACE;
     qDebug() << book;
     QByteArray bytes;
@@ -87,7 +149,7 @@ void BookDb::save(const QString &book, const QVariantHash &data) {
     }
 }
 
-void BookDb::remove(const QString &book) {
+void BookDbWorker::doRemove(const QString &book) {
     TRACE;
     qDebug() << book;
     QSqlQuery query("delete from book where name = ?");
@@ -97,7 +159,7 @@ void BookDb::remove(const QString &book) {
     }
 }
 
-QStringList BookDb::books() {
+QStringList BookDbWorker::doListBooks() {
     TRACE;
     QStringList ret;
     QSqlQuery query("select name from book");
@@ -113,9 +175,9 @@ QStringList BookDb::books() {
     return ret;
 }
 
-void BookDb::removeAll() {
+void BookDbWorker::doRemoveAll() {
     TRACE;
-    foreach (QString book, books()) {
-        remove(book);
+    foreach (QString book, doListBooks()) {
+        doRemove(book);
     }
 }

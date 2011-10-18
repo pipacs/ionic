@@ -53,6 +53,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Set up and show QML widget with main.qml
+
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.engine()->addImageProvider(QString("covers"), new CoverProvider);
@@ -60,17 +61,23 @@ int main(int argc, char *argv[]) {
     viewer.rootContext()->setContextProperty("prefs", settings);
     Book *emptyBook = new Book();
     viewer.rootContext()->setContextProperty("emptyBook", emptyBook);
-    BookFinder *bookFinder = new BookFinder();
-    BookFinderWorker *bookFinderWorker = new BookFinderWorker();
-    BookFinderWorkerThread *bookFinderWorkerThread = new BookFinderWorkerThread();
+
+    BookFinder *bookFinder = new BookFinder;
+    BookFinderWorker *bookFinderWorker = new BookFinderWorker;
+    BookFinderWorkerThread *bookFinderWorkerThread = new BookFinderWorkerThread;
     bookFinderWorker->moveToThread(bookFinderWorkerThread);
     bookFinder->connect(bookFinder, SIGNAL(findRequested()), bookFinderWorker, SLOT(doFind()));
     bookFinderWorker->connect(bookFinderWorker, SIGNAL(begin(int)), bookFinder, SIGNAL(begin(int)));
     bookFinderWorker->connect(bookFinderWorker, SIGNAL(add(QString)), bookFinder, SIGNAL(add(QString)));
     bookFinderWorker->connect(bookFinderWorker, SIGNAL(done(int)), bookFinder, SIGNAL(done(int)));
-    bookFinderWorkerThread->start();
-    bookFinderWorkerThread->setPriority(QThread::LowestPriority);
+    bookFinderWorkerThread->start(QThread::LowestPriority);
     viewer.rootContext()->setContextProperty("bookFinder", bookFinder);
+
+    BookDb *bookDb = BookDb::instance();
+    BookDbWorkerThread *bookDbWorkerThread = new BookDbWorkerThread;
+    bookDb->worker()->moveToThread(bookDbWorkerThread);
+    bookDbWorkerThread->start(QThread::LowestPriority);
+
     viewer.rootContext()->setContextProperty("platform", Platform::instance());
     viewer.setMainQmlFile(QLatin1String("qml/ionic/main.qml"));
     // viewer.setFocusPolicy(Qt::StrongFocus);
@@ -87,14 +94,21 @@ int main(int argc, char *argv[]) {
     int ret = app.exec();
 
     // Delete singletons
+
     bookFinderWorkerThread->quit();
     bookFinderWorkerThread->wait();
     delete bookFinderWorkerThread;
     delete bookFinderWorker;
     delete bookFinder;
+
     delete emptyBook;
     Library::close();
+
+    bookDbWorkerThread->quit();
+    bookDbWorkerThread->wait();
+    delete bookDbWorkerThread;
     BookDb::close();
+
     Preferences::close();
     Platform::close();
 
