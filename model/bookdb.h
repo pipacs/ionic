@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QVariantHash>
 #include <QtSql>
+#include <QMutex>
 
 class QString;
 
@@ -25,6 +26,7 @@ public slots:
 private:
     void create();
     QSqlDatabase db;
+    mutable QMutex mutex;
 };
 
 /** Facade for storing/retrieving book meta-data. */

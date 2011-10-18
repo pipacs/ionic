@@ -32,6 +32,9 @@ BookDbWorker *BookDb::worker() {
 
 QVariantHash BookDb::load(const QString &book) {
     QVariantHash ret;
+
+#if 0
+    // FIXME: This will only work in Qt 4.8: https://bugreports.qt.nokia.com/browse/QTBUG-10440
     if (!QMetaObject::invokeMethod(
             worker_,
             "doLoad",
@@ -39,6 +42,9 @@ QVariantHash BookDb::load(const QString &book) {
             Q_ARG(QString, book))) {
         qCritical() << "BookDb::load: Invoking remote loader failed";
     }
+#else
+    ret = worker_->doLoad(book);
+#endif
     return ret;
 }
 
@@ -71,12 +77,17 @@ void BookDb::removeAll() {
 
 QStringList BookDb::books() {
     QStringList ret;
+#if 0
+    // FIXME: This will only work in Qt 4.8: https://bugreports.qt.nokia.com/browse/QTBUG-10440
     if (!QMetaObject::invokeMethod(
             worker_,
             "doListBooks",
             Q_RETURN_ARG(QStringList, ret))) {
         qCritical() << "BookDb::books: Invoking remote loader failed";
     }
+#else
+    ret = worker_->doListBooks();
+#endif
     return ret;
 }
 
@@ -109,6 +120,7 @@ BookDbWorker::~BookDbWorker() {
 void BookDbWorker::create() {
     TRACE;
     QSqlQuery query;
+    QMutexLocker locker(&mutex);
     if (!query.exec("create table book (name text primary key, content blob)")) {
         qCritical() << "Failed to create database:" << query.lastError().text();
     }
@@ -117,6 +129,7 @@ void BookDbWorker::create() {
 QVariantHash BookDbWorker::doLoad(const QString &book) {
     TRACE;
     qDebug() << book;
+    QMutexLocker locker(&mutex);
     QVariantHash ret;
     QByteArray bytes;
     QSqlQuery query("select content from book where name = ?");
@@ -138,6 +151,7 @@ QVariantHash BookDbWorker::doLoad(const QString &book) {
 void BookDbWorker::doSave(const QString &book, const QVariantHash &data) {
     TRACE;
     qDebug() << book;
+    QMutexLocker locker(&mutex);
     QByteArray bytes;
     QDataStream out(&bytes, QIODevice::WriteOnly);
     out << data;
@@ -152,6 +166,7 @@ void BookDbWorker::doSave(const QString &book, const QVariantHash &data) {
 void BookDbWorker::doRemove(const QString &book) {
     TRACE;
     qDebug() << book;
+    QMutexLocker locker(&mutex);
     QSqlQuery query("delete from book where name = ?");
     query.bindValue(0, book);
     if (!query.exec()) {
@@ -161,6 +176,7 @@ void BookDbWorker::doRemove(const QString &book) {
 
 QStringList BookDbWorker::doListBooks() {
     TRACE;
+    QMutexLocker locker(&mutex);
     QStringList ret;
     QSqlQuery query("select name from book");
     query.setForwardOnly(true);
