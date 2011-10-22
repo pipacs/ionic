@@ -13,6 +13,7 @@
 
 #include "bookmark.h"
 #include "contentitem.h"
+#include "trace.h"
 
 class QPixmap;
 
@@ -43,6 +44,7 @@ class Book: public QObject {
     Q_PROPERTY(QStringList chapterNames READ chapterNames NOTIFY contentChanged)
     Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
     Q_PROPERTY(QDeclarativeListProperty<Bookmark> bookmarks READ bookmarks NOTIFY bookmarksChanged)
+    Q_PROPERTY(qreal lastProgress READ lastProgress NOTIFY lastBookmarkChanged)
 
 public:
     /** Default constructor. */
@@ -91,7 +93,7 @@ public:
     bool clearDir(const QString &directory);
 
     /** Set last bookmark. */
-    void setLastBookmark(int part, qreal position);
+    Q_INVOKABLE void setLastBookmark(int part, qreal position);
 
     /** Get last bookmark. */
     Bookmark *lastBookmark();
@@ -156,66 +158,30 @@ public:
     QString dateOpenedStr();
     QDateTime dateAdded() {load(); return dateAdded_;}
     QDateTime dateOpened() {load(); return dateOpened_;}
-
     void setTitle(const QString &title) {title_ = title; emit titleChanged();}
-    void addPart(const QString &part) {
-        parts_.append(part);
-        emit partsChanged();
-    }
+    void addPart(const QString &part) {parts_.append(part); emit partsChanged();}
     void clearParts() {parts_.clear(); emit partsChanged();}
     void clearContent() {content_.clear(); emit contentChanged();}
     void setCover(const QImage &cover);
     QImage cover();
-    void addCreator(const QString &creator) {
-        creators_.append(creator);
-        emit creatorsChanged();
-    }
+    void addCreator(const QString &creator) {creators_.append(creator); emit creatorsChanged();}
     void clearCreators() {creators_.clear(); emit creatorsChanged();}
-    void setCreators(const QStringList &creators) {
-        creators_ = creators;
-        emit creatorsChanged();
-    }
+    void setCreators(const QStringList &creators) {creators_ = creators; emit creatorsChanged();}
     void setDate(const QString &date) {date_ = date; emit dateChanged();}
-    void setPublisher(const QString &publisher) {
-        publisher_ = publisher;
-        emit publisherChanged();
-    }
-    void setDatePublished(const QString date) {
-        datePublished_ = date;
-        emit datePublishedChanged();
-    }
-    void setSubject(const QString &subject) {
-        subject_ = subject;
-        emit subjectChanged();
-    }
-    void setSource(const QString &source) {
-        source_ = source;
-        emit sourceChanged();
-    }
-    void setRights(const QString &rights) {
-        rights_ = rights;
-        emit rightsChanged();
-    }
+    void setPublisher(const QString &publisher) {publisher_ = publisher; emit publisherChanged();}
+    void setDatePublished(const QString date) {datePublished_ = date; emit datePublishedChanged();}
+    void setSubject(const QString &subject) {subject_ = subject; emit subjectChanged();}
+    void setSource(const QString &source) {source_ = source; emit sourceChanged();}
+    void setRights(const QString &rights) {rights_ = rights; emit rightsChanged();}
     void setTocPath(const QString &tocPath) {tocPath_ = tocPath;}
     void setCoverPath(const QString &path) {coverPath_ = path;}
-    void addChapter(const QString &chapter) {
-        chapters_.append(chapter);
-        emit chaptersChanged();
-    }
+    void addChapter(const QString &chapter) {chapters_.append(chapter); emit chaptersChanged();}
     void clearChapters() {chapters_.clear(); emit chaptersChanged();}
     void setSize(const quint64 size) {size_ = size; emit sizeChanged();}
-    void setDateAdded(const QDateTime &date) {
-        dateAdded_ = date;
-        emit dateAddedChanged();
-    }
-    void setDateOpened(const QDateTime &date) {
-        dateOpened_ = date;
-        emit dateOpenedChanged();
-    }
-    void setRootPath(const QString &path) {
-        rootPath_ = path;
-        emit rootPathChanged();
-    }
+    void setDateAdded(const QDateTime &date) {dateAdded_ = date; emit dateAddedChanged();}
+    void setDateOpened(const QDateTime &date) {dateOpened_ = date;  emit dateOpenedChanged();}
+    void setRootPath(const QString &path) {rootPath_ = path; emit rootPathChanged();}
+    qreal lastProgress() {TRACE; qreal ret = getProgress(lastBookmark_->part(), lastBookmark_->position()); qDebug() << ret; return ret;}
 
     /** Get cover image url. */
     QString coverUrl();
@@ -315,6 +281,7 @@ protected:
     bool isOpen_;                           //< True, if the book is open.
     QDateTime dateAdded_;                   //< Date book added to library.
     QDateTime dateOpened_;                  //< Date book was last read.
+    qreal lastProgress_;                    //< Last reading progress (0..1).
 
 };
 

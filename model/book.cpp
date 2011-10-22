@@ -15,10 +15,10 @@ const int COVER_WIDTH = 53;
 const int COVER_HEIGHT = 59;
 const int COVER_MAX = 512 * 1024;
 
-Book::Book(): QObject(0), path_(""), lastBookmark_(new Bookmark), loaded_(false), valid_(false), isOpen_(false) {
+Book::Book(): QObject(0), path_(""), lastBookmark_(new Bookmark), loaded_(false), valid_(false), isOpen_(false), lastProgress_(0) {
 }
 
-Book::Book(const QString &p, QObject *parent): QObject(parent), lastBookmark_(new Bookmark), loaded_(false), isOpen_(false) {
+Book::Book(const QString &p, QObject *parent): QObject(parent), lastBookmark_(new Bookmark), loaded_(false), isOpen_(false), lastProgress_(0) {
     setPath(p);
 }
 
@@ -305,6 +305,7 @@ void Book::load() {
     setSubject(data["subject"].toString());
     setSource(data["source"].toString());
     setRights(data["rights"].toString());
+    setSize(data["size"].toReal());
     setLastBookmark(data["lastpart"].toInt(), data["lastpos"].toReal());
     setCover(data["cover"].value<QImage>());
     if (cover_.isNull()) {
@@ -354,6 +355,7 @@ void Book::save() {
     }
     data["dateadded"] = dateAdded_;
     data["dateopened"] = dateOpened_;
+    data["size"] = size_;
     BookDb::instance()->save(path(), data);
 }
 
@@ -362,6 +364,7 @@ void Book::setLastBookmark(int part, qreal position) {
     qDebug() << "Part" << part << "position" << position;
     lastBookmark_->setPart(part);
     lastBookmark_->setPosition(position);
+    qDebug() << "Last progress:" << lastProgress_;
     emit lastBookmarkChanged();
 }
 
@@ -477,11 +480,6 @@ int Book::partFromChapter(int index) {
     if (hashPos != -1) {
         href = href.left(hashPos);
     }
-
-    qDebug() << "Chapter" << index;
-    qDebug() << " id" << id;
-    qDebug() << " href" << href;
-
     for (int i = 0; i < parts_.size(); i++) {
         QString partId = parts_[i];
         if (content_[partId].href == href) {
@@ -526,6 +524,9 @@ qreal Book::getProgress(int part, qreal position) {
     load();
     if ((part < 0) || (part >= parts_.count())) {
         qWarning() << "Book::getProgress: Invalid part ID" << part;
+        return 0;
+    }
+    if (size_ == 0) {
         return 0;
     }
     QString key;
@@ -643,7 +644,7 @@ QString Book::rights() {
 
 void Book::fixExtensions() {
     TRACE;
-    QStringList supportedExtensions = QStringList() << ".html" << ".htm" << ".xht" << ".xhtm" << ".xhtml" << ".xml" << ".ncx" << ".css" << ".opf" << ".jpg" << ".jpeg" << ".gif" << ".png" << ".bmp" << ".tif" << ".tiff" << ".svg";
+    QStringList supportedExtensions = QStringList() << ".html" << ".htm" << ".xht" << ".xhtm" << ".xhtml" << ".xml" << ".ncx" << ".css" << ".opf" << ".jpg" << ".jpeg" << ".gif" << ".png" << ".bmp" << ".tif" << ".tiff" << ".svg" << ".ttf" << "mimetype" << ".txt";
     foreach (QString key, content_.keys()) {
         QString href = content_[key].href;
         QString fragment;

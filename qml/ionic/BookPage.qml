@@ -62,7 +62,8 @@ Page {
         QtObject {property string label: "Rights:"; property string content: book.rights},
         QtObject {property string label: "Location:"; property string content: book.path},
         QtObject {property string label: "Added to library:"; property string content: book.dateAdded},
-        QtObject {property string label: "Last read:"; property string content: book.dateOpened}
+        QtObject {property string label: "Last read:"; property string content: book.dateOpened},
+        QtObject {property string label: "Reading progress:"; property string content: book.lastProgress? ("" + Math.floor(book.lastProgress * 100) + "%"): ""}
     ]
 
     Image {

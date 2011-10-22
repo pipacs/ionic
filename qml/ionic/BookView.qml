@@ -209,8 +209,7 @@ Flickable {
         var book = library.nowReading
         if ((Math.abs(book.lastBookmark.position - currentPosition) > 0.0005) || (book.lastBookmark.part != flickable.part)) {
             console.log("* BookView.updateLastBookmark: Needs update")
-            book.lastBookmark.position = currentPosition
-            book.lastBookmark.part = flickable.part
+            book.setLastBookmark(flickable.part, currentPosition)
             book.save()
         }
     }
