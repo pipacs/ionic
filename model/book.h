@@ -284,6 +284,12 @@ protected:
         return *b1 < *b2;
     }
 
+    /** Ensure book parts have an extension supported by WebView. */
+    void fixExtensions();
+
+    /** Ensure a given file name has an extension supported by WebView. */
+    void fixFileExtension(const QString &fileName);
+
     QString title_;                         //< Book title from EPUB.
     QStringList parts_;                     //< EPUB part list.
     QHash<QString, ContentItem> content_;   //< Content items from EPUB.

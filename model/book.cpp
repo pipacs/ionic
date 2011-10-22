@@ -71,6 +71,7 @@ bool Book::open() {
         return false;
     }
     parse();
+    fixExtensions();
     setDateOpened(QDateTime::currentDateTime().toUTC());
     isOpen_ = true;
     save();
@@ -107,7 +108,6 @@ void Book::peek() {
 void Book::close() {
     clearContent();
     clearParts();
-    QDir::setCurrent(QDir::rootPath());
     clearDir(tmpDir());
     isOpen_ = false;
 }
@@ -246,6 +246,7 @@ bool Book::clearDir(const QString &dir) {
     if (!d.exists()) {
         return true;
     }
+    QDir::setCurrent(QDir::rootPath());
     QDirIterator i(dir, QDirIterator::Subdirectories);
     while (i.hasNext()) {
         QString entry = i.next();
@@ -638,4 +639,41 @@ void Book::setBookmarkNote(int index, const QString &note) {
 QString Book::rights() {
     load();
     return rights_.replace(QRegExp("\\s{3,}"), " ").replace(QRegExp("^\\s+"), "");
+}
+
+void Book::fixExtensions() {
+    TRACE;
+    QStringList supportedExtensions = QStringList() << ".html" << ".htm" << ".xht" << ".xhtm" << ".xhtml" << ".xml" << ".ncx" << ".css" << ".opf" << ".jpg" << ".jpeg" << ".gif" << ".png" << ".bmp" << ".tif" << ".tiff" << ".svg";
+    foreach (QString key, content_.keys()) {
+        QString href = content_[key].href;
+        QString fragment;
+        int fragmentStart = href.lastIndexOf("#");
+        if (fragmentStart != -1) {
+            fragment = href.mid(fragmentStart);
+            href = href.remove(fragmentStart, href.length());
+        }
+        bool hasSupportedExtension = false;
+        foreach (QString extension, supportedExtensions) {
+            if (href.endsWith(extension, Qt::CaseInsensitive)) {
+                hasSupportedExtension = true;
+                break;
+            }
+        }
+        if (!hasSupportedExtension) {
+            qDebug() << "href" << href << "has no supported extension";
+            fixFileExtension(href);
+            href.append(".html");
+            content_[key].href = href + fragment;
+        }
+    }
+}
+
+void Book::fixFileExtension(const QString &fileName) {
+    QString src = QDir(rootPath_).absoluteFilePath(fileName);
+    QString dst = src + ".html";
+    if (!QFile::exists(dst)) {
+        if (!QFile::rename(src, dst)) {
+            qWarning() << "Book::fixFileExtension: Failed to rename" << src << "to" << dst;
+        }
+    }
 }

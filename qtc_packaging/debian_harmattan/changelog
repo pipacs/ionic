@@ -4,6 +4,7 @@ ionic (0.5.3) unstable; urgency=low
   * Update package manager icon
   * Keep logical and package versions in sync
   * Make navigation smoother, run database operations in the background
+  * Fix reading books where part file names have unsupported extensions
 
  -- Akos Polster <akos@pipacs.com>  Mon, 17 Oct 2011 22:55:00 +0200
 
