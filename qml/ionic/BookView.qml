@@ -60,8 +60,6 @@ Flickable {
     anchors.right: parent.right
     pressDelay: 0
     flickableDirection: Flickable.VerticalFlick
-    // focus: true
-    // Keys.enabled: true
     interactive: prefs.useSwipe
 
     WebView {
@@ -85,6 +83,7 @@ Flickable {
         preferredHeight: flickable.height
         contentsScale: 1
         Keys.enabled: true
+        z: 0
 
         property bool loading: false
 
@@ -95,19 +94,20 @@ Flickable {
         }
 
         onLoadFinished: {
-            console.log("* BookView.WebView.onLoadFinished")
             setStyle(prefs.style)
             loading = false
             bookView.jump()
             styleCover.visible = false
+            // Disable links
+            webView.evaluateJavaScript("for (var i = 0; i < document.links.length; i++) {document.links[i].disabled = true; document.links[i].onclick = new Function('return false');}")
         }
 
         onLoadStarted: {
             loading = true
         }
 
+        // Handle up/down keys
         Keys.onPressed: {
-            console.log("* BookView.WebView.Keys.onPressed " + event.key)
             if ((event.key == Qt.Key_VolumeUp) || (event.key == Qt.Key_Up) || (event.key == Qt.Key_PageUp)) {
                 goToPreviousPage()
             } else if ((event.key == Qt.Key_VolumeDown) || (event.key == Qt.Key_Down) || (event.key == Qt.Key_PageDown)) {
@@ -130,6 +130,7 @@ Flickable {
         delegate: bookmarkDelegate
     }
 
+    // Delegate to draw a bookmark, but only if it points to the current part
     Component {
         id: bookmarkDelegate
         Item {
@@ -153,15 +154,17 @@ Flickable {
         }
     }
 
+    // A rectangle to cover up the web view while it is loading
     Rectangle {
         id: styleCover
         anchors.fill: parent
         border.width: 0
         color: "white"
-        visible: false
-        z: 1
+        opacity: 0
+        z: 0.5
     }
 
+    // Scroll up one page
     function goToPreviousPage() {
         if (flickable.contentY == 0) {
             goToPreviousPart()
@@ -174,6 +177,7 @@ Flickable {
         flickable.contentY = newY;
     }
 
+    // Scroll down one page
     function goToNextPage() {
         if (flickable.contentY + flickable.height >= webView.contentsSize.height) {
             goToNextPart()
@@ -185,6 +189,7 @@ Flickable {
         flickable.contentY = newY
     }
 
+    // Load previous part
     function goToPreviousPart() {
         if (flickable.part == 0) {
             return
@@ -194,6 +199,7 @@ Flickable {
         load(library.nowReading.urlFromPart(flickable.part))
     }
 
+    // Load next part
     function goToNextPart() {
         if (flickable.part >= (library.nowReading.partCount - 1)) {
             return;
@@ -203,18 +209,19 @@ Flickable {
         load(library.nowReading.urlFromPart(flickable.part))
     }
 
-    // Update book's last reading position
+    // Update book's last reading position, but only if it has been changed
     function updateLastBookmark() {
-        var currentPosition = flickable.contentY / webView.contentsSize.height
-        var book = library.nowReading
-        if ((Math.abs(book.lastBookmark.position - currentPosition) > 0.0005) || (book.lastBookmark.part != flickable.part)) {
-            console.log("* BookView.updateLastBookmark: Needs update")
-            book.setLastBookmark(flickable.part, currentPosition)
-            book.save()
+        if (webView.contentsSize.height > 0) {
+            var currentPosition = flickable.contentY / webView.contentsSize.height
+            var book = library.nowReading
+            if ((Math.abs(book.lastBookmark.position - currentPosition) > 0.0005) || (book.lastBookmark.part != flickable.part)) {
+                book.setLastBookmark(flickable.part, currentPosition)
+                book.save()
+            }
         }
     }
 
-    // Jump to a new location specified in flickable.targetPos or flickable.targetUrlFragment
+    // Jump to a new location within the page, specified in flickable.targetPos
     function jump() {
         console.log("* BookView.jump targetPos " + flickable.targetPos)
         if (flickable.targetPos != -1) {
@@ -246,17 +253,17 @@ Flickable {
         webView.evaluateJavaScript(styles[style])
     }
 
+    // Load URL while covering the web view
     function load(url) {
-        styleCover.visible = true;
+        styleCover.visible = true
         webView.url = url
     }
 
+    // Periodically update last reading position
     Timer {
         interval: 3000
         running: true
         repeat: true
-        onTriggered: {
-            updateLastBookmark()
-        }
+        onTriggered: {if (!webView.loading) updateLastBookmark()}
     }
 }

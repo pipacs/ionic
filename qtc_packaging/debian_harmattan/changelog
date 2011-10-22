@@ -6,6 +6,7 @@ ionic (0.5.3) unstable; urgency=low
   * Make navigation smoother, run database operations in the background
   * Fix reading books where part file names have unsupported extensions
   * Show reading progress on book info page
+  * Disable links inside book pages
 
  -- Akos Polster <akos@pipacs.com>  Mon, 17 Oct 2011 22:55:00 +0200
 
