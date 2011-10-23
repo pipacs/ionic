@@ -7,7 +7,7 @@ ionic (0.5.3) unstable; urgency=low
   * Fix reading books where part file names have unsupported extensions
   * Show reading progress on book info page
   * Disable links inside book pages
-  * Add e-book sources and instructions to About page
+  * Add books from menu
   * Open books downloaded with the browser
 
  -- Akos Polster <akos@pipacs.com>  Mon, 17 Oct 2011 22:55:00 +0200
