@@ -7,10 +7,8 @@ CoverProvider::CoverProvider(): QDeclarativeImageProvider(QDeclarativeImageProvi
 }
 
 QImage CoverProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize) {
-    TRACE;
     (void)requestedSize;
     QImage ret;
-    qDebug() << "Requesting image for" << id;
     Library *Library = Library::instance();
     Book *book = Library->find(id);
     if (book) {
@@ -19,7 +17,7 @@ QImage CoverProvider::requestImage(const QString &id, QSize *size, const QSize &
             qWarning() << "CoverProvider::requestImage: Cover image is null";
         }
     } else {
-        qDebug() << "Not found";
+        qWarning() << "CoverProvider::requestImage: Book not found";
     }
     if (size) {
         *size = ret.size();

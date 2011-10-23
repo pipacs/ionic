@@ -46,10 +46,21 @@ int main(int argc, char *argv[]) {
     BookDb::instance()->worker()->moveToThread(bookDbWorkerThread);
     bookDbWorkerThread->start(QThread::LowestPriority);
 
-    // Initialize library, load last book or default book
+    // Initialize library, load book from command line, or the last book, or the default book
     Library *library = Library::instance();
     library->load();
-    Book *current = library->nowReading();
+    Book *current;
+    if (argc > 1) {
+        qDebug() << argv[1];
+        current = library->find(argv[1]);
+        if (!current) {
+            current = library->add(argv[1]);
+        }
+        if (current) {
+            library->setNowReading(current);
+        }
+    }
+    current = library->nowReading();
     if (!current->isValid()) {
         if (!library->bookCount()) {
             library->add(":/books/2BR02B.epub");

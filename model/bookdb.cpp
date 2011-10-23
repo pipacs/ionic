@@ -1,7 +1,6 @@
 #include "bookdb.h"
 #include "bookdbworker.h"
 #include "platform.h"
-#include "trace.h"
 
 BookDb *theInstance;
 

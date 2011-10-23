@@ -3,7 +3,6 @@
 
 #include "xmlhandler.h"
 #include "book.h"
-#include "trace.h"
 
 /** XML content handler for OPS format. */
 class OpsHandler: public XmlHandler {

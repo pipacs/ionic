@@ -50,14 +50,10 @@ bool Book::isValid() const {
 }
 
 bool Book::open() {
-    TRACE;
-    qDebug() << path();
     if (!valid_) {
-        qDebug() << "Not valid";
         return true;
     }
     if (isOpen_) {
-        qDebug() << "Already open";
         return true;
     }
     close();
@@ -80,14 +76,10 @@ bool Book::open() {
 }
 
 void Book::peek() {
-    TRACE;
-    qDebug() << path();
     if (!valid_) {
-        qDebug() << "Not valid";
         return;
     }
     if (isOpen_) {
-        qDebug() << "Open already";
         return;
     }
     close();
@@ -118,10 +110,8 @@ QString Book::tmpDir() const {
 }
 
 bool Book::extract(const QStringList &excludedExtensions) {
-    TRACE;
     bool ret = false;
     QString tmp = tmpDir();
-    qDebug() << "Extracting" << path_ << "to" << tmp;
 
     load();
     QDir::setCurrent(QDir::rootPath());
@@ -164,13 +154,10 @@ bool Book::extract(const QStringList &excludedExtensions) {
 }
 
 void Book::parse() {
-    TRACE;
-
     load();
 
     // Parse OPS file
     QString opsFileName = opsPath();
-    qDebug() << "Parsing OPS file" << opsFileName;
     QFile opsFile(opsFileName);
     QXmlSimpleReader reader;
     QXmlInputSource *source = new QXmlInputSource(&opsFile);
@@ -214,10 +201,9 @@ void Book::parse() {
     } else if (content_.contains("toc")) {
         ncxFileName = content_["toc"].href;
     } else {
-        qDebug() << "No NCX table of contents";
+        qWarning() << "Book::parse: No NCX table of contents";
     }
     if (!ncxFileName.isEmpty()) {
-        qDebug() << "Parsing NCX file" << ncxFileName;
         QFile ncxFile(QDir(rootPath()).absoluteFilePath(ncxFileName));
         source = new QXmlInputSource(&ncxFile);
         NcxHandler *ncxHandler = new NcxHandler(*this);
@@ -291,13 +277,9 @@ void Book::load() {
         return;
     }
 
-    TRACE;
     loaded_ = true;
-    qDebug() << "path" << path();
-
     QVariantHash data = BookDb::instance()->load(path());
     setTitle(data["title"].toString());
-    qDebug() << title_;
     setCreators(data["creators"].toStringList());
     setDate(data["date"].toString());
     setPublisher(data["publisher"].toString());
@@ -329,8 +311,6 @@ void Book::save() {
         return;
     }
 
-    TRACE;
-
     load();
     QVariantHash data;
     data["title"] = title_;
@@ -360,11 +340,8 @@ void Book::save() {
 }
 
 void Book::setLastBookmark(int part, qreal position) {
-    TRACE;
-    qDebug() << "Part" << part << "position" << position;
     lastBookmark_->setPart(part);
     lastBookmark_->setPosition(position);
-    qDebug() << "Last progress:" << lastProgress_;
     emit lastBookmarkChanged();
 }
 
@@ -377,8 +354,6 @@ Bookmark *Book::lastBookmark() {
 }
 
 void Book::addBookmark(int part, qreal position, const QString &note) {
-    TRACE;
-    qDebug() << "To" << title() << "at part" << part << "position" << position << "note" << note;
     load();
     bookmarks_.append(new Bookmark(part, position, note));
     qSort(bookmarks_.begin(), bookmarks_.end(), compareBookmarks);
@@ -400,12 +375,10 @@ QDeclarativeListProperty<Bookmark> Book::bookmarks() {
 }
 
 QString Book::opsPath() {
-    TRACE;
     load();
     QString ret;
 
     QFile container(tmpDir() + "/META-INF/container.xml");
-    qDebug() << container.fileName();
     QXmlSimpleReader reader;
     QXmlInputSource *source = new QXmlInputSource(&container);
     ContainerHandler *containerHandler = new ContainerHandler();
@@ -416,7 +389,6 @@ QString Book::opsPath() {
         ret = tmpDir() + "/" + containerHandler->rootFile;
         rootPath_ = QFileInfo(ret).absoluteDir().absolutePath();
         emit rootPathChanged();
-        qDebug() << "OSP path" << ret << "\nRoot dir" << rootPath_;
     }
     delete errorHandler;
     delete containerHandler;
@@ -447,7 +419,6 @@ QString Book::shortName() {
 }
 
 int Book::chapterFromPart(int index) {
-    TRACE;
     load();
     int ret = -1;
 
@@ -467,12 +438,10 @@ int Book::chapterFromPart(int index) {
         }
     }
 
-    qDebug() << "Part" << index << partId << partHref << ":" << ret;
     return ret;
 }
 
 int Book::partFromChapter(int index) {
-    TRACE;
     load();
     QString id = chapters_[index];
     QString href = content_[id].href;
@@ -483,7 +452,6 @@ int Book::partFromChapter(int index) {
     for (int i = 0; i < parts_.size(); i++) {
         QString partId = parts_[i];
         if (content_[partId].href == href) {
-            qDebug() << "Part index for" << href << "is" << i;
             return i;
         }
     }
@@ -493,7 +461,6 @@ int Book::partFromChapter(int index) {
 }
 
 QString Book::urlFromChapter(int index) {
-    TRACE;
     load();
     QString id = chapters_[index];
     QString fullPath = QDir(rootPath_).absoluteFilePath(content_[id].href);
@@ -503,12 +470,10 @@ QString Book::urlFromChapter(int index) {
     if (fragmentStart != -1) {
         ret = ret.remove(fragmentStart, ret.length());
     }
-    qDebug() << "Return" << ret;
     return ret;
 }
 
 QString Book::urlFromPart(int part) {
-    TRACE;
     open();
     if (part >= parts_.count()) {
         return QString();
@@ -516,7 +481,6 @@ QString Book::urlFromPart(int part) {
     QString partName = parts_[part];
     QString fullPath = QDir(rootPath_).absoluteFilePath(content_[partName].href);
     QString ret = QUrl::fromLocalFile(fullPath).toString();
-    qDebug() << "Return" << ret;
     return ret;
 }
 
@@ -537,7 +501,6 @@ qreal Book::getProgress(int part, qreal position) {
     }
     key = parts_[part];
     partSize += content_[key].size * position;
-    qDebug() << "Book::getProgress: part" << part << "position" << position << "size so far" << partSize << "total size" << size_;
     return partSize / (qreal)size_;
 }
 
@@ -548,26 +511,22 @@ bool Book::extractMetaData() {
 }
 
 void Book::remove() {
-    TRACE;
     close();
     BookDb::instance()->remove(path());
 }
 
 QImage Book::makeCover(const QString &fileName) {
-    TRACE;
-    qDebug() << fileName;
     if (!fileName.isEmpty()) {
         QFileInfo info(fileName);
         if (info.exists() && info.isReadable() && (info.size() < COVER_MAX)) {
             return makeCover(QImage(fileName));
         }
     }
-    qDebug() << "Could not read cover file, using default image";
+    qWarning() << "Book::makeCover: Could not read cover file, using default image";
     return makeCover(QImage(":/icons/book.png"));
 }
 
 QImage Book::makeCover(const QImage &image) {
-    TRACE;
     QImage src = image.scaled(COVER_WIDTH, COVER_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     QImage transparent(COVER_WIDTH, COVER_HEIGHT, QImage::Format_ARGB32);
     transparent.fill(Qt::transparent);
@@ -643,7 +602,6 @@ QString Book::rights() {
 }
 
 void Book::fixExtensions() {
-    TRACE;
     QStringList supportedExtensions = QStringList() << ".html" << ".htm" << ".xht" << ".xhtm" << ".xhtml" << ".xml" << ".ncx" << ".css" << ".opf" << ".jpg" << ".jpeg" << ".gif" << ".png" << ".bmp" << ".tif" << ".tiff" << ".svg" << ".ttf" << "mimetype" << ".txt";
     foreach (QString key, content_.keys()) {
         QString href = content_[key].href;
@@ -661,7 +619,7 @@ void Book::fixExtensions() {
             }
         }
         if (!hasSupportedExtension) {
-            qDebug() << "href" << href << "has no supported extension";
+            qWarning() << "Book::fixExtensions: href" << href << "has no supported extension";
             fixFileExtension(href);
             href.append(".html");
             content_[key].href = href + fragment;
@@ -674,7 +632,7 @@ void Book::fixFileExtension(const QString &fileName) {
     QString dst = src + ".html";
     if (!QFile::exists(dst)) {
         if (!QFile::rename(src, dst)) {
-            qWarning() << "Book::fixFileExtension: Failed to rename" << src << "to" << dst;
+            qCritical() << "Book::fixFileExtension: Failed to rename" << src << "to" << dst;
         }
     }
 }

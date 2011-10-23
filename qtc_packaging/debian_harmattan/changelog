@@ -8,6 +8,7 @@ ionic (0.5.3) unstable; urgency=low
   * Show reading progress on book info page
   * Disable links inside book pages
   * Add e-book sources and instructions to About page
+  * Open books downloaded with the browser
 
  -- Akos Polster <akos@pipacs.com>  Mon, 17 Oct 2011 22:55:00 +0200
 

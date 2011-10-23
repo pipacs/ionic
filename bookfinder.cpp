@@ -20,10 +20,9 @@ void BookFinderWorker::doFind() {
     QStringList filters(QString("*.epub"));
     QStringList paths;
     paths.append(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    paths.append(QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + QString("/Download"));
-    paths.append(QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + QString("/Books"));
     paths.append(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     paths.append(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation));
+    paths.append(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + QString("/Downloads"));
     foreach (QString path, paths) {
         qDebug() << "Checking" << path;
         QFileInfoList entries = QDir(path).entryInfoList(filters, QDir::Files | QDir::Readable);

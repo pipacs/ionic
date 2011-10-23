@@ -8,20 +8,19 @@
 #include "platform.h"
 
 BookDbWorker::BookDbWorker() {
-    TRACE;
     bool shouldCreate = false;
     QFileInfo info(Platform::instance()->dbPath());
     if (!info.exists()) {
         QDir dbDir;
         if (!dbDir.mkpath(info.absolutePath())) {
-            qCritical() << "Could not create" << info.absolutePath();
+            qCritical() << "BookDbWorker::BookDbWorker: Could not create" << info.absolutePath();
         }
         shouldCreate = true;
     }
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(QDir::toNativeSeparators(Platform::instance()->dbPath()));
     if (!db.open()) {
-        qCritical() << "Could not open" << Platform::instance()->dbPath() << ": Error" << db.lastError().text();
+        qCritical() << "BookDbWorker::BookDbWorker: Could not open" << Platform::instance()->dbPath() << ": Error" << db.lastError().text();
     }
     if (shouldCreate) {
         create();
@@ -29,22 +28,18 @@ BookDbWorker::BookDbWorker() {
 }
 
 BookDbWorker::~BookDbWorker() {
-    TRACE;
     db.close();
 }
 
 void BookDbWorker::create() {
-    TRACE;
     QSqlQuery query;
     QMutexLocker locker(&mutex);
     if (!query.exec("create table book (name text primary key, content blob)")) {
-        qCritical() << "Failed to create database:" << query.lastError().text();
+        qCritical() << "BookDbWorker::create: Failed to create database:" << query.lastError().text();
     }
 }
 
 QVariantHash BookDbWorker::doLoad(const QString &book) {
-    TRACE;
-    qDebug() << book;
     QMutexLocker locker(&mutex);
     QVariantHash ret;
     QByteArray bytes;
@@ -52,7 +47,7 @@ QVariantHash BookDbWorker::doLoad(const QString &book) {
     query.bindValue(0, book);
     query.setForwardOnly(true);
     if (!query.exec()) {
-        qCritical() << "Query failed:" << query.lastError().text();
+        qCritical() << "BookDbWorker::doLoad: Query failed:" << query.lastError().text();
         return ret;
     }
     while (query.next()) {
@@ -65,8 +60,6 @@ QVariantHash BookDbWorker::doLoad(const QString &book) {
 }
 
 void BookDbWorker::doSave(const QString &book, const QVariantHash &data) {
-    TRACE;
-    qDebug() << book;
     QMutexLocker locker(&mutex);
     QByteArray bytes;
     QDataStream out(&bytes, QIODevice::WriteOnly);
@@ -75,40 +68,35 @@ void BookDbWorker::doSave(const QString &book, const QVariantHash &data) {
     query.bindValue(0, book);
     query.bindValue(1, bytes);
     if (!query.exec()) {
-        qCritical() << "Query failed:" << query.lastError().text();
+        qCritical() << "BookDbWorker::doSave: Query failed:" << query.lastError().text();
     }
 }
 
 void BookDbWorker::doRemove(const QString &book) {
-    TRACE;
-    qDebug() << book;
     QMutexLocker locker(&mutex);
     QSqlQuery query("delete from book where name = ?");
     query.bindValue(0, book);
     if (!query.exec()) {
-        qCritical() << "Query failed:" << query.lastError().text();
+        qCritical() << "BookDbWorker::doRemove: Query failed:" << query.lastError().text();
     }
 }
 
 QStringList BookDbWorker::doListBooks() {
-    TRACE;
     QMutexLocker locker(&mutex);
     QStringList ret;
     QSqlQuery query("select name from book");
     query.setForwardOnly(true);
     if (!query.exec()) {
-        qCritical() << "Query failed:" << query.lastError().text();
+        qCritical() << "BookDbWorker::doListBooks: Query failed:" << query.lastError().text();
         return ret;
     }
     while (query.next()) {
         ret.append(query.value(0).toString());
     }
-    qDebug() << ret;
     return ret;
 }
 
 void BookDbWorker::doRemoveAll() {
-    TRACE;
     foreach (QString book, doListBooks()) {
         doRemove(book);
     }

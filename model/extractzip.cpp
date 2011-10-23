@@ -22,14 +22,14 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions) {
 
     err = unzGetCurrentFileInfo64(uf, &fileInfo, fileNameInZip, sizeof(fileNameInZip), NULL, 0, NULL, 0);
     if (err != UNZ_OK) {
-        qDebug() << "doExtractCurrentFile: Error" << err << "in unzGetCurrentFileInfo";
+        qCritical() << "doExtractCurrentFile: Error" << err << "in unzGetCurrentFileInfo";
         return err;
     }
 
     bufSize = WRITEBUFFERSIZE;
     buf = (void *)malloc(bufSize);
     if (buf == NULL) {
-        qDebug() << "doExtractCurrentFile: Error allocating memory";
+        qCritical() << "doExtractCurrentFile: Error allocating memory";
         return UNZ_INTERNALERROR;
     }
 
@@ -47,12 +47,10 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions) {
         QString name(fileNameInZip);
         for (int i = 0; i < excludedExtensions.length(); i++) {
             if (name.endsWith(excludedExtensions[i], Qt::CaseInsensitive)) {
-                qDebug() << "extractCurrentFile: Skipping" << name;
                 free(buf);
                 return UNZ_OK;
             }
         }
-        qDebug() << "extractCurrentFile: Extracting" << name;
 
         const char *writeFileName;
         int skip = 0;
@@ -61,7 +59,7 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions) {
 
         err = unzOpenCurrentFilePassword(uf, 0);
         if (err != UNZ_OK) {
-            qDebug() << "doExtractCurrentFile: Error" << err << "in unzOpenCurrentFilePassword";
+            qCritical() << "doExtractCurrentFile: Error" << err << "in unzOpenCurrentFilePassword";
             ret = false;
         }
 
@@ -81,7 +79,7 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions) {
             }
 
             if (!ret) {
-                qDebug() << "doExtractCurrentFile: Error opening" << writeFileName;
+                qCritical() << "doExtractCurrentFile: Error opening" << writeFileName;
             }
         }
 
@@ -89,12 +87,12 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions) {
             do {
                 err = unzReadCurrentFile(uf, buf, bufSize);
                 if (err < 0) {
-                    qDebug() << "doExtractCurrentFile: Error" << err << "in unzReadCurrentFile";
+                    qCritical() << "doExtractCurrentFile: Error" << err << "in unzReadCurrentFile";
                     break;
                 }
                 if (err > 0) {
                     if (f->write((char *)buf, err) != err) {
-                        qDebug() << "doExtractCurrentFile:" << "Error in writing extracted file";
+                        qCritical() << "doExtractCurrentFile:" << "Error in writing extracted file";
                         err = UNZ_ERRNO;
                         break;
                     }
@@ -108,7 +106,7 @@ int doExtractCurrentFile(unzFile uf, const QStringList &excludedExtensions) {
         if (err == UNZ_OK) {
             err = unzCloseCurrentFile(uf);
             if (err != UNZ_OK) {
-                qDebug() << "doExtractCurrentFile: Error" << err << "with zipfile in unzCloseCurrentFile";
+                qCritical() << "doExtractCurrentFile: Error" << err << "with zipfile in unzCloseCurrentFile";
             }
         }
         else {
@@ -128,7 +126,7 @@ bool doExtract(unzFile uf, const QStringList &excludedExtensions) {
 
     err = unzGetGlobalInfo64(uf, &gi);
     if (err != UNZ_OK) {
-        qDebug() << "doExtract: Error" << err << "in unzGetGlobalInfo";
+        qCritical() << "doExtract: Error" << err << "in unzGetGlobalInfo";
         return false;
     }
 
@@ -139,7 +137,7 @@ bool doExtract(unzFile uf, const QStringList &excludedExtensions) {
         if ((i + 1) < gi.number_entry) {
             err = unzGoToNextFile(uf);
             if (err != UNZ_OK) {
-                qDebug() << "doExtract: Error" << err << "in unzGoToNextFile";
+                qCritical() << "doExtract: Error" << err << "in unzGoToNextFile";
                 return false;
             }
         }

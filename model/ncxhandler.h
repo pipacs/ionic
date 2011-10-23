@@ -24,7 +24,6 @@ public:
             QString indentedName = QString(" ").repeated(depth) + name;
             book.addContent(id, indentedName, href);
             book.addChapter(id);
-            qDebug() << "TreeItem::addToBook" << id << href << indentedName;
             foreach (TreeItem *child, children) {
                 child->addToBook(book);
             }

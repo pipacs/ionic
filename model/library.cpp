@@ -42,7 +42,6 @@ void Library::close() {
 }
 
 void Library::load() {
-    TRACE;
     clear();
     QStringList books = BookDb::instance()->books();
 
@@ -61,20 +60,18 @@ void Library::load() {
 }
 
 void Library::save() {
-    TRACE;
     QSettings settings;
     settings.setValue("lib/nowreading", mNowReading->path());
     settings.setValue("lib/sortby", (int)mSortBy);
 }
 
 Book *Library::add(const QString &path) {
-    TRACE;
     if (path == "") {
         qCritical() << "Library::add: Empty path";
         return noBook();
     }
     if (find(path)) {
-        qDebug() << "Book already exists in library";
+        qWarning() << "Library::add: Book already exists in library";
         return noBook();
     }
     Book *book = new Book(path);
@@ -87,7 +84,6 @@ Book *Library::add(const QString &path) {
 }
 
 void Library::remove(Book *book) {
-    TRACE;
     if (!book) {
         return;
     }
@@ -110,7 +106,6 @@ Book *Library::nowReading() const {
 }
 
 void Library::setNowReading(Book *book) {
-    TRACE;
     if (find(book)) {
         mNowReading = book;
     } else {
@@ -121,7 +116,6 @@ void Library::setNowReading(Book *book) {
 }
 
 void Library::clear() {
-    TRACE;
     for (int i = 0; i < mBooks.size(); i++) {
         delete mBooks[i];
     }
@@ -132,24 +126,10 @@ void Library::clear() {
 }
 
 Book *Library::find(QString path) const {
-    TRACE;
     if (path != "") {
         QString absolutePath = QFileInfo(path).absoluteFilePath();
-        for (int i = 0; i < mBooks.size(); i++) {
-            if (absolutePath == mBooks[i]->path()) {
-                return mBooks[i];
-            }
-        }
-    }
-    qDebug() << "Not found" << path;
-    return 0;
-}
-
-Book *Library::find(Book *book) const {
-    TRACE;
-    if (book) {
-        for (int i = 0; i < mBooks.size(); i++) {
-            if (book == mBooks[i]) {
+        foreach (Book *book, mBooks) {
+            if (absolutePath == book->path()) {
                 return book;
             }
         }
@@ -157,8 +137,12 @@ Book *Library::find(Book *book) const {
     return 0;
 }
 
+Book *Library::find(Book *book) const {
+    int index = mBooks.indexOf(book);
+    return (index != -1)? mBooks[index]: 0;
+}
+
 QDeclarativeListProperty<Book> Library::books() {
-    TRACE;
     return QDeclarativeListProperty<Book>(this, mBooks);
 }
 

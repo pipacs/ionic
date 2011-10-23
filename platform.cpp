@@ -1,4 +1,7 @@
+#include <sys/types.h>
 #include <unistd.h>
+#include <signal.h>
+#include <errno.h>
 
 #include <QProcess>
 #include <QtGlobal>
@@ -38,12 +41,10 @@ int Platform::brightness() {
 }
 
 void Platform::setBrightness(int value) {
-    TRACE;
     QProcess gconftool;
     QString num;
     num.setNum(value);
     QStringList args = QStringList() << "-s" << "/system/osso/dsm/display/display_brightness" << "-t" << "int" << num;
-    qDebug() << "Setting brightness: " << args;
     gconftool.start("gconftool-2", args);
     gconftool.waitForFinished();
 }

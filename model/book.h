@@ -181,7 +181,7 @@ public:
     void setDateAdded(const QDateTime &date) {dateAdded_ = date; emit dateAddedChanged();}
     void setDateOpened(const QDateTime &date) {dateOpened_ = date;  emit dateOpenedChanged();}
     void setRootPath(const QString &path) {rootPath_ = path; emit rootPathChanged();}
-    qreal lastProgress() {TRACE; qreal ret = getProgress(lastBookmark_->part(), lastBookmark_->position()); qDebug() << ret; return ret;}
+    qreal lastProgress() {qreal ret = getProgress(lastBookmark_->part(), lastBookmark_->position()); return ret;}
 
     /** Get cover image url. */
     QString coverUrl();
