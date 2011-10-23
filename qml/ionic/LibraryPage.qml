@@ -9,13 +9,8 @@ Page {
     tools: libraryTools
     orientationLock: prefs.orientation
 
-    signal begin(int total)
-    signal add(string title)
-    signal done(int total)
-
-    BookPage {
-        id: bookPage
-    }
+    BookPage {id: bookPage}
+    ImportPage {id: importPage}
 
     PageHeader {
         id: header
@@ -106,11 +101,6 @@ Page {
         flickableItem: listView
     }
 
-    ProgressDialog {
-        id: importDialog
-        titleText: "Importing Books"
-    }
-
     ToolBarLayout {
         id: libraryTools
         visible: true
@@ -120,50 +110,7 @@ Page {
         }
         ToolIcon {
             iconId: "toolbar-add"
-            onClicked: {
-                importDialog.indeterminate = true
-                importDialog.messageText = "Gathering books"
-                importDialog.open()
-                bookFinder.find()
-            }
+            onClicked: {pageStack.push(importPage)}
         }
-        // ToolIcon {
-        //     iconId: "toolbar-search"
-        // }
-    }
-
-    Component.onCompleted: {
-        bookFinder.begin.connect(begin)
-        bookFinder.add.connect(add)
-        bookFinder.done.connect(done)
-    }
-
-    onBegin: {
-        console.log("* LibraryPage.onBegin " + total)
-        importDialog.indeterminate = false
-        importDialog.minimumValue = 0
-        importDialog.maximumValue = total
-        importDialog.value = 0
-    }
-
-    onAdd: {
-        console.log("* LibraryPage.onAdd " + title)
-        importDialog.messageText = title
-        importDialog.value = importDialog.value + 1
-    }
-
-    onDone: {
-        console.log("* LibraryPage.onDone " + total)
-        importDialog.maximumValue = 1
-        importDialog.value = 1
-        var message
-        if (total === 0) {
-            message = "No new books"
-        } else if (total == 1) {
-            message = "1 book imported"
-        } else {
-            message = "" + total + " books imported"
-        }
-        importDialog.messageText = message
     }
 }

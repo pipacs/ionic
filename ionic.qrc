@@ -6,5 +6,6 @@
         <file>icons/star.png</file>
         <file>icons/splash.png</file>
         <file>texts/about.html</file>
+        <file>texts/booksources.html</file>
     </qresource>
 </RCC>

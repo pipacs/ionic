@@ -13,6 +13,7 @@ PageStackWindow {
     AboutPage {id: aboutPage}
     BookPage {id: thisBookPage; enableJump: false}
     SettingsPage {id: settingsPage}
+    ImportPage {id: importPage}
 
     BookmarksPage {
         id: bookmarksPage
@@ -36,7 +37,7 @@ PageStackWindow {
             iconId: "toolbar-up" // toolbar-previous"
             enabled: library.nowReading.valid
             onClicked: {
-                myMenu.close()
+                menu.close()
                 mainPage.goToPreviousPage()
             }
         }
@@ -44,7 +45,7 @@ PageStackWindow {
             iconId: "toolbar-down" // toolbar-next"
             enabled: library.nowReading.valid
             onClicked: {
-                myMenu.close()
+                menu.close()
                 mainPage.goToNextPage()
             }
         }
@@ -52,7 +53,7 @@ PageStackWindow {
             iconId: "toolbar-list"
             enabled: library.nowReading.valid
             onClicked: {
-                myMenu.close()
+                menu.close()
                 chaptersPage.book = library.nowReading
                 pageStack.push(chaptersPage)
             }
@@ -61,7 +62,7 @@ PageStackWindow {
             iconId: "toolbar-favorite-mark"
             enabled: library.nowReading.valid
             onClicked: {
-                myMenu.close()
+                menu.close()
                 bookmarksPage.book = library.nowReading
                 pageStack.push(bookmarksPage)
             }
@@ -69,34 +70,38 @@ PageStackWindow {
         ToolIcon {
             platformIconId: "toolbar-view-menu"
             anchors.right: (parent === undefined)? undefined: parent.right
-            onClicked: (myMenu.status == DialogStatus.Closed)? myMenu.open(): myMenu.close()
+            onClicked: (menu.status == DialogStatus.Closed)? menu.open(): menu.close()
         }
     }
 
     Menu {
-        id: myMenu
+        id: menu
         visualParent: pageStack
         MenuLayout {
             MenuItem {
                 text: "Book details"
                 enabled: library.nowReading.valid
                 onClicked: {
-                    myMenu.close()
+                    menu.close()
                     thisBookPage.book = library.nowReading
                     pageStack.push(thisBookPage)
                 }
             }
             MenuItem {
+                text: "Add books"
+                onClicked: {menu.close(); pageStack.push(importPage)}
+            }
+            MenuItem {
                 text: "Library"
-                onClicked: {myMenu.close(); pageStack.push(libraryPage)}
+                onClicked: {menu.close(); pageStack.push(libraryPage)}
             }
             MenuItem {
                 text: "Settings"
-                onClicked: {myMenu.close(); pageStack.push(settingsPage)}
+                onClicked: {menu.close(); pageStack.push(settingsPage)}
             }
             MenuItem {
                 text: "About"
-                onClicked: {myMenu.close(); pageStack.push(aboutPage)}
+                onClicked: {menu.close(); pageStack.push(aboutPage)}
             }
         }
     }
