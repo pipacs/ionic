@@ -3,6 +3,8 @@
 #include <QProcess>
 #include <QtGlobal>
 #include <QDir>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include "trace.h"
 #include "platform.h"
@@ -63,11 +65,6 @@ QString Platform::dbPath() {
     return QDir(base).absoluteFilePath("books.db");
 }
 
-void Platform::restart(char *argv[]) {
-    extern char **environ;
-    execve(argv[0], argv, environ);
-}
-
 QString Platform::version() {
     return QString(IONIC_VERSION);
 }
@@ -85,4 +82,16 @@ void Platform::pauseBlanking() {
         displayState = new MeeGo::QmDisplayState;
     }
     (void)displayState->setBlankingPause();
+}
+
+QString Platform::text(const QString &key) {
+    QFile resource(":/texts/" + key);
+    resource.open(QFile::ReadOnly);
+    QString ret = resource.readAll();
+    resource.close();
+    return ret;
+}
+
+void Platform::browse(const QString &url) {
+    QDesktopServices::openUrl(QUrl(url));
 }

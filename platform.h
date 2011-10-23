@@ -20,12 +20,12 @@ public:
     int brightness();
     void setBrightness(int value);
     QString dbPath();
-    void restart(char *argv[]);
     QString version();
     QString downloadDir();
-    void information(const QString &label, QWidget *parent = 0);
     QString traceFileName();
     Q_INVOKABLE void pauseBlanking();
+    Q_INVOKABLE QString text(const QString &key);
+    Q_INVOKABLE void browse(const QString &url);
 
 signals:
     void brightnessChanged();
