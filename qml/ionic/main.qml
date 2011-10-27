@@ -6,6 +6,7 @@ PageStackWindow {
     id: appWindow
     initialPage: mainPage
     showStatusBar: false
+    showToolBar: prefs.showToolbar
 
     MainPage {id: mainPage}
     LibraryPage {id: libraryPage}
@@ -70,7 +71,14 @@ PageStackWindow {
         ToolIcon {
             platformIconId: "toolbar-view-menu"
             anchors.right: (parent === undefined)? undefined: parent.right
-            onClicked: (menu.status == DialogStatus.Closed)? menu.open(): menu.close()
+            onClicked: {
+                if (menu.status == DialogStatus.Closed) {
+                    mainPage.toolBarRevelaerActive = false
+                    menu.open()
+                } else {
+                    menu.close()
+                }
+            }
         }
     }
 
@@ -102,6 +110,12 @@ PageStackWindow {
             MenuItem {
                 text: "About"
                 onClicked: {menu.close(); pageStack.push(aboutPage)}
+            }
+        }
+        onStatusChanged: {
+            if (status == DialogStatus.Closed && mainPage.status == PageStatus.Active) {
+                mainPage.toolBarRevelaerActive = true
+                showToolBar = prefs.showToolBar
             }
         }
     }

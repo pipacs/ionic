@@ -48,6 +48,18 @@ Page {
                 // enabled: useVolumeKeys.checked
                 onClicked: {prefs.useSwipe = checked}
             }
+            CheckBox {
+                id: showToolbar
+                text: "Show toolbar"
+                checked: prefs.showToolBar
+                onClicked: {prefs.showToolBar = checked}
+            }
+            Label {
+                width: parent.width
+                color: "grey"
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                text: "If the toolbar is hidden, double-tap to reveal it temporarily"
+            }
             Label {text: "Zoom level:"}
             Slider {
                 id: zoom

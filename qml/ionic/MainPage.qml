@@ -7,6 +7,7 @@ import com.pipacs.ionic.Book 1.0
 
 Page {
     signal nowReadingChanged
+    property alias toolBarRevelaerActive: revealer.active
 
     tools: commonTools
     orientationLock: prefs.orientation
@@ -36,9 +37,24 @@ Page {
         visible: false
     }
 
+    ToolBarRevealer {
+        id: revealer
+    }
+
     Component.onCompleted: {
         library.nowReadingChanged.connect(nowReadingChanged)
         library.setNowReading(library.nowReading)
+        revealer.targetWindow = appWindow
+    }
+
+    onStatusChanged: {
+        if (status == PageStatus.Activating) {
+            revealer.active = true
+            appWindow.showToolBar = prefs.showToolBar
+        } else if (status == PageStatus.Deactivating) {
+            revealer.active = false
+            appWindow.showToolBar = true
+        }
     }
 
     onNowReadingChanged: {
