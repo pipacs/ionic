@@ -2,6 +2,7 @@ ionic (0.5.4) unstable; urgency=low
 
   * Add setting to hide the toolbar
   * Show reading progress
+  * Update book links
 
  -- Akos Polster <akos@pipacs.com>  Sun, 23 Oct 2011 18:58:00 +0200
 
