@@ -1,3 +1,7 @@
+ionic (0.5.5) unstable; urgency=low
+
+ -- Akos Polster <akos@pipacs.com>  Sat, 29 Oct 2011 21:53:00 +0200
+
 ionic (0.5.4) unstable; urgency=low
 
   * Add setting to hide the toolbar
