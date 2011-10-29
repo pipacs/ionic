@@ -15,11 +15,9 @@ PageStackWindow {
     BookPage {id: thisBookPage; enableJump: false}
     SettingsPage {id: settingsPage}
     ImportPage {id: importPage}
-
     BookmarksPage {
         id: bookmarksPage
         onBookmarkAdded: {
-            // FIXME: infoBanner's default location is wrong if the system status bar is shown
             infoBookmarkAdded.show()
         }
     }
@@ -29,6 +27,9 @@ PageStackWindow {
         width: parent.width - 17
         text: "Bookmarked current position"
     }
+
+    // Reading progress indicator
+    ReadingProgress {}
 
     ToolBarLayout {
         id: commonTools

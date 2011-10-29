@@ -172,9 +172,10 @@ Flickable {
         }
         var newY = flickable.contentY - flickable.height + 31;
         if (newY < 0) {
-            newY = 0;
+            newY = 0
         }
-        flickable.contentY = newY;
+        flickable.contentY = newY
+        updateLastBookmark()
     }
 
     // Scroll down one page
@@ -187,6 +188,7 @@ Flickable {
             newY = webView.contentsSize.height - flickable.height
         }
         flickable.contentY = newY
+        updateLastBookmark()
     }
 
     // Load previous part
