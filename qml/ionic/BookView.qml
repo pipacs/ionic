@@ -243,16 +243,12 @@ Flickable {
     // Set style
     function setStyle(style) {
         var styles = new Object
-        styles.day = "document.body.style.background = '#F7F7F7'; document.body.style.color = '#000000'"
-        styles.night = "document.body.style.background = '#000009'; document.body.style.color = '#F7F7F7'"
-        styles.sand = "document.body.style.background = '#EDC9AF'; document.body.style.color = '#000000'"
         var backgrounds = new Object
         backgrounds.day = "#F7F7F7"
         backgrounds.night = "#000009"
         backgrounds.sand = "#EDC9AF"
-        console.log("* BookView.setStyle " + style + " -> " + styles[style] + ", color " + backgrounds[style])
         styleCover.color = backgrounds[style]
-        webView.evaluateJavaScript(styles[style])
+        webView.evaluateJavaScript(platform.text("styles/" + style + ".js"))
     }
 
     // Load URL while covering the web view
