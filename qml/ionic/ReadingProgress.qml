@@ -1,15 +1,15 @@
 import QtQuick 1.1
-import com.nokia.meego 1.0
-import com.nokia.extras 1.0
 
 import com.pipacs.ionic.Book 1.0
+import "theme.js" as Theme
 
 Item {
     id: progress
+    property alias color: left.color
     x: 0
     y: -15
-    height: 15
     z: 0.7
+    height: 15
     width: parent.width
     Rectangle {
         id: left
@@ -17,8 +17,8 @@ Item {
         y: 0
         width: library.nowReading.lastProgress * parent.width
         height: parent.height
-        color: "blue"
         opacity: 0.3
+        color: Theme.progressColor(prefs.style)
         onWidthChanged: {
             if (slideOutTimer.running) {
                 slideOutTimer.restart()
@@ -34,7 +34,7 @@ Item {
         y: 0
         width: parent.width - left.width
         height: parent.height
-        color: "blue"
+        color: left.color
         opacity: 0.1
     }
     NumberAnimation {

@@ -136,10 +136,7 @@ OTHER_FILES += \
     books/2BR02B/META-INF/container.xml \
     books/Makefile \
     texts/about.html \
-    texts/booksources.html \
-    texts/styles/sand.js \
-    texts/styles/night.js \
-    texts/styles/day.js
+    texts/booksources.html
 
 HEADERS += \
     model/book.h \
@@ -166,6 +163,9 @@ HEADERS += \
 
 RESOURCES += \
     ionic.qrc
+
+
+
 
 
 

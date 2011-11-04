@@ -4,6 +4,7 @@ import QtWebKit 1.0
 
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
+import "theme.js" as Theme
 
 Page {
     signal nowReadingChanged
@@ -27,6 +28,11 @@ Page {
             spinner.visible = false
             spinner.running = false
         }
+    }
+
+    // Reading progress indicator
+    ReadingProgress {
+        id: readingProgress
     }
 
     BusyIndicator {
@@ -91,6 +97,7 @@ Page {
     }
 
     function setStyle(style) {
+        readingProgress.color = Theme.progressColor(style)
         bookView.setStyle(style)
     }
 }

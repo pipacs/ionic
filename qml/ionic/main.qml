@@ -28,9 +28,6 @@ PageStackWindow {
         text: "Bookmarked current position"
     }
 
-    // Reading progress indicator
-    ReadingProgress {}
-
     ToolBarLayout {
         id: commonTools
         visible: true

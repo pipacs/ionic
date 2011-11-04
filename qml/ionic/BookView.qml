@@ -25,6 +25,7 @@ import com.nokia.meego 1.0
 import com.nokia.extras 1.0
 import com.pipacs.ionic.Book 1.0
 import com.pipacs.ionic.Preferences 1.0
+import "theme.js" as Theme
 
 Flickable {
     // Target reading position, within the current part of the book. After loading the part, BookView will jump to this position.
@@ -161,7 +162,7 @@ Flickable {
         border.width: 0
         color: "white"
         opacity: 0
-        z: 0.5
+        z: 1
     }
 
     // Scroll up one page
@@ -242,13 +243,8 @@ Flickable {
 
     // Set style
     function setStyle(style) {
-        var styles = new Object
-        var backgrounds = new Object
-        backgrounds.day = "#F7F7F7"
-        backgrounds.night = "#000009"
-        backgrounds.sand = "#EDC9AF"
-        styleCover.color = backgrounds[style]
-        webView.evaluateJavaScript(platform.text("styles/" + style + ".js"))
+        styleCover.color = Theme.background(style)
+        webView.evaluateJavaScript(Theme.webTheme(style))
     }
 
     // Load URL while covering the web view
