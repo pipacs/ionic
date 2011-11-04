@@ -100,7 +100,7 @@ Flickable {
             bookView.jump()
             styleCover.visible = false
             // Disable links
-            webView.evaluateJavaScript("for (var i = 0; i < document.links.length; i++) {document.links[i].disabled = true; document.links[i].onclick = new Function('return false');}")
+            webView.evaluateJavaScript("for (var i = 0; i < document.links.length; i++) {l = document.links[i]; l.disabled = true; l.onclick = new Function('return false'); l.style.textDecoration = 'none'}")
         }
 
         onLoadStarted: {
