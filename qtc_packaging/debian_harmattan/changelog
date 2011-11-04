@@ -1,5 +1,9 @@
 ionic (0.5.5) unstable; urgency=low
 
+  * Fix toolbar hiding when it should be visible
+  * Make reading progress more visible in "night" mode
+  * Don't underline dead links
+
  -- Akos Polster <akos@pipacs.com>  Sat, 29 Oct 2011 21:53:00 +0200
 
 ionic (0.5.4) unstable; urgency=low
