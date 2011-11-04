@@ -7,8 +7,8 @@ progressColors.sand = "#6C541E"
 
 var backgrounds = new Object
 backgrounds.day = "#F7F7F7"
-backgrounds.night = "red" // #000009"
-backgrounds.sand = "red" // #EDC9AF"
+backgrounds.night = "#000009"
+backgrounds.sand = "#EDC9AF"
 
 var webThemes = new Object
 webThemes.day = "document.body.style.background = '#FFFFFB';document.body.style.color = '#000000'"

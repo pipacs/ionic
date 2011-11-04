@@ -88,17 +88,26 @@ Flickable {
 
         property bool loading: false
 
+        // Hide cover with a delay (prevent flicking)
+        Timer {
+            id: coverRemover
+            interval: 200
+            running: false
+            repeat: false
+            onTriggered: {styleCover.opacity = 0}
+        }
+
         onLoadFailed: {
             loading = false
             flickable.targetPos = -1
-            styleCover.visible = false
+            coverRemover.restart()
         }
 
         onLoadFinished: {
             setStyle(prefs.style)
             loading = false
             bookView.jump()
-            styleCover.visible = false
+            coverRemover.restart()
             // Disable links
             webView.evaluateJavaScript("for (var i = 0; i < document.links.length; i++) {l = document.links[i]; l.disabled = true; l.onclick = new Function('return false'); l.style.textDecoration = 'none'}")
         }
@@ -160,8 +169,7 @@ Flickable {
         id: styleCover
         anchors.fill: parent
         border.width: 0
-        color: "white"
-        opacity: 0
+        color: Theme.background(prefs.style)
         z: 1
     }
 
@@ -249,7 +257,7 @@ Flickable {
 
     // Load URL while covering the web view
     function load(url) {
-        styleCover.visible = true
+        styleCover.opacity = 1
         webView.url = url
     }
 
