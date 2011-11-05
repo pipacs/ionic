@@ -7,6 +7,7 @@ PageStackWindow {
     initialPage: mainPage
     showStatusBar: false
     showToolBar: prefs.showToolbar
+    focus: true
 
     MainPage {id: mainPage}
     LibraryPage {id: libraryPage}

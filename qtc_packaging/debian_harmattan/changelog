@@ -4,6 +4,7 @@ ionic (0.5.5) unstable; urgency=low
   * Make reading progress more visible in "night" mode
   * Don't underline dead links
   * Prevent flickering when loading new page
+  * Handle keys without tapping first
 
  -- Akos Polster <akos@pipacs.com>  Sat, 29 Oct 2011 21:53:00 +0200
 

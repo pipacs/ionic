@@ -28,7 +28,7 @@ import com.pipacs.ionic.Preferences 1.0
 import "theme.js" as Theme
 
 Flickable {
-    // Target reading position, within the current part of the book. After loading the part, BookView will jump to this position.
+    // Target reading position, within the current part of the book. After loading the part, BookView will jump to this position, unless it is set to -1
     property double targetPos: -1
 
     // Current part index
@@ -67,6 +67,7 @@ Flickable {
         id: webView
         transformOrigin: Item.TopLeft
         pressGrabTime: 9999
+        focus: true
         settings.defaultFontSize: 26 + (prefs.zoom - 100) / 10
         settings.minimumFontSize: 22
         settings.javaEnabled: false
@@ -83,7 +84,6 @@ Flickable {
         preferredWidth: flickable.width
         preferredHeight: flickable.height
         contentsScale: 1
-        Keys.enabled: true
         z: 0
 
         property bool loading: false
@@ -114,15 +114,6 @@ Flickable {
 
         onLoadStarted: {
             loading = true
-        }
-
-        // Handle up/down keys
-        Keys.onPressed: {
-            if ((event.key == Qt.Key_VolumeUp) || (event.key == Qt.Key_Up) || (event.key == Qt.Key_PageUp)) {
-                goToPreviousPage()
-            } else if ((event.key == Qt.Key_VolumeDown) || (event.key == Qt.Key_Down) || (event.key == Qt.Key_PageDown)) {
-                goToNextPage()
-            }
         }
 
         // Forward signals on completion
@@ -234,7 +225,6 @@ Flickable {
 
     // Jump to a new location within the page, specified in flickable.targetPos
     function jump() {
-        console.log("* BookView.jump targetPos " + flickable.targetPos)
         if (flickable.targetPos != -1) {
             var newY = webView.contentsSize.height * flickable.targetPos
             if (flickable.targetPos == 1) {
