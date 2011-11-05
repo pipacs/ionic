@@ -78,7 +78,7 @@ Page {
                     }
                 }
             }
-            Label {text: "Style:"}
+            Label {text: "Theme:"}
             ButtonRow {
                 Button {
                     text: "Day"
