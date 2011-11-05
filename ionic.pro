@@ -44,19 +44,19 @@ unix:!symbian:!maemo5 {
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    model/book.cpp \
-    model/bookdb.cpp \
-    bookfinder.cpp \
-    model/extractzip.cpp \
-    model/unzip/unzip.c \
-    model/unzip/ioapi.c \
-    model/library.cpp \
-    trace.cpp \
-    model/coverprovider.cpp \
-    eventfilter.cpp \
-    preferences.cpp \
-    platform.cpp \
-    model/bookdbworker.cpp
+    backend/book.cpp \
+    backend/bookdb.cpp \
+    backend/bookfinder.cpp \
+    backend/extractzip.cpp \
+    backend/unzip/unzip.c \
+    backend/unzip/ioapi.c \
+    backend/library.cpp \
+    backend/trace.cpp \
+    backend/coverprovider.cpp \
+    backend/eventfilter.cpp \
+    backend/preferences.cpp \
+    backend/platform.cpp \
+    backend/bookdbworker.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -69,11 +69,11 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/control \
     qtc_packaging/debian_harmattan/compat \
     qtc_packaging/debian_harmattan/changelog \
-    model/unzip/MiniZip64_info.txt \
-    model/unzip/MiniZip64_Changes.txt \
-    model/unzip/Makefile \
-    model/unzip/make_vms.com \
-    model/unzip/make_vms_com \
+    backend/unzip/MiniZip64_info.txt \
+    backend/unzip/MiniZip64_Changes.txt \
+    backend/unzip/Makefile \
+    backend/unzip/make_vms.com \
+    backend/unzip/make_vms_com \
     pkg/version.txt \
     pkg/acknowledgements.txt \
     books/2BR02B.epub \
@@ -139,39 +139,28 @@ OTHER_FILES += \
     texts/booksources.html
 
 HEADERS += \
-    model/book.h \
-    model/bookdb.h \
-    bookfinder.h \
-    model/containerhandler.h \
-    model/xmlhandler.h \
-    model/opshandler.h \
-    model/extractzip.h \
-    model/unzip/unzip.h \
-    model/unzip/ioapi.h \
-    model/library.h \
-    model/ncxhandler.h \
-    model/xmlerrorhandler.h \
-    trace.h \
-    platform.h \
-    model/bookmark.h \
-    model/coverprovider.h \
-    model/contentitem.h \
-    eventfilter.h \
-    preferences.h \
-    splash.h \
-    model/bookdbworker.h
+    backend/book.h \
+    backend/bookdb.h \
+    backend/bookfinder.h \
+    backend/containerhandler.h \
+    backend/xmlhandler.h \
+    backend/opshandler.h \
+    backend/extractzip.h \
+    backend/unzip/unzip.h \
+    backend/unzip/ioapi.h \
+    backend/library.h \
+    backend/ncxhandler.h \
+    backend/xmlerrorhandler.h \
+    backend/trace.h \
+    backend/platform.h \
+    backend/bookmark.h \
+    backend/coverprovider.h \
+    backend/contentitem.h \
+    backend/eventfilter.h \
+    backend/preferences.h \
+    backend/splash.h \
+    backend/bookdbworker.h
 
 RESOURCES += \
     ionic.qrc
-
-
-
-
-
-
-
-
-
-
-
 
