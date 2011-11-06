@@ -2,18 +2,18 @@
 #include <QtDeclarative>
 
 #include "qmlapplicationviewer.h"
-#include "trace.h"
-#include "preferences.h"
-#include "model/contentitem.h"
-#include "model/book.h"
-#include "model/bookmark.h"
-#include "model/bookdb.h"
-#include "model/library.h"
-#include "model/coverprovider.h"
-#include "bookfinder.h"
-#include "eventfilter.h"
-#include "splash.h"
-#include "platform.h"
+#include "backend/trace.h"
+#include "backend/preferences.h"
+#include "backend/contentitem.h"
+#include "backend/book.h"
+#include "backend/bookmark.h"
+#include "backend/bookdb.h"
+#include "backend/library.h"
+#include "backend/coverprovider.h"
+#include "backend/bookfinder.h"
+#include "backend/eventfilter.h"
+#include "backend/splash.h"
+#include "backend/platform.h"
 
 int main(int argc, char *argv[]) {
     // Set up application

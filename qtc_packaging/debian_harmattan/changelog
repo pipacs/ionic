@@ -6,6 +6,8 @@ ionic (0.5.5) unstable; urgency=low
   * Prevent flickering when loading new page
   * Handle keys without tapping first
   * Make bookmark icon more visible if "sand" theme is used
+  * Update bookstore links
+  * Look for new books in ~/MyDocs/Books, too
 
  -- Akos Polster <akos@pipacs.com>  Sat, 29 Oct 2011 21:53:00 +0200
 

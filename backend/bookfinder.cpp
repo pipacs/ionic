@@ -3,7 +3,7 @@
 #include <QDir>
 #include <QDesktopServices>
 
-#include "model/library.h"
+#include "library.h"
 #include "bookfinder.h"
 #include "trace.h"
 
@@ -23,6 +23,7 @@ void BookFinderWorker::doFind() {
     paths.append(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     paths.append(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation));
     paths.append(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + QString("/Downloads"));
+    paths.append(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + QString("/Books"));
     foreach (QString path, paths) {
         qDebug() << "Checking" << path;
         QFileInfoList entries = QDir(path).entryInfoList(filters, QDir::Files | QDir::Readable);
