@@ -8,6 +8,7 @@ ionic (0.5.5) unstable; urgency=low
   * Make bookmark icon more visible if "sand" theme is used
   * Update bookstore links
   * Look for new books in ~/MyDocs/Books, too
+  * Don't allow non-HTML content item extensions for HTML content
 
  -- Akos Polster <akos@pipacs.com>  Sat, 29 Oct 2011 21:53:00 +0200
 

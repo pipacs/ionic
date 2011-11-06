@@ -137,8 +137,8 @@ public:
     QString title() {load(); return title_;}
     QStringList parts() {return parts_;}
 
-    /** Add a new content item with the given ID. */
-    void addContent(const QString &id, const QString &name, const QString &href);
+    /** Add a new content item. */
+    void addContent(const QString &id, const QString &name, const QString &href, const QString &mediaType = QString());
 
     /** Return displayable chapter names. */
     QStringList chapterNames() const;

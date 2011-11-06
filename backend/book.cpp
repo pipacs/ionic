@@ -574,8 +574,8 @@ void Book::setCover(const QImage &cover) {
     emit coverChanged();
 }
 
-void Book::addContent(const QString &id, const QString &name, const QString &href) {
-    content_[id] = ContentItem(name, href);
+void Book::addContent(const QString &id, const QString &name, const QString &href, const QString &mediaType) {
+    content_[id] = ContentItem(name, href, mediaType);
     emit contentChanged();
 }
 
@@ -602,8 +602,15 @@ QString Book::rights() {
 }
 
 void Book::fixExtensions() {
-    QStringList supportedExtensions = QStringList() << ".html" << ".htm" << ".xht" << ".xhtm" << ".xhtml" << ".xml" << ".ncx" << ".css" << ".opf" << ".jpg" << ".jpeg" << ".gif" << ".png" << ".bmp" << ".tif" << ".tiff" << ".svg" << ".ttf" << "mimetype" << ".txt";
+    QStringList supportedExtensions = QStringList() << ".html" << ".htm" << ".xht" << ".xhtm" << ".xhtml";
+
     foreach (QString key, content_.keys()) {
+        // Don't touch non-HTML content items
+        if (content_[key].mediaType != QString("application/xhtml+xml")) {
+            continue;
+        }
+
+        // Check if the item URL, without the fragment, has a supported extension
         QString href = content_[key].href;
         QString fragment;
         int fragmentStart = href.lastIndexOf("#");
@@ -618,6 +625,8 @@ void Book::fixExtensions() {
                 break;
             }
         }
+
+        // Rename content item to .html if the original extension is not supported
         if (!hasSupportedExtension) {
             qWarning() << "Book::fixExtensions: href" << href << "has no supported extension";
             fixFileExtension(href);
