@@ -52,6 +52,7 @@ Page {
         library.nowReadingChanged.connect(nowReadingChanged)
         library.setNowReading(library.nowReading)
         revealer.targetWindow = appWindow
+        setStyle(prefs.style)
     }
 
     onStatusChanged: {
@@ -108,6 +109,7 @@ Page {
     }
 
     function setStyle(style) {
+        theme.inverted = (style == "night")
         readingProgress.color = Theme.progressColor(style)
         bookView.setStyle(style)
     }

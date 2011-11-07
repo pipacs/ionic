@@ -16,21 +16,8 @@ void BookFinderWorker::doFind() {
     int toAdd = 0;
     int added = 0;
 
-    // Gather all .epub files
-    QStringList filters(QString("*.epub"));
-    QStringList paths;
-    paths.append(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    paths.append(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
-    paths.append(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation));
-    paths.append(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + QString("/Downloads"));
-    paths.append(QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + QString("/Books"));
-    foreach (QString path, paths) {
-        qDebug() << "Checking" << path;
-        QFileInfoList entries = QDir(path).entryInfoList(filters, QDir::Files | QDir::Readable);
-        foreach (QFileInfo entry, entries) {
-            booksFound.append(entry.absoluteFilePath());
-        }
-    }
+    // Gather all .epub files from /home/user
+    doFindInDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation), booksFound, 0);
 
     // Count the number of new books
     Library *library = Library::instance();
@@ -51,4 +38,21 @@ void BookFinderWorker::doFind() {
         }
     }
     emit done(added);
+}
+
+void BookFinderWorker::doFindInDir(const QString &dir, QStringList &results, int depth) {
+    const int maxDepth = 6;
+    if (depth == maxDepth) {
+        qWarning() << "BookFinderWorker::doFindInDir: Bailing out after" << maxDepth << "recursions";
+        return;
+    }
+    qDebug() << "BookFinderWorker::doFindInDir:" << dir << depth;
+    QStringList epubFilters(QString("*.epub"));
+    foreach (QFileInfo entry, QDir(dir).entryInfoList(epubFilters, QDir::Files | QDir::Readable)) {
+        results.append(entry.absoluteFilePath());
+    }
+    QStringList dirFilters(QString("*"));
+    foreach (QFileInfo entry, QDir(dir).entryInfoList(dirFilters, QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot)) {
+        doFindInDir(entry.absoluteFilePath(), results, depth + 1);
+    }
 }

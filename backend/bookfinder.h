@@ -27,6 +27,7 @@ class BookFinderWorker: public QObject {
 
 public:
     explicit BookFinderWorker(QObject *parent = 0);
+    void doFindInDir(const QString &dir, QStringList &results, int depth);
 
 public slots:
     /** Do the real work. */
