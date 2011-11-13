@@ -27,18 +27,13 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # CONFIG += qtquickcomponents
 
 QT += webkit xml sql network
-unix {
+
+contains(MEEGO_EDITION,harmattan) { {
     DEFINES += unix
     DEFINES += USE_FILE32API
-}
-unix:!symbian {
-    LIBS += -lz
-}
-unix:!symbian:!maemo5 {
-    # Sorry Dennis
-    DEFINES += Q_WS_HARMATTAN
     CONFIG += link_pkgconfig
     CONFIG += qmsystem2
+    LIBS += -lz
     PKGCONFIG += libresourceqt1
 }
 
