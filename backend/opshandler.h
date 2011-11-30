@@ -41,7 +41,8 @@ public:
             QString href = attrs.value("href");
             QString name = QString("Part %1").arg(partCount + 1);
             QString key = attrs.value("id");
-            book.addContent(key, name, href);
+            QString mediaType = attrs.value("media-type");
+            book.addContent(key, name, href, mediaType);
             partCount++;
         } else if (name == "itemref") {
             book.addPart(attrs.value("idref"));

@@ -1,6 +1,15 @@
 ionic (0.5.5) unstable; urgency=low
 
-  * Load styles from resource
+  * Don't hide toolbar when it should be visible
+  * Make reading progress more visible in "night" mode
+  * Don't underline dead links
+  * Prevent flickering when loading new page
+  * Handle keys without tapping first
+  * Make bookmark icon more visible if "sand" theme is used
+  * Update bookstore links
+  * Don't allow non-HTML content item extensions for HTML content
+  * At import, recursively search the home directory for books
+  * Adjust Meego theme to match Ionic theme
 
  -- Akos Polster <akos@pipacs.com>  Sat, 29 Oct 2011 21:53:00 +0200
 

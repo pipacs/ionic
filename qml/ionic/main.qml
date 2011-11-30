@@ -7,6 +7,7 @@ PageStackWindow {
     initialPage: mainPage
     showStatusBar: false
     showToolBar: prefs.showToolbar
+    focus: true
 
     MainPage {id: mainPage}
     LibraryPage {id: libraryPage}
@@ -27,9 +28,6 @@ PageStackWindow {
         width: parent.width - 17
         text: "Bookmarked current position"
     }
-
-    // Reading progress indicator
-    ReadingProgress {}
 
     ToolBarLayout {
         id: commonTools

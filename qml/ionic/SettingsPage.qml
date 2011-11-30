@@ -78,7 +78,7 @@ Page {
                     }
                 }
             }
-            Label {text: "Style:"}
+            Label {text: "Theme:"}
             ButtonRow {
                 Button {
                     text: "Day"
@@ -101,7 +101,7 @@ Page {
                 Button {
                     text: "Auto"
                     checked: prefs.orientation == PageOrientation.Automatic
-                    onClicked: {prefs.orientation = PageOrientation.Automatic; console.log("* SettingsPage " + PageOrientation.Automatic)}
+                    onClicked: {prefs.orientation = PageOrientation.Automatic}
                 }
                 Button {
                     text: "Portrait"

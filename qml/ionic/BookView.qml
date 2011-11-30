@@ -25,9 +25,10 @@ import com.nokia.meego 1.0
 import com.nokia.extras 1.0
 import com.pipacs.ionic.Book 1.0
 import com.pipacs.ionic.Preferences 1.0
+import "theme.js" as Theme
 
 Flickable {
-    // Target reading position, within the current part of the book. After loading the part, BookView will jump to this position.
+    // Target reading position, within the current part of the book. After loading the part, BookView will jump to this position, unless it is set to -1
     property double targetPos: -1
 
     // Current part index
@@ -66,6 +67,7 @@ Flickable {
         id: webView
         transformOrigin: Item.TopLeft
         pressGrabTime: 9999
+        focus: true
         settings.defaultFontSize: 26 + (prefs.zoom - 100) / 10
         settings.minimumFontSize: 22
         settings.javaEnabled: false
@@ -82,37 +84,36 @@ Flickable {
         preferredWidth: flickable.width
         preferredHeight: flickable.height
         contentsScale: 1
-        Keys.enabled: true
         z: 0
 
         property bool loading: false
 
+        // Hide cover with a delay (prevent flicking)
+        Timer {
+            id: coverRemover
+            interval: 200
+            running: false
+            repeat: false
+            onTriggered: {styleCover.opacity = 0}
+        }
+
         onLoadFailed: {
             loading = false
             flickable.targetPos = -1
-            styleCover.visible = false
+            coverRemover.restart()
         }
 
         onLoadFinished: {
             setStyle(prefs.style)
             loading = false
             bookView.jump()
-            styleCover.visible = false
+            coverRemover.restart()
             // Disable links
-            webView.evaluateJavaScript("for (var i = 0; i < document.links.length; i++) {document.links[i].disabled = true; document.links[i].onclick = new Function('return false');}")
+            webView.evaluateJavaScript("for (var i = 0; i < document.links.length; i++) {l = document.links[i]; l.disabled = true; l.onclick = new Function('return false'); l.style.textDecoration = 'none'}")
         }
 
         onLoadStarted: {
             loading = true
-        }
-
-        // Handle up/down keys
-        Keys.onPressed: {
-            if ((event.key == Qt.Key_VolumeUp) || (event.key == Qt.Key_Up) || (event.key == Qt.Key_PageUp)) {
-                goToPreviousPage()
-            } else if ((event.key == Qt.Key_VolumeDown) || (event.key == Qt.Key_Down) || (event.key == Qt.Key_PageDown)) {
-                goToNextPage()
-            }
         }
 
         // Forward signals on completion
@@ -159,9 +160,8 @@ Flickable {
         id: styleCover
         anchors.fill: parent
         border.width: 0
-        color: "white"
-        opacity: 0
-        z: 0.5
+        color: Theme.background(prefs.style)
+        z: 1
     }
 
     // Scroll up one page
@@ -225,7 +225,6 @@ Flickable {
 
     // Jump to a new location within the page, specified in flickable.targetPos
     function jump() {
-        console.log("* BookView.jump targetPos " + flickable.targetPos)
         if (flickable.targetPos != -1) {
             var newY = webView.contentsSize.height * flickable.targetPos
             if (flickable.targetPos == 1) {
@@ -242,18 +241,13 @@ Flickable {
 
     // Set style
     function setStyle(style) {
-        var styles = new Object
-        var backgrounds = new Object
-        backgrounds.day = "#F7F7F7"
-        backgrounds.night = "#000009"
-        backgrounds.sand = "#EDC9AF"
-        styleCover.color = backgrounds[style]
-        webView.evaluateJavaScript(platform.text("styles/" + style + ".js"))
+        styleCover.color = Theme.background(style)
+        webView.evaluateJavaScript(Theme.webTheme(style))
     }
 
     // Load URL while covering the web view
     function load(url) {
-        styleCover.visible = true
+        styleCover.opacity = 1
         webView.url = url
     }
 

@@ -4,6 +4,7 @@ import QtWebKit 1.0
 
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
+import "theme.js" as Theme
 
 Page {
     signal nowReadingChanged
@@ -11,10 +12,12 @@ Page {
 
     tools: commonTools
     orientationLock: prefs.orientation
+    focus: true
 
     BookView {
         id: bookView
         anchors.fill: parent
+        focus: true
         onLoadStarted: {
             spinner.visible = true
             spinner.running = true
@@ -29,11 +32,15 @@ Page {
         }
     }
 
+    // Reading progress indicator
+    ReadingProgress {
+        id: readingProgress
+    }
+
     BusyIndicator {
         id: spinner
         platformStyle: BusyIndicatorStyle {size: "large"}
         anchors.centerIn: parent
-        focus: false
         visible: false
     }
 
@@ -45,12 +52,14 @@ Page {
         library.nowReadingChanged.connect(nowReadingChanged)
         library.setNowReading(library.nowReading)
         revealer.targetWindow = appWindow
+        setStyle(prefs.style)
     }
 
     onStatusChanged: {
         if (status == PageStatus.Activating) {
             revealer.active = true
             appWindow.showToolBar = prefs.showToolBar
+            focus = true
         } else if (status == PageStatus.Deactivating) {
             revealer.active = false
             appWindow.showToolBar = true
@@ -60,6 +69,15 @@ Page {
     onNowReadingChanged: {
         console.log("* MainPage.onNowReadingChanged")
         goTo(library.nowReading.lastBookmark.part, library.nowReading.lastBookmark.position, "#")
+    }
+
+    // Handle up/down keys
+    Keys.onPressed: {
+        if ((event.key == Qt.Key_VolumeUp) || (event.key == Qt.Key_Up) || (event.key == Qt.Key_PageUp)) {
+            bookView.goToPreviousPage()
+        } else if ((event.key == Qt.Key_VolumeDown) || (event.key == Qt.Key_Down) || (event.key == Qt.Key_PageDown)) {
+            bookView.goToNextPage()
+        }
     }
 
     function goToPreviousPage() {
@@ -91,6 +109,8 @@ Page {
     }
 
     function setStyle(style) {
+        theme.inverted = (style == "night")
+        readingProgress.color = Theme.progressColor(style)
         bookView.setStyle(style)
     }
 }

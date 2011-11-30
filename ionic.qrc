@@ -7,8 +7,5 @@
         <file>icons/splash.png</file>
         <file>texts/about.html</file>
         <file>texts/booksources.html</file>
-        <file>texts/styles/day.js</file>
-        <file>texts/styles/night.js</file>
-        <file>texts/styles/sand.js</file>
     </qresource>
 </RCC>

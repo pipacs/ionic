@@ -33,7 +33,7 @@ Page {
                 font.bold: true
                 width: importTools.width - 18
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                text: "Step 1: Find and download books"
+                text: "Step 1: Find and download"
             }
             Label {
                 font.pixelSize: 32
@@ -48,7 +48,7 @@ Page {
                 font.bold: true
                 width: importTools.width - 18
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                text: "Step 2: Import downloaded books"
+                text: "Step 2: Import books"
             }
             Button {
                 text: "Import"
@@ -89,7 +89,6 @@ Page {
     }
 
     onBegin: {
-        console.log("* ImportPage.onBegin " + total)
         importDialog.indeterminate = false
         importDialog.minimumValue = 0
         importDialog.maximumValue = total
@@ -97,13 +96,11 @@ Page {
     }
 
     onAdd: {
-        console.log("* ImportPage.onAdd " + title)
         importDialog.messageText = title
         importDialog.value = importDialog.value + 1
     }
 
     onDone: {
-        console.log("* ImportPage.onDone " + total)
         importDialog.maximumValue = 1
         importDialog.value = 1
         var message

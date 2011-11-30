@@ -27,12 +27,9 @@ Item {
         running: false
         repeat: false
         onTriggered: {
-            if (active && !prefs.showToolbar) {
+            if (active && !prefs.showToolBar) {
                 targetWindow.showToolBar = false
             }
         }
-    }
-    onTargetWindowChanged: {
-        console.log("* ToolBarRevealer.onTargetChanged " + targetWindow)
     }
 }
