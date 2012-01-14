@@ -1,40 +1,49 @@
 # Add more folders to ship with the application, here
-folder_01.source = qml/ionic
-folder_01.target = qml
-DEPLOYMENTFOLDERS = folder_01
+folder_qml.source = qml/ionic
+folder_qml.target = qml
+DEPLOYMENTFOLDERS = folder_qml
 
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
-
-symbian:TARGET.UID3 = 0xE1E990A6
-
-# Smart Installer package's UID
-# This UID is from the protected range and therefore the package will
-# fail to install if self-signed. By default qmake uses the unprotected
-# range value if unprotected UID is defined for the application and
-# 0x2002CCCF value if protected UID is given to the application
-#symbian:DEPLOYMENT.installer_header = 0x2002CCCF
-
-# Allow network access on Symbian
-symbian:TARGET.CAPABILITY += NetworkServices
 
 # If your application uses the Qt Mobility libraries, uncomment the following
 # lines and add the respective components to the MOBILITY variable.
 # CONFIG += mobility
 # MOBILITY +=
 
-# Add dependency to symbian components
-# CONFIG += qtquickcomponents
-
 QT += webkit xml sql network
 
-contains(MEEGO_EDITION,harmattan) { {
+# Meego Harmattan settings
+contains(MEEGO_EDITION,harmattan) {
     DEFINES += unix
     DEFINES += USE_FILE32API
     CONFIG += link_pkgconfig
     CONFIG += qmsystem2
     LIBS += -lz
     PKGCONFIG += libresourceqt1
+
+    # Add a splash image for the Meego launcher
+    folder_splash.source = splash
+    folder_splash.target =
+    DEPLOYMENTFOLDERS += folder_splash
+}
+
+# Symbian settings
+symbian {
+    symbian:TARGET.UID3 = 0xE1E990A6
+
+    # Smart Installer package's UID
+    # This UID is from the protected range and therefore the package will
+    # fail to install if self-signed. By default qmake uses the unprotected
+    # range value if unprotected UID is defined for the application and
+    # 0x2002CCCF value if protected UID is given to the application
+    #symbian:DEPLOYMENT.installer_header = 0x2002CCCF
+
+    # Allow network access
+    symbian:TARGET.CAPABILITY += NetworkServices
+
+    # Add dependency to symbian components
+    # CONFIG += qtquickcomponents
 }
 
 # The .cpp file which was generated for your project. Feel free to hack it.
@@ -131,7 +140,8 @@ OTHER_FILES += \
     books/2BR02B/META-INF/container.xml \
     books/Makefile \
     texts/about.html \
-    texts/booksources.html
+    texts/booksources.html \
+    splash/splash.jpg
 
 HEADERS += \
     backend/book.h \
@@ -153,7 +163,6 @@ HEADERS += \
     backend/contentitem.h \
     backend/eventfilter.h \
     backend/preferences.h \
-    backend/splash.h \
     backend/bookdbworker.h
 
 RESOURCES += \

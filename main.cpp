@@ -12,16 +12,15 @@
 #include "backend/coverprovider.h"
 #include "backend/bookfinder.h"
 #include "backend/eventfilter.h"
-#include "backend/splash.h"
 #include "backend/platform.h"
 
 int main(int argc, char *argv[]) {
     // Set up application
-    QApplication app(argc, argv);
-    app.setApplicationName("Ionic");
-    app.setApplicationVersion(Platform::instance()->version());
-    app.setOrganizationDomain("pipacs.com");
-    app.setOrganizationName("pipacs.com");
+    QScopedPointer<QApplication> app(createApplication(argc, argv));
+    app->setApplicationName("Ionic");
+    app->setApplicationVersion(Platform::instance()->version());
+    app->setOrganizationDomain("pipacs.com");
+    app->setOrganizationName("pipacs.com");
 
     // Set up tracing
     Preferences *settings = Preferences::instance();
@@ -29,11 +28,6 @@ int main(int argc, char *argv[]) {
     Trace::setFileName(settings->value("tracefilename").toString());
     qInstallMsgHandler(Trace::messageHandler);
     qDebug() << "Ionic version " << Platform::instance()->version();
-
-    // Show splash screen
-    Splash splash;
-    splash.show();
-    app.processEvents();
 
     // Register QML types
     qmlRegisterType<Bookmark>("com.pipacs.ionic.Bookmark", 1, 0, "Bookmark");
@@ -96,9 +90,8 @@ int main(int argc, char *argv[]) {
     EventFilter *eventFilter = new EventFilter(&viewer);
     viewer.installEventFilter(eventFilter);
 
-    // Close splash screen, start application
-    splash.close();
-    int ret = app.exec();
+    // Run application
+    int ret = app->exec();
 
     // Delete singletons
     bookFinderWorkerThread->quit();

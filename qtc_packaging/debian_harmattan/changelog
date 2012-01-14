@@ -1,3 +1,9 @@
+ionic (0.5.6) unstable; urgency=low
+
+  * Let the invoker show the splash screen
+
+ -- Akos Polster <akos@pipacs.com>  Sat, 14 Jan 2012 17:30:00 +0100
+
 ionic (0.5.5) unstable; urgency=low
 
   * Don't hide toolbar when it should be visible
