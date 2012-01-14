@@ -176,16 +176,16 @@ void Library::sort() {
 bool Library::lessThanByTitle(const Book *cb1, const Book *cb2) {
     Book *b1 = const_cast<Book *>(cb1);
     Book *b2 = const_cast<Book *>(cb2);
-    return b1->title() < b2->title();
+    return b1->title().toLower() < b2->title().toLower();
 }
 
 bool Library::lessThanByAuthor(const Book *cb1, const Book *cb2) {
     Book *b1 = const_cast<Book *>(cb1);
     Book *b2 = const_cast<Book *>(cb2);
-    QString author1 = b1->creators().join(", ");
-    QString author2 = b2->creators().join(", ");
+    QString author1 = b1->creators().join(", ").toLower();
+    QString author2 = b2->creators().join(", ").toLower();
     if (author1 == author2) {
-        return b1->title() < b2->title();
+        return lessThanByTitle(cb1, cb2);
     } else {
         return author1 < author2;
     }
