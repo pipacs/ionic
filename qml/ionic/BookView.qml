@@ -19,7 +19,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-import QtQuick 1.0
+import QtQuick 1.1
 import QtWebKit 1.0
 import com.nokia.meego 1.0
 import com.nokia.extras 1.0
@@ -46,6 +46,7 @@ Flickable {
     property alias sx: flickable.contentX
     property alias sy: flickable.contentY
     property alias webView: webView
+    property alias updateTimer: updateTimer
 
     signal loadStarted
     signal loadFinished
@@ -164,6 +165,15 @@ Flickable {
         z: 1
     }
 
+    // Periodically update last reading position
+    Timer {
+        id: updateTimer
+        interval: 3000
+        running: true
+        repeat: true
+        onTriggered: {if (!webView.loading) updateLastBookmark()}
+    }
+
     // Scroll up one page
     function goToPreviousPage() {
         if (flickable.contentY == 0) {
@@ -249,13 +259,5 @@ Flickable {
     function load(url) {
         styleCover.opacity = 1
         webView.url = url
-    }
-
-    // Periodically update last reading position
-    Timer {
-        interval: 3000
-        running: true
-        repeat: true
-        onTriggered: {if (!webView.loading) updateLastBookmark()}
     }
 }

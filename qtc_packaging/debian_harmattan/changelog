@@ -1,6 +1,7 @@
 ionic (0.5.6) unstable; urgency=low
 
   * Let the invoker show the splash screen
+  * Maintain reading position after orientation change
 
  -- Akos Polster <akos@pipacs.com>  Sat, 14 Jan 2012 17:30:00 +0100
 

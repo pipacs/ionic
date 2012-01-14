@@ -71,7 +71,7 @@ PageStackWindow {
             platformIconId: "toolbar-view-menu"
             anchors.right: (parent === undefined)? undefined: parent.right
             onClicked: {
-                if (menu.status == DialogStatus.Closed) {
+                if (menu.status === DialogStatus.Closed) {
                     mainPage.toolBarRevelaerActive = false
                     menu.open()
                 } else {
@@ -112,7 +112,7 @@ PageStackWindow {
             }
         }
         onStatusChanged: {
-            if (status == DialogStatus.Closed && mainPage.status == PageStatus.Active) {
+            if (status === DialogStatus.Closed && mainPage.status == PageStatus.Active) {
                 mainPage.toolBarRevelaerActive = true
                 showToolBar = prefs.showToolBar
             }

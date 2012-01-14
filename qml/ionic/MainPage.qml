@@ -48,19 +48,30 @@ Page {
         id: revealer
     }
 
+    // Restore last reading position after a delay
+    Timer {
+        id: restoreTimer
+        interval: 200
+        running: false
+        repeat: false
+        onTriggered: restorePosition()
+    }
+
     Component.onCompleted: {
         library.nowReadingChanged.connect(nowReadingChanged)
         library.setNowReading(library.nowReading)
         revealer.targetWindow = appWindow
         setStyle(prefs.style)
+        appWindow.orientationChangeAboutToStart.connect(prepareRestoringPosition)
+        appWindow.orientationChangeFinished.connect(restoreTimer.start)
     }
 
     onStatusChanged: {
-        if (status == PageStatus.Activating) {
+        if (status === PageStatus.Activating) {
             revealer.active = true
             appWindow.showToolBar = prefs.showToolBar
             focus = true
-        } else if (status == PageStatus.Deactivating) {
+        } else if (status === PageStatus.Deactivating) {
             revealer.active = false
             appWindow.showToolBar = true
         }
@@ -73,9 +84,9 @@ Page {
 
     // Handle up/down keys
     Keys.onPressed: {
-        if ((event.key == Qt.Key_VolumeUp) || (event.key == Qt.Key_Up) || (event.key == Qt.Key_PageUp)) {
+        if ((event.key === Qt.Key_VolumeUp) || (event.key === Qt.Key_Up) || (event.key === Qt.Key_PageUp)) {
             bookView.goToPreviousPage()
-        } else if ((event.key == Qt.Key_VolumeDown) || (event.key == Qt.Key_Down) || (event.key == Qt.Key_PageDown)) {
+        } else if ((event.key === Qt.Key_VolumeDown) || (event.key === Qt.Key_Down) || (event.key === Qt.Key_PageDown)) {
             bookView.goToNextPage()
         }
     }
@@ -92,11 +103,11 @@ Page {
         console.log("* MainPage.goTo part " + part + ", targetPos " + targetPos + ", url '" + url + "'")
         bookView.targetPos = targetPos
         bookView.part = part
-        if (url == "#") {
+        if (url === "#") {
             url = library.nowReading.urlFromPart(part)
             console.log("*  url from part: " + url)
         }
-        if (url == bookView.url) {
+        if ((url === "") || (url === bookView.url)) {
             // Force a jump to the new position
             console.log("*  Same as current, forcing local jump")
             bookView.jump()
@@ -109,8 +120,19 @@ Page {
     }
 
     function setStyle(style) {
-        theme.inverted = (style == "night")
+        theme.inverted = (style === "night")
         readingProgress.color = Theme.progressColor(style)
         bookView.setStyle(style)
+    }
+
+    function prepareRestoringPosition() {
+        bookView.updateTimer.stop()
+        bookView.updateLastBookmark()
+    }
+
+    function restorePosition() {
+        bookView.targetPos = library.nowReading.lastBookmark.position
+        bookView.jump()
+        bookView.updateTimer.start()
     }
 }
