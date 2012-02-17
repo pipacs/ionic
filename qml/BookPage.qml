@@ -1,15 +1,12 @@
 import QtQuick 1.1
-import com.nokia.meego 1.0
-import com.nokia.extras 1.0
-
+import "meego"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
-Page {
+StepsPage {
     property Book book: emptyBook
     property alias enableJump: jumpTool.visible
 
-    tools: libraryTools
     orientationLock: prefs.orientation
 
     PageHeader {
@@ -17,14 +14,11 @@ Page {
         text: book.title
     }
 
-    QueryDialog {
+    StepsYesNoDialog {
         id: deleteQuery
         icon: "qrc:/ionic80.png"
-        titleText: book.title
-        message: "Are you sure to delete this book?"
-        acceptButtonText: "Yes"
-        rejectButtonText: "No"
-        onAccepted: {
+        title: "Are you sure to delete this book?"
+        onDialogAccepted: {
             library.remove(book)
             pageStack.pop()
         }
@@ -36,11 +30,11 @@ Page {
             height: content.length? (column.height + 9): 0
             Column {
                 id: column
-                Label {
+                StepsLabel {
                     id: textLabel
                     text: content.length? label: ""
                 }
-                Label {
+                StepsLabel {
                     id: textContent
                     text: content
                     font.bold: true
@@ -89,20 +83,18 @@ Page {
         delegate: delegate
     }
 
-    ScrollDecorator {
+    StepsScrollDecorator {
         flickableItem: listView
     }
 
-    ToolBarLayout {
+    StepsToolBarLayout {
         id: libraryTools
         visible: true
-        ToolIcon {
+        StepsToolIcon {
             iconId: "toolbar-back"
-            onClicked: {
-                pageStack.pop()
-            }
+            onClicked: pageStack.pop()
         }
-        ToolIcon {
+        StepsToolIcon {
             id: jumpTool
             iconId: "toolbar-jump-to"
             onClicked: {
@@ -110,12 +102,12 @@ Page {
                 library.setNowReading(book)
             }
         }
-        ToolIcon {
+        StepsToolIcon {
             iconId: "toolbar-delete"
             enabled: book.valid
-            onClicked: {
-                deleteQuery.open()
-            }
+            onClicked: deleteQuery.open()
         }
     }
+
+    Component.onCompleted: setToolBar(libraryTools)
 }
