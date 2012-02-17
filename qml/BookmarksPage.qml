@@ -118,7 +118,7 @@ Page {
 
     BookmarkEditor {
         id: addBookmark
-        onAccepted: {
+        onDialogAccepted: {
             book.addBookmark(book.lastBookmark.part, book.lastBookmark.position, note)
             pageStack.pop(null)
             bookmarkAdded()
@@ -127,7 +127,7 @@ Page {
 
     BookmarkEditor {
         id: editBookmark
-        onAccepted: {
+        onDialogAccepted: {
             console.log("* BookmarksPage.editBookmark.onAccepted: Setting " + index + " to \"" + note + "\"")
             book.setBookmarkNote(index, note)
         }
