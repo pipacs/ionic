@@ -11,7 +11,7 @@ QueryDialog {
     acceptButtonText: qsTr("Yes")
     rejectButtonText: qsTr("No")
     message: title
-    titleText: qsTr("Steps")
+    titleText: qsTr("Ionic")
     icon: "/images/steps.png"
 
     onStatusChanged: {

@@ -21,5 +21,6 @@
         <file alias="StepsMenu.qml">qml/meego/StepsMenu.qml</file>
         <file alias="StepsMenuLayout.qml">qml/meego/StepsMenuLayout.qml</file>
         <file alias="StepsMenuItem.qml">qml/meego/StepsMenuItem.qml</file>
+        <file alias="StepsContextMenu.qml">qml/meego/StepsContextMenu.qml</file>
     </qresource>
 </RCC>

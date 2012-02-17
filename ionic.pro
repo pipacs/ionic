@@ -191,7 +191,9 @@ OTHER_FILES += \
     qml/meego/StepsMenuLayout.qml \
     qml/symbian/StepsMenuLayout.qml \
     qml/meego/StepsMenuItem.qml \
-    qml/symbian/StepsMenuItem.qml
+    qml/symbian/StepsMenuItem.qml \
+    qml/meego/StepsContextMenu.qml \
+    qml/symbian/StepsContextMenu.qml
 
 HEADERS += \
     backend/book.h \

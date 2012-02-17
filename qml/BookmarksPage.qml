@@ -1,15 +1,12 @@
 import QtQuick 1.1
-import com.nokia.meego 1.0
-import com.nokia.extras 1.0
-
+import "meego"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
-Page {
+StepsPage {
     id: page
     property Book book: emptyBook
     signal bookmarkAdded
-    tools: bookmarksTools
     orientationLock: prefs.orientation
 
     PageHeader {
@@ -20,7 +17,7 @@ Page {
     Component {
         id: delegate
         Item {
-            height: 60
+            height: 64
             width: parent.width
             BorderImage {
                 id: background
@@ -32,11 +29,11 @@ Page {
             }
             Row {
                 Column {
-                    Label {
+                    StepsLabel {
                         font.pixelSize: 28
                         text: "At " + getProgress(book.bookmarks[index])
                     }
-                    Label {
+                    StepsLabel {
                         font.pixelSize: 24
                         text: book.bookmarks[index].note
                     }
@@ -70,15 +67,15 @@ Page {
         delegate: delegate
     }
 
-    ScrollDecorator {
+    StepsScrollDecorator {
         flickableItem: listView
     }
 
-    ContextMenu {
+    StepsContextMenu {
         id: contextMenu
         property int index
-        MenuLayout {
-            MenuItem {
+        StepsMenuLayout {
+            StepsMenuItem {
                 text: "Edit"
                 onClicked: {
                     var bookmark = book.bookmarks[contextMenu.index]
@@ -89,7 +86,7 @@ Page {
                     editBookmark.open()
                 }
             }
-            MenuItem {
+            StepsMenuItem {
                 text: "Delete"
                 onClicked: {
                     deleteQuery.bookmark = book.bookmarks[contextMenu.index]
@@ -99,14 +96,14 @@ Page {
         }
     }
 
-    ToolBarLayout {
+    StepsToolBarLayout {
         id: bookmarksTools
         visible: true
-        ToolIcon {
+        StepsToolIcon {
             iconId: "toolbar-back"
-            onClicked: {pageStack.pop()}
+            onClicked: pageStack.pop()
         }
-        ToolIcon {
+        StepsToolIcon {
             iconId: "toolbar-add"
             onClicked: {
                 addBookmark.book = book
@@ -133,18 +130,17 @@ Page {
         }
     }
 
-    QueryDialog {
+    StepsYesNoDialog {
         property Bookmark bookmark
         id: deleteQuery
         icon: "qrc:/ionic80.png"
-        titleText: "Delete bookmark"
         message: "Are you sure to delete bookmark at " + getProgress(bookmark) + "?"
         acceptButtonText: "Yes"
         rejectButtonText: "No"
-        onAccepted: {
-            book.deleteBookmark(bookmark)
-        }
+        onDialogAccepted: book.deleteBookmark(bookmark)
     }
+
+    Component.onCompleted: setToolBar(bookmarksTools)
 
     function getProgress(bookmark) {
         if (!bookmark) {
