@@ -1,6 +1,5 @@
 import QtQuick 1.1
-import com.nokia.meego 1.0
-import com.nokia.extras 1.0
+import "meego"
 
 StepsPageStackWindow {
     id: appWindow
@@ -23,17 +22,17 @@ StepsPageStackWindow {
         }
     }
 
-    InfoBanner {
+    StepsBanner {
         id: infoBookmarkAdded
         width: parent.width - 17
         text: "Bookmarked current position"
     }
 
-    ToolBarLayout {
+    StepsToolBarLayout {
         id: commonTools
         visible: true
 
-        ToolIcon {
+        StepsToolIcon {
             iconId: "toolbar-up" // toolbar-previous"
             enabled: library.nowReading.valid
             onClicked: {
@@ -41,7 +40,7 @@ StepsPageStackWindow {
                 mainPage.goToPreviousPage()
             }
         }
-        ToolIcon {
+        StepsToolIcon {
             iconId: "toolbar-down" // toolbar-next"
             enabled: library.nowReading.valid
             onClicked: {
@@ -49,7 +48,7 @@ StepsPageStackWindow {
                 mainPage.goToNextPage()
             }
         }
-        ToolIcon {
+        StepsToolIcon {
             iconId: "toolbar-list"
             enabled: library.nowReading.valid
             onClicked: {
@@ -58,7 +57,7 @@ StepsPageStackWindow {
                 pageStack.push(chaptersPage)
             }
         }
-        ToolIcon {
+        StepsToolIcon {
             iconId: "toolbar-favorite-mark"
             enabled: library.nowReading.valid
             onClicked: {
@@ -67,11 +66,11 @@ StepsPageStackWindow {
                 pageStack.push(bookmarksPage)
             }
         }
-        ToolIcon {
+        StepsToolIcon {
             platformIconId: "toolbar-view-menu"
             anchors.right: (parent === undefined)? undefined: parent.right
             onClicked: {
-                if (menu.status === DialogStatus.Closed) {
+                if (menu.status === menu.statusClosed) {
                     mainPage.toolBarRevelaerActive = false
                     menu.open()
                 } else {
@@ -81,11 +80,11 @@ StepsPageStackWindow {
         }
     }
 
-    Menu {
+    StepsMenu {
         id: menu
         visualParent: pageStack
-        MenuLayout {
-            MenuItem {
+        StepsMenuLayout {
+            StepsMenuItem {
                 text: "Book details"
                 enabled: library.nowReading.valid
                 onClicked: {
@@ -94,25 +93,25 @@ StepsPageStackWindow {
                     pageStack.push(thisBookPage)
                 }
             }
-            MenuItem {
+            StepsMenuItem {
                 text: "Add books"
                 onClicked: {menu.close(); pageStack.push(importPage)}
             }
-            MenuItem {
+            StepsMenuItem {
                 text: "Library"
                 onClicked: {menu.close(); pageStack.push(libraryPage)}
             }
-            MenuItem {
+            StepsMenuItem {
                 text: "Settings"
                 onClicked: {menu.close(); pageStack.push(settingsPage)}
             }
-            MenuItem {
+            StepsMenuItem {
                 text: "About"
                 onClicked: {menu.close(); pageStack.push(aboutPage)}
             }
         }
         onStatusChanged: {
-            if (status === DialogStatus.Closed && mainPage.status == PageStatus.Active) {
+            if (status === statusClosed && mainPage.status === PageStatus.Active) {
                 mainPage.toolBarRevelaerActive = true
                 showToolBar = prefs.showToolBar
             }

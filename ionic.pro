@@ -1,16 +1,3 @@
-# Add more folders to ship with the application, here
-folder_qml.source = qml/ionic
-folder_qml.target = qml
-DEPLOYMENTFOLDERS += folder_qml
-
-# Additional import path used to resolve QML modules in Creator's code model
-QML_IMPORT_PATH =
-
-# If your application uses the Qt Mobility libraries, uncomment the following
-# lines and add the respective components to the MOBILITY variable.
-# CONFIG += mobility
-# MOBILITY +=
-
 QT += webkit xml sql network script
 CONFIG += mobility
 CONFIG += qt-components
@@ -28,11 +15,6 @@ contains(MEEGO_EDITION,harmattan) {
     folder_splash.source = splash
     folder_splash.target =
     DEPLOYMENTFOLDERS += folder_splash
-
-    # Install Meego component wrappers
-    folder_meegoqml.source = qml/ionic/meego
-    folder_meegoqml.target = qml
-    DEPLOYMENTFOLDERS += folder_meegoqml
 }
 
 # Symbian settings
@@ -53,11 +35,6 @@ symbian {
     vendorinfo += "%{\"pipacs\"}" ":\"pipacs\""
     my_deployment.pkg_prerules += vendorinfo
     DEPLOYMENT += my_deployment
-
-    # Install Symbian component wrappers
-    folder_symbianqml.source = qml/ionic/symbian
-    folder_symbianqml.target = qml
-    DEPLOYMENTFOLDERS += folder_symbianqml
 }
 
 # The .cpp file which was generated for your project. Feel free to hack it.
@@ -155,7 +132,66 @@ OTHER_FILES += \
     books/Makefile \
     texts/about.html \
     texts/booksources.html \
-    splash/splash.jpg
+    splash/splash.jpg \
+    qml/meego/StepsYesNoDialog.qml \
+    qml/meego/StepsToolIcon.qml \
+    qml/meego/StepsToolButton.qml \
+    qml/meego/StepsToolBarLayout.qml \
+    qml/meego/StepsTextField.qml \
+    qml/meego/StepsSpinner.qml \
+    qml/meego/StepsSlider.qml \
+    qml/meego/StepsScrollDecorator.qml \
+    qml/meego/StepsRedButton.qml \
+    qml/meego/StepsPageStackWindow.qml \
+    qml/meego/StepsPage.qml \
+    qml/meego/StepsLabel.qml \
+    qml/meego/StepsFlickable.qml \
+    qml/meego/StepsDialog.qml \
+    qml/meego/StepsCheckBox.qml \
+    qml/meego/StepsButtonColumn.qml \
+    qml/meego/StepsButton.qml \
+    qml/meego/StepsBanner.qml \
+    qml/symbian/StepsYesNoDialog.qml \
+    qml/symbian/StepsToolIcon.qml \
+    qml/symbian/StepsToolButton.qml \
+    qml/symbian/StepsToolBarLayout.qml \
+    qml/symbian/StepsTextField.qml \
+    qml/symbian/StepsSpinner.qml \
+    qml/symbian/StepsSlider.qml \
+    qml/symbian/StepsScrollDecorator.qml \
+    qml/symbian/StepsRedButton.qml \
+    qml/symbian/StepsPageStackWindow.qml \
+    qml/symbian/StepsPage.qml \
+    qml/symbian/StepsLabel.qml \
+    qml/symbian/StepsFlickable.qml \
+    qml/symbian/StepsDialog.qml \
+    qml/symbian/StepsCheckBox.qml \
+    qml/symbian/StepsButtonColumn.qml \
+    qml/symbian/StepsButton.qml \
+    qml/symbian/StepsBanner.qml \
+    qml/theme.js \
+    qml/ToolBarRevealer.qml \
+    qml/SettingsPage.qml \
+    qml/ReadingProgress.qml \
+    qml/ProgressDialog.qml \
+    qml/PageHeader.qml \
+    qml/MainPage.qml \
+    qml/main.qml \
+    qml/LibraryPage.qml \
+    qml/ImportPage.qml \
+    qml/ChaptersPage.qml \
+    qml/BookView.qml \
+    qml/BookPage.qml \
+    qml/BookmarksPage.qml \
+    qml/BookmarkEditor.qml \
+    qml/AboutPage.qml \
+    qml/Dummy.qml \
+    qml/meego/StepsMenu.qml \
+    qml/symbian/StepsMenu.qml \
+    qml/meego/StepsMenuLayout.qml \
+    qml/symbian/StepsMenuLayout.qml \
+    qml/meego/StepsMenuItem.qml \
+    qml/symbian/StepsMenuItem.qml
 
 HEADERS += \
     backend/book.h \
@@ -180,5 +216,7 @@ HEADERS += \
     backend/bookdbworker.h
 
 RESOURCES += \
-    ionic.qrc
+    ionic.qrc \
+    meego.qrc \
+    symbian.qrc
 

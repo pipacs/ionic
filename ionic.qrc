@@ -7,5 +7,27 @@
         <file>icons/splash.png</file>
         <file>texts/about.html</file>
         <file>texts/booksources.html</file>
+        <file>qml/AboutPage.qml</file>
+        <file>qml/BookmarkEditor.qml</file>
+        <file>qml/BookmarksPage.qml</file>
+        <file>qml/BookPage.qml</file>
+        <file>qml/BookView.qml</file>
+        <file>qml/ChaptersPage.qml</file>
+        <file>qml/ImportPage.qml</file>
+        <file>qml/LibraryPage.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/MainPage.qml</file>
+        <file>qml/PageHeader.qml</file>
+        <file>qml/ProgressDialog.qml</file>
+        <file>qml/ReadingProgress.qml</file>
+        <file>qml/SettingsPage.qml</file>
+        <file>qml/theme.js</file>
+        <file>qml/ToolBarRevealer.qml</file>
+    </qresource>
+    <qresource prefix="/qml/symbian">
+        <file alias="Dummy.qml">qml/Dummy.qml</file>
+    </qresource>
+    <qresource prefix="/qml/meego">
+        <file alias="Dummy.qml">qml/Dummy.qml</file>
     </qresource>
 </RCC>

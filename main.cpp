@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
     viewer.rootContext()->setContextProperty("emptyBook", emptyBook);
     viewer.rootContext()->setContextProperty("bookFinder", bookFinder);
     viewer.rootContext()->setContextProperty("platform", Platform::instance());
-    viewer.setMainQmlFile(QLatin1String("qml/ionic/main.qml"));
+    viewer.setSource(QUrl("qrc:/qml/main.qml"));
     viewer.showExpanded();
 
     // Install event filter to capture/release volume keys

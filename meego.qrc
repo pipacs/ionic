@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file alias="StepsLabel.qml">qml/meego/StepsLabel.qml</file>
+        <file alias="StepsPage.qml">qml/meego/StepsPage.qml</file>
+        <file alias="StepsPageStackWindow.qml">qml/meego/StepsPageStackWindow.qml</file>
+        <file alias="StepsCheckBox.qml">qml/meego/StepsCheckBox.qml</file>
+        <file alias="StepsSlider.qml">qml/meego/StepsSlider.qml</file>
+        <file alias="StepsDialog.qml">qml/meego/StepsDialog.qml</file>
+        <file alias="StepsButton.qml">qml/meego/StepsButton.qml</file>
+        <file alias="StepsYesNoDialog.qml">qml/meego/StepsYesNoDialog.qml</file>
+        <file alias="StepsTextField.qml">qml/meego/StepsTextField.qml</file>
+        <file alias="StepsSpinner.qml">qml/meego/StepsSpinner.qml</file>
+        <file alias="StepsBanner.qml">qml/meego/StepsBanner.qml</file>
+        <file alias="StepsRedButton.qml">qml/meego/StepsRedButton.qml</file>
+        <file alias="StepsButtonColumn.qml">qml/meego/StepsButtonColumn.qml</file>
+        <file alias="StepsToolBarLayout.qml">qml/meego/StepsToolBarLayout.qml</file>
+        <file alias="StepsToolIcon.qml">qml/meego/StepsToolIcon.qml</file>
+        <file alias="StepsScrollDecorator.qml">qml/meego/StepsScrollDecorator.qml</file>
+        <file alias="StepsToolButton.qml">qml/meego/StepsToolButton.qml</file>
+        <file alias="StepsFlickable.qml">qml/meego/StepsFlickable.qml</file>
+        <file alias="StepsMenu.qml">qml/meego/StepsMenu.qml</file>
+        <file alias="StepsMenuLayout.qml">qml/meego/StepsMenuLayout.qml</file>
+        <file alias="StepsMenuItem.qml">qml/meego/StepsMenuItem.qml</file>
+    </qresource>
+</RCC>
