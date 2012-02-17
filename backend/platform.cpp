@@ -28,7 +28,7 @@ static const char *IONIC_VERSION =
 #if defined(Q_OS_SYMBIAN)
 #define IONIC_OS_NAME "symbian"
 #elif defined(MEEGO_EDITION_HARMATTAN)
-#define IONIC_OS_NAME "meego"
+#define IONIC_OS_NAME "harmattan"
 #else
 #error "Unsupported OS"
 #endif

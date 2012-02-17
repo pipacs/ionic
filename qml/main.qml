@@ -111,7 +111,7 @@ StepsPageStackWindow {
             }
         }
         onStatusChanged: {
-            if (status === statusClosed && mainPage.status === PageStatus.Active) {
+            if (status === statusClosed && mainPage.status === mainPage.statusActive) {
                 mainPage.toolBarRevelaerActive = true
                 showToolBar = prefs.showToolBar
             }
