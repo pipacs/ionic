@@ -7,6 +7,11 @@ Page {
     property bool lockOrientation: true
     property bool showBack: true
     property bool showTools: true
+    property int statusInactive: PageStatus.Inactive
+    property int statusActivating: PageStatus.Activating
+    property int statusActive: PageStatus.Active
+    property int statusDeactivating: PageStatus.Deactivating
+
     signal back
 
     active: status === PageStatus.Active
