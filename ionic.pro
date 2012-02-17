@@ -1,7 +1,7 @@
 # Add more folders to ship with the application, here
 folder_qml.source = qml/ionic
 folder_qml.target = qml
-DEPLOYMENTFOLDERS = folder_qml
+DEPLOYMENTFOLDERS += folder_qml
 
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
@@ -11,7 +11,9 @@ QML_IMPORT_PATH =
 # CONFIG += mobility
 # MOBILITY +=
 
-QT += webkit xml sql network
+QT += webkit xml sql network script
+CONFIG += mobility
+CONFIG += qt-components
 
 # Meego Harmattan settings
 contains(MEEGO_EDITION,harmattan) {
@@ -26,6 +28,11 @@ contains(MEEGO_EDITION,harmattan) {
     folder_splash.source = splash
     folder_splash.target =
     DEPLOYMENTFOLDERS += folder_splash
+
+    # Install Meego component wrappers
+    folder_meegoqml.source = qml/ionic/meego
+    folder_meegoqml.target = qml
+    DEPLOYMENTFOLDERS += folder_meegoqml
 }
 
 # Symbian settings
@@ -42,8 +49,15 @@ symbian {
     # Allow network access
     symbian:TARGET.CAPABILITY += NetworkServices
 
-    # Add dependency to symbian components
-    # CONFIG += qtquickcomponents
+    # For Nokia Store
+    vendorinfo += "%{\"pipacs\"}" ":\"pipacs\""
+    my_deployment.pkg_prerules += vendorinfo
+    DEPLOYMENT += my_deployment
+
+    # Install Symbian component wrappers
+    folder_symbianqml.source = qml/ionic/symbian
+    folder_symbianqml.target = qml
+    DEPLOYMENTFOLDERS += folder_symbianqml
 }
 
 # The .cpp file which was generated for your project. Feel free to hack it.

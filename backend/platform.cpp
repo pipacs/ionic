@@ -8,6 +8,12 @@
 #include <QDir>
 #include <QDesktopServices>
 #include <QUrl>
+#include <qplatformdefs.h>
+
+#if defined(MEEGO_EDITION_HARMATTAN)
+#   include <qmdevicemode.h>
+#   include <qmsysteminformation.h>
+#endif
 
 #include "trace.h"
 #include "platform.h"
@@ -18,6 +24,14 @@
 static const char *IONIC_VERSION =
 #include "pkg/version.txt"
 ;
+
+#if defined(Q_OS_SYMBIAN)
+#define IONIC_OS_NAME "symbian"
+#elif defined(MEEGO_EDITION_HARMATTAN)
+#define IONIC_OS_NAME "meego"
+#else
+#error "Unsupported OS"
+#endif
 
 static Platform *theInstance;
 
@@ -95,4 +109,34 @@ QString Platform::text(const QString &key) {
 
 void Platform::browse(const QString &url) {
     QDesktopServices::openUrl(QUrl(url));
+}
+
+QString Platform::osName() {
+    return IONIC_OS_NAME;
+}
+
+QString Platform::osVersion() {
+#if defined(Q_OS_SYMBIAN)
+    return "3";
+#elif defined(MEEGO_EDITION_HARMATTAN)
+    QString firmwareVersion = MeeGo::QmSystemInformation().valueForKey("/device/sw-release-ver");
+    if (!firmwareVersion.startsWith("DFL61_HARMATTAN_") || firmwareVersion.length() < 20) {
+        return "unknown";
+    }
+    int majorVersion = firmwareVersion.at(16).digitValue();
+    int minorVersion = firmwareVersion.at(17).digitValue();
+    if (majorVersion >= 3) {
+        return "1.2";
+    } else if (majorVersion == 2 && minorVersion >= 2) {
+        return "1.1.1";
+    } else if (majorVersion == 2) {
+        return "1.1";
+    } else if (majorVersion == 1) {
+        return "1.0";
+    } else {
+        return "unknown";
+    }
+#else
+    return QString();
+#endif
 }

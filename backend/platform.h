@@ -7,11 +7,17 @@
 
 class QWidget;
 
-/** Platform abstractions. */
+/// Platform abstractions.
 class Platform: public QObject {
     Q_OBJECT
     Q_PROPERTY(int brightness READ brightness WRITE setBrightness NOTIFY brightnessChanged)
     Q_PROPERTY(QString version READ version CONSTANT)
+
+    /// Operating system name, like "harmattan"
+    Q_PROPERTY(QString osName READ osName CONSTANT)
+
+    /// Operating system version
+    Q_PROPERTY(QString osVersion READ osVersion CONSTANT)
 
 public:
     static Platform *instance();
@@ -26,6 +32,12 @@ public:
     Q_INVOKABLE void pauseBlanking();
     Q_INVOKABLE QString text(const QString &key);
     Q_INVOKABLE void browse(const QString &url);
+
+    /// Operating system name.
+    QString osName();
+
+    /// Operating system version
+    QString osVersion();
 
 signals:
     void brightnessChanged();
