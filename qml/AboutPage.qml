@@ -34,7 +34,5 @@ StepsPage {
         flickableItem: about
     }
 
-    onBack: {
-        appWindow.pageStack.pop()
-    }
+    onBack: appWindow.pageStack.pop()
 }

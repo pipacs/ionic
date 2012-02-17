@@ -1,12 +1,9 @@
 import QtQuick 1.1
-import com.nokia.meego 1.0
-import com.nokia.extras 1.0
+import "meego"
 import com.pipacs.ionic.Book 1.0
 
-Page {
+StepsPage {
     property Book book: emptyBook
-
-    tools: chaptersTools
     orientationLock: prefs.orientation
 
     PageHeader {
@@ -27,7 +24,7 @@ Page {
                 visible: mouseArea.pressed
                 source: "image://theme/meegotouch-list-background-pressed-center"
             }
-            Label {
+            StepsLabel {
                 width: chaptersTools.width - listView.anchors.leftMargin - listView.anchors.rightMargin
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 anchors.verticalCenter: parent.verticalCenter
@@ -63,18 +60,9 @@ Page {
         delegate: delegate
     }
 
-    ScrollDecorator {
+    StepsScrollDecorator {
         flickableItem: listView
     }
 
-    ToolBarLayout {
-        id: chaptersTools
-        visible: true
-        ToolIcon {
-            iconId: "toolbar-back"
-            onClicked: {
-                pageStack.pop()
-            }
-        }
-    }
+    onBack: appWindow.pageStack.pop()
 }
