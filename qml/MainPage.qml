@@ -1,12 +1,11 @@
 import QtQuick 1.1
-import com.nokia.meego 1.0
 import QtWebKit 1.0
-
+import "meego"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 import "theme.js" as Theme
 
-Page {
+StepsPage {
     signal nowReadingChanged
     property alias toolBarRevelaerActive: revealer.active
 
@@ -37,10 +36,8 @@ Page {
         id: readingProgress
     }
 
-    BusyIndicator {
+    StepsSpinner {
         id: spinner
-        platformStyle: BusyIndicatorStyle {size: "large"}
-        anchors.centerIn: parent
         visible: false
     }
 
@@ -67,11 +64,12 @@ Page {
     }
 
     onStatusChanged: {
-        if (status === PageStatus.Activating) {
+        console.log("* MainPage.onStatusChanged, status: " + status)
+        if (status === statusActivating) {
             revealer.active = true
             appWindow.showToolBar = prefs.showToolBar
             focus = true
-        } else if (status === PageStatus.Deactivating) {
+        } else if (status === statusDeactivating) {
             revealer.active = false
             appWindow.showToolBar = true
         }
