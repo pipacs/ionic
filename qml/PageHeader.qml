@@ -19,7 +19,7 @@ Rectangle {
     Label {
         anchors.fill: parent
         anchors.leftMargin: 19
-        anchors.topMargin: 17
+        anchors.topMargin: 13
         text: pageHeader.text
         font.pixelSize: 32
         color: "white"
