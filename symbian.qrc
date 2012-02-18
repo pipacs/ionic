@@ -22,5 +22,6 @@
         <file alias="StepsMenuLayout.qml">qml/symbian/StepsMenuLayout.qml</file>
         <file alias="StepsMenuItem.qml">qml/symbian/StepsMenuItem.qml</file>
         <file alias="StepsContextMenu.qml">qml/symbian/StepsContextMenu.qml</file>
+        <file alias="StepsSelectionDialog.qml">qml/symbian/StepsSelectionDialog.qml</file>
     </qresource>
 </RCC>

@@ -1,13 +1,10 @@
 import QtQuick 1.1
-import com.nokia.meego 1.0
-import com.nokia.extras 1.0
-
+import "meego"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
-Page {
-    tools: libraryTools
-    orientationLock: prefs.orientation
+StepsPage {
+    // FIXME: orientationLock: prefs.orientation
 
     BookPage {id: bookPage}
     ImportPage {id: importPage}
@@ -16,12 +13,10 @@ Page {
         id: header
         text: sortByModel.get(library.sortBy).header
         clickable: true
-        onClicked: {
-            sortByDialog.open()
-        }
+        onClicked: sortByDialog.open()
     }
 
-    SelectionDialog {
+    StepsSelectionDialog {
         id: sortByDialog
         titleText: "Sort books by"
         selectedIndex: library.sortBy
@@ -33,9 +28,7 @@ Page {
             ListElement {name: "Date added"; header: "Library: By date added"}
             ListElement {name: "Date last read"; header: "Library: By date last read"}
         }
-        onAccepted: {
-            library.sortBy = sortByDialog.selectedIndex
-        }
+        onDialogAccepted: library.sortBy = sortByDialog.selectedIndex
     }
 
     Component {
@@ -61,11 +54,11 @@ Page {
                     source: coverUrl
                 }
                 Column {
-                    Label {
+                    StepsLabel {
                         id: textName
                         text: name
                     }
-                    Label {
+                    StepsLabel {
                         id: textOpened
                         text: "Last read: " + dateOpened
                         font.pixelSize: platformStyle.fontPixelSize - 4
@@ -97,20 +90,22 @@ Page {
         delegate: delegate
     }
 
-    ScrollDecorator {
+    StepsScrollDecorator {
         flickableItem: listView
     }
 
-    ToolBarLayout {
+    StepsToolBarLayout {
         id: libraryTools
         visible: true
-        ToolIcon {
+        StepsToolIcon {
             iconId: "toolbar-back"
-            onClicked: {pageStack.pop()}
+            onClicked: pageStack.pop()
         }
-        ToolIcon {
+        StepsToolIcon {
             iconId: "toolbar-add"
-            onClicked: {pageStack.push(importPage)}
+            onClicked: pageStack.push(importPage)
         }
     }
+
+    Component.onCompleted: setToolBar(libraryTools)
 }
