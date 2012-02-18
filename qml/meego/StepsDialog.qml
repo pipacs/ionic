@@ -27,4 +27,3 @@ Sheet {
         dialogRejected()
     }
 }
-

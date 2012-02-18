@@ -195,7 +195,11 @@ OTHER_FILES += \
     qml/meego/StepsContextMenu.qml \
     qml/symbian/StepsContextMenu.qml \
     qml/meego/StepsSelectionDialog.qml \
-    qml/symbian/StepsSelectionDialog.qml
+    qml/symbian/StepsSelectionDialog.qml \
+    qml/meego/StepsPopup.qml \
+    qml/symbian/StepsPopup.qml \
+    qml/meego/StepsProgressBar.qml \
+    qml/symbian/StepsProgressBar.qml
 
 HEADERS += \
     backend/book.h \

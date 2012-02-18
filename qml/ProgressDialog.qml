@@ -1,8 +1,7 @@
 import QtQuick 1.1
-import com.nokia.meego 1.0
-import com.nokia.extras 1.0
+import "meego"
 
-Dialog {
+StepsPopup {
 
     property alias indeterminate: progressBar.indeterminate
     property alias minimumValue: progressBar.minimumValue
@@ -24,7 +23,7 @@ Dialog {
             anchors.leftMargin: 5
             anchors.rightMargin: 5
         }
-        Label {
+        StepsLabel {
             id: titleLabel
             anchors.left: supplement.right
             anchors.verticalCenter: titleField.verticalCenter
@@ -49,7 +48,7 @@ Dialog {
         id: name
         width: parent.width
         Column {
-            Label {
+            StepsLabel {
                 id: messageLabel
                 height: importDialog.platformStyle.titleBarHeight
                 color: "white"
@@ -58,7 +57,7 @@ Dialog {
                 elide: Text.ElideRight
                 verticalAlignment: Text.AlignBottom
             }
-            ProgressBar {
+            StepsProgressBar {
                 id: progressBar
                 width: name.width
                 indeterminate: true

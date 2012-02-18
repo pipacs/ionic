@@ -23,5 +23,7 @@
         <file alias="StepsMenuItem.qml">qml/meego/StepsMenuItem.qml</file>
         <file alias="StepsContextMenu.qml">qml/meego/StepsContextMenu.qml</file>
         <file alias="StepsSelectionDialog.qml">qml/meego/StepsSelectionDialog.qml</file>
+        <file alias="StepsPopup.qml">qml/meego/StepsPopup.qml</file>
+        <file alias="StepsProgressBar.qml">qml/meego/StepsProgressBar.qml</file>
     </qresource>
 </RCC>
