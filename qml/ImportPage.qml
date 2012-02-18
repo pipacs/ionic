@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "meego"
+import "symbian"
 import com.pipacs.ionic.Book 1.0
 
 StepsPage {
@@ -32,14 +32,14 @@ StepsPage {
             spacing: 18
             width: importPage.width
             StepsLabel {
-                font.pixelSize: 28
+                font.pixelSize: (platform.osName === "harmattan")? 28: 24
                 font.bold: true
                 width: parent.width - 18
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 text: "Step 1: Find and download"
             }
             StepsLabel {
-                font.pixelSize: 28
+                font.pixelSize: (platform.osName === "harmattan")? 28: 24
                 textFormat: Text.RichText
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 width: parent.width - 18
@@ -47,7 +47,7 @@ StepsPage {
                 onLinkActivated: {platform.browse(link)}
             }
             StepsLabel {
-                font.pixelSize: 28
+                font.pixelSize: (platform.osName === "harmattan")? 28: 24
                 font.bold: true
                 width: parent.width - 18
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere

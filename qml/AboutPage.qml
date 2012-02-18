@@ -1,6 +1,6 @@
 import QtQuick 1.1
 import com.pipacs.ionic.Book 1.0
-import "meego"
+import "symbian"
 
 StepsPage {
     orientationLock: prefs.orientation
@@ -21,7 +21,7 @@ StepsPage {
             }
             StepsLabel {
                 width: parent.width - 18
-                font.pixelSize: platform.osName === "harmattan"? 28: 26
+                font.pixelSize: (platform.osName === "harmattan")? 28: 24
                 textFormat: Text.RichText
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 text: "<b>Ionic E-Book Reader</b><p>Version " + platform.version + "<p>" + platform.text("about.html")

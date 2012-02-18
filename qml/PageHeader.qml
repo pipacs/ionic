@@ -10,7 +10,7 @@ Rectangle {
     property bool clickable: false   // Set to true to show a combobox indicator
     signal clicked
 
-    height: 65
+    height: (platform.osName === "harmattan")? 65: 61
     color: "orange"
     anchors.top: parent.top
     anchors.left: parent.left
@@ -21,7 +21,7 @@ Rectangle {
         anchors.leftMargin: 19
         anchors.topMargin: 13
         text: pageHeader.text
-        font.pixelSize: 32
+        font.pixelSize: (platform.osName === "harmattan")? 32: 28
         color: "white"
         elide: Text.ElideRight
     }
