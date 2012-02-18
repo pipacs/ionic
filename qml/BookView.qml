@@ -67,8 +67,8 @@ Flickable {
         transformOrigin: Item.TopLeft
         pressGrabTime: 9999
         focus: true
-        settings.defaultFontSize: 26 + (prefs.zoom - 100) / 10
-        settings.minimumFontSize: 22
+        settings.defaultFontSize: (platform.osName === "harmattan")? 26: 22 + (prefs.zoom - 100) / 10
+        settings.minimumFontSize: (platform.osName === "harmattan")? 22: 18
         settings.javaEnabled: false
         settings.javascriptCanAccessClipboard: false
         settings.javascriptCanOpenWindows: false

@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "meego"
+import "symbian"
 import com.pipacs.ionic.Book 1.0
 
 StepsPage {
@@ -25,12 +25,12 @@ StepsPage {
                 source: "image://theme/meegotouch-list-background-pressed-center"
             }
             StepsLabel {
-                width: chaptersTools.width - listView.anchors.leftMargin - listView.anchors.rightMargin
+                width: listView.width - listView.anchors.leftMargin - listView.anchors.rightMargin
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 anchors.verticalCenter: parent.verticalCenter
                 id: chapterLabel
                 text: modelData
-                font.pixelSize: 30
+                font.pixelSize: (platform.osName === "harmattan")? 30: 26
             }
             MouseArea {
                 id: mouseArea
