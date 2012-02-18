@@ -10,6 +10,9 @@ Page {
     property int statusActivating: PageStatus.Activating
     property int statusActive: PageStatus.Active
     property int statusDeactivating: PageStatus.Deactivating
+    property int orientationAutomatic: PageOrientation.Automatic
+    property int orientationLockPortrait:PageOrientation.LockPortrait
+    property int orientationLockLandscape: PageOrientation.LockLandscape
 
     signal back
 

@@ -199,7 +199,9 @@ OTHER_FILES += \
     qml/meego/StepsPopup.qml \
     qml/symbian/StepsPopup.qml \
     qml/meego/StepsProgressBar.qml \
-    qml/symbian/StepsProgressBar.qml
+    qml/symbian/StepsProgressBar.qml \
+    qml/meego/StepsButtonRow.qml \
+    qml/symbian/StepsButtonRow.qml
 
 HEADERS += \
     backend/book.h \

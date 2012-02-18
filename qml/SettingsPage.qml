@@ -1,24 +1,11 @@
 import QtQuick 1.1
-import com.nokia.meego 1.0
-import com.nokia.extras 1.0
-
+import "meego"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
-Page {
-    tools: settingsTools
+StepsPage {
     orientationLock: prefs.orientation
-
-    ToolBarLayout {
-        id: settingsTools
-        visible: true
-        ToolIcon {
-            iconId: "toolbar-back"
-            onClicked: {
-                pageStack.pop()
-            }
-        }
-    }
+    id: page
 
     Flickable {
         id: flickable
@@ -35,33 +22,35 @@ Page {
             id: column
             spacing: 30
 
-            CheckBox {
+            StepsCheckBox {
                 id: useVolumeKeys
                 text: "Navigate with volume keys"
                 checked: prefs.useVolumeKeys
-                onClicked: {prefs.useVolumeKeys = checked}
+                onClicked: prefs.useVolumeKeys = checked
             }
-            CheckBox {
+            StepsCheckBox {
                 id: useSwipe
                 text: "Navigate with swipe"
                 checked: prefs.useSwipe
                 // enabled: useVolumeKeys.checked
-                onClicked: {prefs.useSwipe = checked}
+                onClicked: prefs.useSwipe = checked
             }
-            CheckBox {
+            StepsCheckBox {
                 id: showToolbar
                 text: "Show toolbar"
                 checked: prefs.showToolBar
-                onClicked: {prefs.showToolBar = checked}
+                onClicked: prefs.showToolBar = checked
             }
-            Label {
+            StepsLabel {
                 width: parent.width
                 color: "grey"
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 text: "If the toolbar is hidden, double-tap to reveal it temporarily"
             }
-            Label {text: "Zoom level:"}
-            Slider {
+            StepsLabel {
+                text: "Zoom level:"
+            }
+            StepsSlider {
                 id: zoom
                 property bool firstUpdate: true
                 stepSize: 10
@@ -69,59 +58,67 @@ Page {
                 minimumValue: 80
                 maximumValue: 250
                 value: prefs.zoom
-                onValueChanged: {
-                    if (firstUpdate) {
-                        // Work around a slider bug: The first valueChanged notification is sent too early
-                        firstUpdate = false
-                    } else {
-                        prefs.zoom = value
+                onChangedChanged: prefs.zoom = value
+            }
+            StepsLabel {
+                text: "Theme:"
+            }
+            StepsButtonRow {
+                StepsButton {
+                    text: "Day"
+                    checked: prefs.style == "day"
+                    onClicked: {
+                        prefs.style = "day"
+                        mainPage.setStyle("day")
+                    }
+                }
+                StepsButton {
+                    text: "Night"
+                    checked: prefs.style == "night"
+                    onClicked: {
+                        prefs.style = "night"
+                        mainPage.setStyle("night")
+                    }
+                }
+                StepsButton {
+                    text: "Sand"
+                    checked: prefs.style == "sand"
+                    onClicked: {
+                        prefs.style = "sand"
+                        mainPage.setStyle("sand")
                     }
                 }
             }
-            Label {text: "Theme:"}
-            ButtonRow {
-                Button {
-                    text: "Day"
-                    checked: prefs.style == "day"
-                    onClicked: {prefs.style = "day"; mainPage.setStyle("day")}
-                }
-                Button {
-                    text: "Night"
-                    checked: prefs.style == "night"
-                    onClicked: {prefs.style = "night"; mainPage.setStyle("night")}
-                }
-                Button {
-                    text: "Sand"
-                    checked: prefs.style == "sand"
-                    onClicked: {prefs.style = "sand"; mainPage.setStyle("sand")}
-                }
+            StepsLabel {
+                text: "Orientation:"
             }
-            Label {text: "Orientation:"}
-            ButtonRow {
-                Button {
+            StepsButtonRow {
+                StepsButton {
                     text: "Auto"
-                    checked: prefs.orientation == PageOrientation.Automatic
-                    onClicked: {prefs.orientation = PageOrientation.Automatic}
+                    checked: prefs.orientation === page.orientationAutomatic
+                    onClicked: prefs.orientation = page.orientationAutomatic
                 }
-                Button {
+                StepsButton {
                     text: "Portrait"
-                    checked: prefs.orientation == PageOrientation.LockPortrait
-                    onClicked: {prefs.orientation = PageOrientation.LockPortrait}
+                    checked: prefs.orientation === page.orientationLockPortrait
+                    onClicked: prefs.orientation = page.orientationLockPortrait
                 }
-                Button {
+                StepsButton {
                     text: "Landscape"
-                    checked: prefs.orientation == PageOrientation.LockLandscape
-                    onClicked: {prefs.orientation = PageOrientation.LockLandscape}
+                    checked: prefs.orientation === page.orientationLockLandscape
+                    onClicked: prefs.orientation = page.orientationLockLandscape
                 }
             }
-            CheckBox {
+            StepsCheckBox {
                 id: preventBlanking
                 text: "Prevent display blanking"
                 checked: prefs.preventBlanking
-                onClicked: {prefs.preventBlanking = checked}
+                onClicked: prefs.preventBlanking = checked
             }
-            Label {text: "Brightness:"}
-            Slider {
+            StepsLabel {
+                text: "Brightness:"
+            }
+            StepsSlider {
                 id: brightness
                 property bool firstUpdate: true
                 stepSize: 1
@@ -129,19 +126,12 @@ Page {
                 minimumValue: 1
                 maximumValue: 5
                 value: platform.brightness
-                onValueChanged: {
-                    if (firstUpdate) {
-                        // Work around a slider bug: The first valueChanged notification is sent too early
-                        firstUpdate = false
-                    } else {
-                        platform.brightness = value
-                    }
-                }
+                onChangedChanged: platform.brightness = value
             }
         }
     }
 
-    ScrollDecorator {
+    StepsScrollDecorator {
         flickableItem: flickable
     }
 
@@ -159,4 +149,6 @@ Page {
     Component.onCompleted: {
         zoom.value = prefs.zoom
     }
+
+    onBack: pageStack.pop()
 }

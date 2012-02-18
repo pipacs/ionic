@@ -25,5 +25,6 @@
         <file alias="StepsSelectionDialog.qml">qml/symbian/StepsSelectionDialog.qml</file>
         <file alias="StepsPopup.qml">qml/symbian/StepsPopup.qml</file>
         <file alias="StepsProgressBar.qml">qml/symbian/StepsProgressBar.qml</file>
+        <file alias="StepsButtonRow.qml">qml/symbian/StepsButtonRow.qml</file>
     </qresource>
 </RCC>
