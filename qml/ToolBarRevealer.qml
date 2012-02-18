@@ -1,11 +1,10 @@
 // Temporarily reveal toolbar on double-tap
 
 import QtQuick 1.1
-import com.nokia.meego 1.0
 
 Item {
     property bool active: false // Double-taps are only handled if active is true
-    property PageStackWindow targetWindow // Target window that has the toolbar
+    property StepsPageStackWindow targetWindow // Target window that has the toolbar
 
     anchors.fill: parent
     MouseArea {
@@ -17,9 +16,7 @@ Item {
                 hideTimer.restart()
             }
         }
-        onPressed: {
-            mouse.accepted = false
-        }
+        onPressed: mouse.accepted = false
     }
     Timer {
         id: hideTimer
