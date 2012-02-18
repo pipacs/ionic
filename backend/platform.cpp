@@ -35,15 +35,22 @@ static const char *IONIC_VERSION =
 
 static Platform *theInstance;
 
-Platform::Platform(): QObject(), displayState(0) {
+Platform::Platform(): QObject()
+#if defined(MEEGO_EDITION_HARMATTAN)
+  , displayState(0)
+#endif
+{
 }
 
 Platform::~Platform() {
+#if defined(MEEGO_EDITION_HARMATTAN)
     delete displayState;
+#endif
 }
 
 int Platform::brightness() {
     int result = 3;
+#if defined(MEEGO_EDITION_HARMATTAN)
     QProcess gconftool;
     gconftool.start("gconftool-2", QStringList() << "-g" << "/system/osso/dsm/display/display_brightness");
     if (gconftool.waitForFinished()) {
@@ -51,16 +58,21 @@ int Platform::brightness() {
         result = output[0] - '0';
         qDebug() << "Current brightness [" << result << "]";
     }
+#endif
     return result;
 }
 
 void Platform::setBrightness(int value) {
+#if defined(MEEGO_EDITION_HARMATTAN)
     QProcess gconftool;
     QString num;
     num.setNum(value);
     QStringList args = QStringList() << "-s" << "/system/osso/dsm/display/display_brightness" << "-t" << "int" << num;
     gconftool.start("gconftool-2", args);
     gconftool.waitForFinished();
+#else
+    (void)value;
+#endif
 }
 
 Platform *Platform::instance() {
@@ -93,10 +105,12 @@ QString Platform::traceFileName() {
 }
 
 void Platform::pauseBlanking() {
+#if defined(MEEGO_EDITION_HARMATTAN)
     if (!displayState) {
         displayState = new MeeGo::QmDisplayState;
     }
     (void)displayState->setBlankingPause();
+#endif
 }
 
 QString Platform::text(const QString &key) {

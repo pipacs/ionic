@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "meego"
+import "symbian"
 
 StepsPageStackWindow {
     id: appWindow
@@ -8,18 +8,22 @@ StepsPageStackWindow {
     showToolBar: prefs.showToolbar
     focus: true
 
-    MainPage {id: mainPage}
-    LibraryPage {id: libraryPage}
-    ChaptersPage {id: chaptersPage}
-    AboutPage {id: aboutPage}
-    BookPage {id: thisBookPage; enableJump: false}
-    SettingsPage {id: settingsPage}
-    ImportPage {id: importPage}
+    MainPage {
+        id: mainPage
+    }
+
+    BookPage {
+        id: thisBookPage
+        enableJump: false
+    }
+
     BookmarksPage {
         id: bookmarksPage
-        onBookmarkAdded: {
-            infoBookmarkAdded.show()
-        }
+        onBookmarkAdded: infoBookmarkAdded.show()
+    }
+
+    ChaptersPage {
+        id: chaptersPage
     }
 
     StepsBanner {
@@ -33,7 +37,7 @@ StepsPageStackWindow {
         visible: true
 
         StepsToolIcon {
-            iconId: "toolbar-up" // toolbar-previous"
+            stockIcon: "up"
             enabled: library.nowReading.valid
             onClicked: {
                 menu.close()
@@ -41,7 +45,7 @@ StepsPageStackWindow {
             }
         }
         StepsToolIcon {
-            iconId: "toolbar-down" // toolbar-next"
+            stockIcon: "down"
             enabled: library.nowReading.valid
             onClicked: {
                 menu.close()
@@ -49,7 +53,7 @@ StepsPageStackWindow {
             }
         }
         StepsToolIcon {
-            iconId: "toolbar-list"
+            stockIcon: "list"
             enabled: library.nowReading.valid
             onClicked: {
                 menu.close()
@@ -58,8 +62,8 @@ StepsPageStackWindow {
             }
         }
         StepsToolIcon {
+            stockIcon: "bookmark"
             iconId: "toolbar-favorite-mark"
-            enabled: library.nowReading.valid
             onClicked: {
                 menu.close()
                 bookmarksPage.book = library.nowReading
@@ -67,7 +71,7 @@ StepsPageStackWindow {
             }
         }
         StepsToolIcon {
-            platformIconId: "toolbar-view-menu"
+            stockIcon: "menu"
             anchors.right: (parent === undefined)? undefined: parent.right
             onClicked: {
                 if (menu.status === menu.statusClosed) {
@@ -95,19 +99,19 @@ StepsPageStackWindow {
             }
             StepsMenuItem {
                 text: "Add books"
-                onClicked: {menu.close(); pageStack.push(importPage)}
+                onClicked: {menu.close(); pageStack.push(Qt.resolvedUrl("ImportPage.qml"))}
             }
             StepsMenuItem {
                 text: "Library"
-                onClicked: {menu.close(); pageStack.push(libraryPage)}
+                onClicked: {menu.close(); pageStack.push(Qt.resolvedUrl("LibraryPage.qml"))}
             }
             StepsMenuItem {
                 text: "Settings"
-                onClicked: {menu.close(); pageStack.push(settingsPage)}
+                onClicked: {menu.close(); pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))}
             }
             StepsMenuItem {
                 text: "About"
-                onClicked: {menu.close(); pageStack.push(aboutPage)}
+                onClicked: {menu.close(); pageStack.push(Qt.resolvedUrl("AboutPage.qml"))}
             }
         }
         onStatusChanged: {

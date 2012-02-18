@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "meego"
+import "symbian"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
@@ -91,19 +91,19 @@ StepsPage {
         id: libraryTools
         visible: true
         StepsToolIcon {
-            iconId: "toolbar-back"
+            stockIcon: "back"
             onClicked: pageStack.pop()
         }
         StepsToolIcon {
             id: jumpTool
-            iconId: "toolbar-jump-to"
+            stockIcon: "jump"
             onClicked: {
                 pageStack.pop(null)
                 library.setNowReading(book)
             }
         }
         StepsToolIcon {
-            iconId: "toolbar-delete"
+            stockIcon: "delete"
             enabled: book.valid
             onClicked: deleteQuery.open()
         }

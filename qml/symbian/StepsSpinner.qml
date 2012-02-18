@@ -11,7 +11,7 @@ Item {
         width: screen.width
         height: screen.height
         id: cover
-        opacity: 0.5
+        opacity: 0
         color: "black"
         MouseArea {
             anchors.fill: parent

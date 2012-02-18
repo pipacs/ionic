@@ -1,7 +1,7 @@
 // Emulates the page header of some N9 apps
 
 import QtQuick 1.1
-import com.nokia.meego 1.0
+import "symbian"
 
 Rectangle {
     id: pageHeader
@@ -16,7 +16,7 @@ Rectangle {
     anchors.left: parent.left
     anchors.right: parent.right
 
-    Label {
+    StepsLabel {
         anchors.fill: parent
         anchors.leftMargin: 19
         anchors.topMargin: 13

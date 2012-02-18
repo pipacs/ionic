@@ -2,7 +2,11 @@
 #define EVENTFILTER_H
 
 #include <QObject>
+#include <qplatformdefs.h>
+#if defined(MEEGO_EDITION_HARMATTAN)
 #include <policy/resource-set.h>
+#endif
+
 #include "preferences.h"
 
 class EventFilter: public QObject {
@@ -16,8 +20,10 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event);
     bool captureVolumeKeys;
     bool active;
-    ResourcePolicy::ResourceSet *resourceSet;
     Preferences *settings;
+#if defined(MEEGO_EDITION_HARMATTAN)
+    ResourcePolicy::ResourceSet *resourceSet;
+#endif
 };
 
 #endif // EVENTFILTER_H

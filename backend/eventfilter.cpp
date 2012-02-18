@@ -7,20 +7,25 @@
 
 EventFilter::EventFilter(QObject *parent): QObject(parent), active(false) {
     TRACE;
+#if defined(MEEGO_EDITION_HARMATTAN)
     resourceSet = new ResourcePolicy::ResourceSet("player");
     resourceSet->addResourceObject(new ResourcePolicy::ScaleButtonResource);
     settings = Preferences::instance();
     captureVolumeKeys = settings->value("usevolumekeys").toBool();
     connect(settings, SIGNAL(valueChanged(QString)), this, SLOT(onSettingChanged(QString)));
+#endif
 }
 
 EventFilter::~EventFilter() {
+#if defined(MEEGO_EDITION_HARMATTAN)
     resourceSet->release();
     resourceSet->deleteResource(ResourcePolicy::ScaleButtonType);
     delete resourceSet;
+#endif
 }
 
 bool EventFilter::eventFilter(QObject *obj, QEvent *event) {
+#if defined(MEEGO_EDITION_HARMATTAN)
     if (event->type() == QEvent::ApplicationDeactivate) {
         qDebug() << "EventFilter::eventFilter: Releasing volume keys";
         active = false;
@@ -52,11 +57,13 @@ bool EventFilter::eventFilter(QObject *obj, QEvent *event) {
             return true;
         }
     }
+#endif
     return QObject::eventFilter(obj, event);
 }
 
 void EventFilter::onSettingChanged(const QString &key) {
     TRACE;
+#if defined(MEEGO_EDITION_HARMATTAN)
     if (key != "usevolumekeys") {
         return;
     }
@@ -73,4 +80,5 @@ void EventFilter::onSettingChanged(const QString &key) {
     } else {
         qDebug() << "Not active";
     }
+#endif
 }

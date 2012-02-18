@@ -3,7 +3,11 @@
 
 #include <QObject>
 #include <QString>
+#include <qplatformdefs.h>
+
+#if defined(MEEGO_EDITION_HARMATTAN)
 #include <qmsystem2/qmdisplaystate.h>
+#endif
 
 class QWidget;
 
@@ -45,7 +49,9 @@ signals:
 protected:
     Platform();
     ~Platform();
+#if defined(MEEGO_EDITION_HARMATTAN)
     MeeGo::QmDisplayState *displayState;
+#endif
 };
 
 #endif // PLATFORM_H

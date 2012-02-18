@@ -10,6 +10,7 @@ contains(MEEGO_EDITION,harmattan) {
     CONFIG += qmsystem2
     LIBS += -lz
     PKGCONFIG += libresourceqt1
+    RESOURCES += meego.qrc
 
     # Add a splash image for the Meego launcher
     folder_splash.source = splash
@@ -19,7 +20,9 @@ contains(MEEGO_EDITION,harmattan) {
 
 # Symbian settings
 symbian {
-    symbian:TARGET.UID3 = 0xE1E990A6
+    DEFINES += USE_FILE32API
+    RESOURCES += symbian.qrc
+    TARGET.UID3 = 0xE1E990A6
 
     # Smart Installer package's UID
     # This UID is from the protected range and therefore the package will
@@ -29,7 +32,7 @@ symbian {
     #symbian:DEPLOYMENT.installer_header = 0x2002CCCF
 
     # Allow network access
-    symbian:TARGET.CAPABILITY += NetworkServices
+    TARGET.CAPABILITY += NetworkServices
 
     # For Nokia Store
     vendorinfo += "%{\"pipacs\"}" ":\"pipacs\""
@@ -225,8 +228,4 @@ HEADERS += \
     backend/preferences.h \
     backend/bookdbworker.h
 
-RESOURCES += \
-    ionic.qrc \
-    meego.qrc \
-    symbian.qrc
-
+RESOURCES += ionic.qrc
