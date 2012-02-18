@@ -1,17 +1,19 @@
 import QtQuick 1.1
-import com.nokia.meego 1.0
-import com.nokia.extras 1.0
+import "meego"
 import com.pipacs.ionic.Book 1.0
 
-Page {
-    tools: importTools
+StepsPage {
     orientationLock: prefs.orientation
+    id: importPage
 
     signal begin(int total)
     signal add(string title)
     signal done(int total)
 
-    PageHeader {id: header; text: "Add Books"}
+    PageHeader {
+        id: header
+        text: "Add Books"
+    }
 
     Flickable {
         anchors.top: header.bottom
@@ -28,29 +30,30 @@ Page {
         Column {
             id: column
             spacing: 18
-            Label {
-                font.pixelSize: 32
+            width: importPage.width
+            StepsLabel {
+                font.pixelSize: 28
                 font.bold: true
-                width: importTools.width - 18
+                width: parent.width - 18
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 text: "Step 1: Find and download"
             }
-            Label {
-                font.pixelSize: 32
+            StepsLabel {
+                font.pixelSize: 28
                 textFormat: Text.RichText
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                width: importTools.width - 18
+                width: parent.width - 18
                 text: platform.text("booksources.html")
                 onLinkActivated: {platform.browse(link)}
             }
-            Label {
-                font.pixelSize: 32
+            StepsLabel {
+                font.pixelSize: 28
                 font.bold: true
-                width: importTools.width - 18
+                width: parent.width - 18
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 text: "Step 2: Import books"
             }
-            Button {
+            StepsButton {
                 text: "Import"
                 onClicked: {
                     importDialog.indeterminate = true
@@ -62,24 +65,13 @@ Page {
         }
     }
 
-    ScrollDecorator {
+    StepsScrollDecorator {
         flickableItem: instructions
     }
 
     ProgressDialog {
         id: importDialog
         titleText: "Importing Books"
-    }
-
-    ToolBarLayout {
-        id: importTools
-        visible: true
-        ToolIcon {
-            iconId: "toolbar-back"
-            onClicked: {
-                pageStack.pop()
-            }
-        }
     }
 
     Component.onCompleted: {
@@ -106,11 +98,13 @@ Page {
         var message
         if (total === 0) {
             message = "No new books"
-        } else if (total == 1) {
+        } else if (total === 1) {
             message = "1 book imported"
         } else {
             message = "" + total + " books imported"
         }
         importDialog.messageText = message
     }
+
+    onBack: appWindow.pageStack.pop()
 }
