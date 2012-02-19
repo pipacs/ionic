@@ -30,8 +30,8 @@ Rectangle {
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.rightMargin: 19
-        anchors.topMargin: 19
-        source: "image://theme/meegotouch-combobox-indicator-inverted"
+        anchors.topMargin: (platform.osName === "harmattan")? 19: 14
+        source: (platform.osName === "harmattan")? "image://theme/meegotouch-combobox-indicator-inverted": "qrc:/icons/comboindicator.png"
         visible: pageHeader.clickable
     }
 

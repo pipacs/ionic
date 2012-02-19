@@ -20,15 +20,15 @@ StepsPage {
         id: sortByDialog
         titleText: "Sort books by"
         selectedIndex: library.sortBy
+        onSelectedIndexChanged: library.sortBy = sortByDialog.selectedIndex
 
         model: ListModel {
             id: sortByModel
-            ListElement {name: "Title"; header: "Library: By title"}
-            ListElement {name: "Author"; header: "Library: By author"}
-            ListElement {name: "Date added"; header: "Library: By date added"}
-            ListElement {name: "Date last read"; header: "Library: By date last read"}
+            ListElement {name: "Title"; modelData: "Title"; header: "Library: By title"}
+            ListElement {name: "Author"; modelData: "Author"; header: "Library: By author"}
+            ListElement {name: "Date added"; modelData: "Date added"; header: "Library: By date added"}
+            ListElement {name: "Date last read"; modelData: "Date last read"; header: "Library: By date last read"}
         }
-        onDialogAccepted: library.sortBy = sortByDialog.selectedIndex
     }
 
     Component {
@@ -44,7 +44,7 @@ StepsPage {
                 anchors.leftMargin: -listView.anchors.leftMargin
                 anchors.rightMargin: -listView.anchors.rightMargin
                 visible: mouseArea.pressed
-                source: "image://theme/meegotouch-list-background-pressed-center"
+                source: (platform.osName === "harmattan")? "image://theme/meegotouch-list-background-pressed-center": "qrc:/icons/listbg.png"
             }
 
             Row {
