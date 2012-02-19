@@ -8,10 +8,9 @@ QueryDialog {
     signal dialogRejected
 
     height: 190
-    titleText: qsTr("Steps")
+    titleText: qsTr("Ionic")
     message: title
     buttonTexts: [qsTr("Yes"), qsTr("No")]
-    // icon: "/images/steps.png"
 
     onStatusChanged: {
         if (status === DialogStatus.Closed) {
