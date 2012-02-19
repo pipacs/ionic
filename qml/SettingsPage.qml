@@ -64,8 +64,11 @@ StepsPage {
                 text: "Theme:"
             }
             StepsButtonRow {
+                id: styleRow
+                width: flickable.width - 15
                 StepsButton {
                     text: "Day"
+                    id: styleButtonDay
                     checked: prefs.style == "day"
                     onClicked: {
                         prefs.style = "day"
@@ -73,6 +76,7 @@ StepsPage {
                     }
                 }
                 StepsButton {
+                    id: styleButtonNight
                     text: "Night"
                     checked: prefs.style == "night"
                     onClicked: {
@@ -81,6 +85,7 @@ StepsPage {
                     }
                 }
                 StepsButton {
+                    id: styleButtonSand
                     text: "Sand"
                     checked: prefs.style == "sand"
                     onClicked: {
@@ -93,17 +98,22 @@ StepsPage {
                 text: "Orientation:"
             }
             StepsButtonRow {
+                id: orientationRow
+                width: flickable.width - 15
                 StepsButton {
+                    id: orientationButtonAuto
                     text: "Auto"
                     checked: prefs.orientation === page.orientationAutomatic
                     onClicked: prefs.orientation = page.orientationAutomatic
                 }
                 StepsButton {
+                    id: orientationButtonPortrait
                     text: "Portrait"
                     checked: prefs.orientation === page.orientationLockPortrait
                     onClicked: prefs.orientation = page.orientationLockPortrait
                 }
                 StepsButton {
+                    id: orientationButtonLandscape
                     text: "Landscape"
                     checked: prefs.orientation === page.orientationLockLandscape
                     onClicked: prefs.orientation = page.orientationLockLandscape
@@ -151,4 +161,22 @@ StepsPage {
     }
 
     onBack: pageStack.pop()
+
+    onStatusChanged: {
+        // Work around ButtonRow selection bug on Symbian: Set checkedButton by forceActiveFocus
+        if (platform.osName === "symbian") {
+            if (prefs.style === "day")
+                styleRow.checkedButton = styleButtonDay
+            else if (prefs.style === "night")
+                styleRow.checkedButton = styleButtonNight
+            else
+                styleRow.checkedButton = styleButtonSand
+            if (prefs.orientation === page.orientationAutomatic)
+                orientationRow.checkedButton = orientationButtonAuto
+            else if (prefs.orientation === page.orientationLockLandscape)
+                orientationRow.checkedButton = orientationButtonLandscape
+            else
+                orientationRow.checkedButton = orientationButtonPortrait
+        }
+    }
 }

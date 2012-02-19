@@ -118,7 +118,9 @@ StepsPage {
     }
 
     function setStyle(style) {
-        theme.inverted = (style === "night")
+        if (platform.osName === "harmattan") {
+            theme.inverted = (style === "night")
+        }
         readingProgress.color = Theme.progressColor(style)
         bookView.setStyle(style)
     }
