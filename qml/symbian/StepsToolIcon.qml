@@ -49,6 +49,8 @@ ToolButton {
             iconSource = "toolbar-mediacontrol-stop"
         else if (stockIcon === "jump")
             iconSource = "toolbar-mediacontrol-forward"
+        else if (stockIcon !== null)
+            iconSource = stockIcon
         else
             iconSource = iconId
     }

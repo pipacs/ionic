@@ -25,7 +25,7 @@ StepsPage {
                 anchors.leftMargin: -listView.anchors.leftMargin
                 anchors.rightMargin: -listView.anchors.rightMargin
                 visible: mouseArea.pressed
-                source: (platform.osName === "meego")? "image://theme/meegotouch-list-background-pressed-center": "qrc:/icons/listbg.png"
+                source: (platform.osName === "harmattan")? "image://theme/meegotouch-list-background-pressed-center": "qrc:/icons/listbg.png"
             }
             Row {
                 Column {
@@ -100,11 +100,11 @@ StepsPage {
         id: bookmarksTools
         visible: true
         StepsToolIcon {
-            iconId: "toolbar-back"
+            stockIcon: "back"
             onClicked: pageStack.pop()
         }
         StepsToolIcon {
-            iconId: "toolbar-add"
+            stockIcon: "add"
             onClicked: {
                 addBookmark.book = book
                 addBookmark.description = "Bookmark at " + getProgress(book.lastBookmark) + " in \"" + book.title + "\""

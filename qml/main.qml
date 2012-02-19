@@ -62,8 +62,7 @@ StepsPageStackWindow {
             }
         }
         StepsToolIcon {
-            stockIcon: "bookmark"
-            iconId: "toolbar-favorite-mark"
+            stockIcon: (platform.osName === "harmattan")? "bookmark": "qrc:/icons/bookmark.png"
             onClicked: {
                 menu.close()
                 bookmarksPage.book = library.nowReading
