@@ -2,6 +2,7 @@
 #include <QStringList>
 #include <QDir>
 #include <QDesktopServices>
+#include <qplatformdefs.h>
 
 #include "library.h"
 #include "bookfinder.h"
@@ -16,8 +17,13 @@ void BookFinderWorker::doFind() {
     int toAdd = 0;
     int added = 0;
 
-    // Gather all .epub files from /home/user
+    // Gather all .epub files from all possible locations
+#if defined(Q_OS_SYMBIAN)
+    doFindInDir("E:/", booksFound, 0);
+    doFindInDir("F:/", booksFound, 0);
+#else
     doFindInDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation), booksFound, 0);
+#endif
 
     // Count the number of new books
     Library *library = Library::instance();
@@ -41,7 +47,11 @@ void BookFinderWorker::doFind() {
 }
 
 void BookFinderWorker::doFindInDir(const QString &dir, QStringList &results, int depth) {
+#if defined(Q_OS_SYMBIAN)
+    const int maxDepth = 3;
+#else
     const int maxDepth = 6;
+#endif
     if (depth == maxDepth) {
         qWarning() << "BookFinderWorker::doFindInDir: Bailing out after" << maxDepth << "recursions";
         return;
