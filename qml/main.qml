@@ -113,6 +113,11 @@ StepsPageStackWindow {
                 text: "About"
                 onClicked: {menu.close(); pageStack.push(Qt.resolvedUrl("AboutPage.qml"))}
             }
+            StepsMenuItem {
+                text: "Exit"
+                onClicked: Qt.quit()
+                visible: platform.osName === "symbian"
+            }
         }
         onStatusChanged: {
             if (status === statusClosed && mainPage.status === mainPage.statusActive) {

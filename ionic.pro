@@ -204,7 +204,8 @@ OTHER_FILES += \
     qml/meego/StepsProgressBar.qml \
     qml/symbian/StepsProgressBar.qml \
     qml/meego/StepsButtonRow.qml \
-    qml/symbian/StepsButtonRow.qml
+    qml/symbian/StepsButtonRow.qml \
+    icons/listbg.png
 
 HEADERS += \
     backend/book.h \

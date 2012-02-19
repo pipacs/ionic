@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "meego"
+import "symbian"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 

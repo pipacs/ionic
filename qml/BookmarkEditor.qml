@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "meego"
+import "symbian"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
@@ -11,6 +11,7 @@ StepsDialog {
 
     acceptText: "OK"
     rejectText: "Cancel"
+    title: "Steps"
 
     content: Flickable {
         anchors.fill: parent
@@ -32,8 +33,11 @@ StepsDialog {
             }
             StepsTextField {
                 id: noteField
-                anchors {left: parent.left; right: parent.right}
-                Keys.onReturnPressed: {parent.focus = true}
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                }
+                Keys.onReturnPressed: parent.focus = true
             }
         }
     }

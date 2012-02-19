@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "meego"
+import "symbian"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
@@ -25,7 +25,7 @@ StepsPage {
                 anchors.leftMargin: -listView.anchors.leftMargin
                 anchors.rightMargin: -listView.anchors.rightMargin
                 visible: mouseArea.pressed
-                source: "image://theme/meegotouch-list-background-pressed-center"
+                source: (platform.osName === "meego")? "image://theme/meegotouch-list-background-pressed-center": "qrc:/icons/listbg.png"
             }
             Row {
                 Column {
