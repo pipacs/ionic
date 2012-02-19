@@ -32,14 +32,14 @@ StepsPage {
             spacing: 18
             width: importPage.width
             StepsLabel {
-                font.pixelSize: (platform.osName === "harmattan")? 28: 24
+                font.pixelSize: (platform.osName === "harmattan")? 28: 22
                 font.bold: true
                 width: parent.width - 18
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 text: "Step 1: Find and download"
             }
             StepsLabel {
-                font.pixelSize: (platform.osName === "harmattan")? 28: 24
+                font.pixelSize: (platform.osName === "harmattan")? 28: 22
                 textFormat: Text.RichText
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 width: parent.width - 18
@@ -47,7 +47,7 @@ StepsPage {
                 onLinkActivated: {platform.browse(link)}
             }
             StepsLabel {
-                font.pixelSize: (platform.osName === "harmattan")? 28: 24
+                font.pixelSize: (platform.osName === "harmattan")? 28: 22
                 font.bold: true
                 width: parent.width - 18
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere

@@ -7,6 +7,8 @@ ToolIcon {
     Component.onCompleted: {
         if (stockIcon === "menu")
             iconId = "toolbar-view-menu"
+        if (stockIcon === "menu")
+            iconId = "toolbar-menu"
         else if (stockIcon === "delete")
             iconId = "toolbar-delete"
         else if (stockIcon === "home")

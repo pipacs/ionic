@@ -9,6 +9,8 @@ ToolButton {
     Component.onCompleted: {
         if (stockIcon === "menu")
             iconSource = "toolbar-menu"
+        else if (stockIcon === "add")
+            iconSource = "toolbar-add"
         else if (stockIcon === "delete")
             iconSource = "toolbar-delete"
         else if (stockIcon === "home")
