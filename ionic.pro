@@ -96,18 +96,8 @@ OTHER_FILES += \
     icons/library.png \
     icons/info.png \
     icons/goto.png \
-    icons/general_delete.png \
-    icons/forward.png \
-    icons/folder.png \
-    icons/edit.png \
     icons/developer.png \
-    icons/delete.png \
-    icons/chapters.png \
-    icons/bookmarks.png \
-    icons/bookmark.png \
     icons/book.png \
-    icons/back.png \
-    icons/add.png \
     icons/star.png \
     screenshots/ovi-screenshot-full-0.png \
     screenshots/ovi-screenshot-2.png \
