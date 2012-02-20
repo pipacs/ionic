@@ -53,6 +53,7 @@ StepsPage {
             StepsSlider {
                 id: zoom
                 property bool firstUpdate: true
+                width: flickable.width - 15
                 stepSize: 10
                 valueIndicatorVisible: true
                 minimumValue: 80
@@ -121,16 +122,20 @@ StepsPage {
             }
             StepsCheckBox {
                 id: preventBlanking
+                visible: platform.osName !== "symbian"
                 text: "Prevent display blanking"
                 checked: prefs.preventBlanking
                 onClicked: prefs.preventBlanking = checked
             }
             StepsLabel {
+                visible: platform.osName !== "symbian"
                 text: "Brightness:"
             }
             StepsSlider {
                 id: brightness
+                visible: platform.osName !== "symbian"
                 property bool firstUpdate: true
+                width: flickable.width - 15
                 stepSize: 1
                 valueIndicatorVisible: true
                 minimumValue: 1

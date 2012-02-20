@@ -66,7 +66,7 @@ StepsPage {
     }
 
     onStatusChanged: {
-        console.log("* MainPage.onStatusChanged, status: " + status)
+        // Activate/deactivate the toolbar revealer, depending on the page status
         if (status === statusActivating) {
             revealer.active = true
             appWindow.showToolBar = prefs.showToolBar
