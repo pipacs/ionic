@@ -11,7 +11,7 @@ StepsDialog {
 
     acceptText: "OK"
     rejectText: "Cancel"
-    title: "Steps"
+    title: "Ionic"
 
     content: Flickable {
         anchors.fill: parent

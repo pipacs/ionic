@@ -12,7 +12,6 @@ QueryDialog {
     rejectButtonText: qsTr("No")
     message: title
     titleText: qsTr("Ionic")
-    icon: "/images/steps.png"
 
     onStatusChanged: {
         if (status === DialogStatus.Closed) {
