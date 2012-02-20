@@ -59,7 +59,15 @@ StepsPage {
                 minimumValue: 80
                 maximumValue: 250
                 value: prefs.zoom
-                onChangedChanged: prefs.zoom = value
+                property bool firstValueChange: true
+                onValueChanged: {
+                    // The first valueChanged signal comes too early: work around it
+                    if (firstValueChange) {
+                        firstValueChange = false
+                    } else {
+                        prefs.zoom = value
+                    }
+                }
             }
             StepsLabel {
                 text: "Theme:"
@@ -141,7 +149,7 @@ StepsPage {
                 minimumValue: 1
                 maximumValue: 5
                 value: platform.brightness
-                onChangedChanged: platform.brightness = value
+                onValueChanged: platform.brightness = value
             }
         }
     }
@@ -162,7 +170,7 @@ StepsPage {
     }
 
     Component.onCompleted: {
-        zoom.value = prefs.zoom
+        // zoom.value = prefs.zoom
     }
 
     onBack: pageStack.pop()
