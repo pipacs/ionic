@@ -61,6 +61,8 @@ StepsPage {
         setStyle(prefs.style)
         appWindow.orientationChangeAboutToStart.connect(prepareRestoringPosition)
         appWindow.orientationChangeFinished.connect(restoreTimer.start)
+        mediaKey.volumeUpPressed.connect(onVolumeUpPressed)
+        mediaKey.volumeDownPressed.connect(onVolumeDownPressed)
     }
 
     onStatusChanged: {
@@ -85,6 +87,20 @@ StepsPage {
         if ((event.key === Qt.Key_VolumeUp) || (event.key === Qt.Key_Up) || (event.key === Qt.Key_PageUp)) {
             bookView.goToPreviousPage()
         } else if ((event.key === Qt.Key_VolumeDown) || (event.key === Qt.Key_Down) || (event.key === Qt.Key_PageDown)) {
+            bookView.goToNextPage()
+        }
+    }
+
+    // Handle Volume Up key (needs special signal handler on Symbian)
+    function onVolumeUpPressed() {
+        if (prefs.useVolumeKeys && status === statusActive) {
+            bookView.goToPreviousPage()
+        }
+    }
+
+    // Handle Volume Down key (needs special signal handler on Symbian)
+    function onVolumeDownPressed() {
+        if (prefs.useVolumeKeys && status === statusActive) {
             bookView.goToNextPage()
         }
     }

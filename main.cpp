@@ -11,8 +11,8 @@
 #include "backend/library.h"
 #include "backend/coverprovider.h"
 #include "backend/bookfinder.h"
-#include "backend/eventfilter.h"
 #include "backend/platform.h"
+#include "backend/mediakey.h"
 
 int main(int argc, char *argv[]) {
     // Set up application
@@ -74,26 +74,30 @@ int main(int argc, char *argv[]) {
     bookFinderWorkerThread->start(QThread::LowestPriority);
 
     // Set up and show QML widget with main.qml
-    QmlApplicationViewer viewer;
-    viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
-    viewer.engine()->addImageProvider(QString("covers"), new CoverProvider);
-    viewer.rootContext()->setContextProperty("library", library);
-    viewer.rootContext()->setContextProperty("prefs", settings);
+    QmlApplicationViewer *viewer = new QmlApplicationViewer;
+    MediaKey *mediaKey = new MediaKey(viewer);
+    viewer->setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
+    viewer->engine()->addImageProvider(QString("covers"), new CoverProvider);
+    viewer->rootContext()->setContextProperty("library", library);
+    viewer->rootContext()->setContextProperty("prefs", settings);
     Book *emptyBook = new Book();
-    viewer.rootContext()->setContextProperty("emptyBook", emptyBook);
-    viewer.rootContext()->setContextProperty("bookFinder", bookFinder);
-    viewer.rootContext()->setContextProperty("platform", Platform::instance());
-    viewer.setSource(QUrl("qrc:/qml/main.qml"));
-    viewer.showExpanded();
+    viewer->rootContext()->setContextProperty("emptyBook", emptyBook);
+    viewer->rootContext()->setContextProperty("bookFinder", bookFinder);
+    viewer->rootContext()->setContextProperty("platform", Platform::instance());
+    viewer->rootContext()->setContextProperty("mediaKey", mediaKey);
+    viewer->setSource(QUrl("qrc:/qml/main.qml"));
+    viewer->showExpanded();
 
+#if defined(MEEGO_EDITION_HARMATTAN)
     // Install event filter to capture/release volume keys
-    EventFilter *eventFilter = new EventFilter(&viewer);
-    viewer.installEventFilter(eventFilter);
+    viewer.installEventFilter(mediaKey);
+#endif
 
     // Run application
     int ret = app->exec();
 
     // Delete singletons
+    delete viewer;
     bookFinderWorkerThread->quit();
     bookFinderWorkerThread->wait();
     delete bookFinderWorkerThread;

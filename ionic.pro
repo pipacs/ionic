@@ -11,6 +11,7 @@ contains(MEEGO_EDITION,harmattan) {
     LIBS += -lz
     PKGCONFIG += libresourceqt1
     RESOURCES += meego.qrc
+    SOURCES += backend/mediakeyprivate-meego.cpp
 
     # Add a splash image for the Meego launcher
     folder_splash.source = splash
@@ -23,6 +24,8 @@ symbian {
     DEFINES += USE_FILE32API
     RESOURCES += symbian.qrc
     TARGET.UID3 = 0xE1E990A6
+    LIBS += -L\\epoc32\\release\\armv5\\lib -lremconcoreapi -lremconinterfacebase -lsysutil -lws32 -lapgrfx -lavkon
+    SOURCES += backend/mediakeyprivate-symbian.cpp
 
     # Smart Installer package's UID
     # This UID is from the protected range and therefore the package will
@@ -38,6 +41,7 @@ symbian {
     vendorinfo += "%{\"pipacs\"}" ":\"pipacs\""
     my_deployment.pkg_prerules += vendorinfo
     DEPLOYMENT += my_deployment
+
 }
 
 # The .cpp file which was generated for your project. Feel free to hack it.
@@ -51,10 +55,10 @@ SOURCES += main.cpp \
     backend/library.cpp \
     backend/trace.cpp \
     backend/coverprovider.cpp \
-    backend/eventfilter.cpp \
     backend/preferences.cpp \
     backend/platform.cpp \
-    backend/bookdbworker.cpp
+    backend/bookdbworker.cpp \
+    backend/mediakey.cpp \
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -217,8 +221,9 @@ HEADERS += \
     backend/bookmark.h \
     backend/coverprovider.h \
     backend/contentitem.h \
-    backend/eventfilter.h \
     backend/preferences.h \
-    backend/bookdbworker.h
+    backend/bookdbworker.h \
+    backend/mediakeyprivate.h \
+    backend/mediakey.h
 
 RESOURCES += ionic.qrc

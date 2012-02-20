@@ -140,7 +140,7 @@ Flickable {
                 y: webView.contentsSize.height * library.nowReading.bookmarks[index].position
                 width: 50
                 height: 50
-                visible: !webView.loading && (library.nowReading.bookmarks[index].part == flickable.part)
+                visible: !webView.loading && (library.nowReading.bookmarks[index].part === flickable.part)
                 source: "qrc:/icons/star.png"
                 opacity: 0.75
             }
