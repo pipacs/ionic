@@ -203,7 +203,8 @@ OTHER_FILES += \
     icons/bookmark.png \
     icons/comboindicator.png \
     qml/FontSelector.qml \
-    qml/Splash.qml
+    qml/Splash.qml \
+    icons/Office-book.svg
 
 HEADERS += \
     backend/book.h \
