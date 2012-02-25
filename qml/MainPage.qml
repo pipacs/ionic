@@ -115,13 +115,14 @@ StepsPage {
 
     function goTo(part, targetPos, url) {
         console.log("* MainPage.goTo part " + part + ", targetPos " + targetPos + ", url '" + url + "'")
+        console.log("*  Current URL is " + bookView.url)
         bookView.targetPos = targetPos
         bookView.part = part
         if (url === "#") {
             url = library.nowReading.urlFromPart(part)
             console.log("*  url from part: " + url)
         }
-        if ((url === "") || (url === bookView.url)) {
+        if ((url == "") || (url == bookView.url)) {
             // Force a jump to the new position
             console.log("*  Same as current, forcing local jump")
             bookView.jump()
