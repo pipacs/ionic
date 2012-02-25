@@ -20,6 +20,7 @@ class Preferences: public QObject {
     Q_PROPERTY(int orientation READ orientation WRITE setOrientation NOTIFY valueChanged)
     Q_PROPERTY(bool preventBlanking READ preventBlanking WRITE setPreventBlanking NOTIFY valueChanged)
     Q_PROPERTY(bool showToolBar READ showToolBar WRITE setShowToolBar NOTIFY valueChanged)
+    Q_PROPERTY(QString font READ font WRITE setFont NOTIFY valueChanged)
 
 public:
     static Preferences *instance();
@@ -42,6 +43,8 @@ public:
     void setPreventBlanking(bool v) {setValue("preventblanking", v);}
     bool showToolBar() {return value("showtoolbar", true).toBool();}
     void setShowToolBar(bool v) {setValue("showtoolbar", v);}
+    QString font() {return value("font", "Times New Roman").toString();}
+    void setFont(const QString &v) {setValue("font", v);}
 
 signals:
     void valueChanged(const QString &key);

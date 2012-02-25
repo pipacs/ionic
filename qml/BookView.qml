@@ -67,6 +67,7 @@ Flickable {
         transformOrigin: Item.TopLeft
         pressGrabTime: 9999
         focus: true
+        settings.standardFontFamily: prefs.font
         settings.defaultFontSize: (platform.osName === "harmattan")? 26: 22 + (prefs.zoom - 100) / 10
         settings.minimumFontSize: (platform.osName === "harmattan")? 22: 18
         settings.javaEnabled: false

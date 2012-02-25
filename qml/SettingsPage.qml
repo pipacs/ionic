@@ -48,6 +48,15 @@ StepsPage {
                 text: "If the toolbar is hidden, double-tap to reveal it temporarily"
             }
             StepsLabel {
+                text: "Font:"
+            }
+            StepsButton {
+                id: fontButton
+                text: prefs.font
+                onClicked: fontSelector.open()
+            }
+
+            StepsLabel {
                 text: "Zoom level:"
             }
             StepsSlider {
@@ -156,6 +165,14 @@ StepsPage {
 
     StepsScrollDecorator {
         flickableItem: flickable
+    }
+
+    FontSelector {
+        id: fontSelector
+        onAccepted: {
+            fontButton.text = fontName
+            prefs.font = fontName
+        }
     }
 
     Timer {

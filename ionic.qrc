@@ -26,6 +26,7 @@
         <file>icons/listbg.png</file>
         <file>icons/bookmark.png</file>
         <file>icons/comboindicator.png</file>
+        <file>qml/FontSelector.qml</file>
     </qresource>
     <qresource prefix="/qml/symbian">
         <file alias="Dummy.qml">qml/Dummy.qml</file>
