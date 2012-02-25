@@ -202,7 +202,8 @@ OTHER_FILES += \
     icons/listbg.png \
     icons/bookmark.png \
     icons/comboindicator.png \
-    qml/FontSelector.qml
+    qml/FontSelector.qml \
+    qml/Splash.qml
 
 HEADERS += \
     backend/book.h \

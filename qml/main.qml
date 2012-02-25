@@ -125,4 +125,10 @@ StepsPageStackWindow {
             }
         }
     }
+
+    Splash {
+        id: splash
+        Component.onCompleted: splash.activate();
+        onFinished: splash.destroy();
+    }
 }
