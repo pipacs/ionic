@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
 
 #if defined(MEEGO_EDITION_HARMATTAN)
     // Install event filter to capture/release volume keys
-    viewer.installEventFilter(mediaKey);
+    viewer->installEventFilter(mediaKey);
 #endif
 
     // Run application
