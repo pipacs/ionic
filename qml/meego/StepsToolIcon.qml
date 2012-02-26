@@ -7,8 +7,6 @@ ToolIcon {
     Component.onCompleted: {
         if (stockIcon === "menu")
             iconId = "toolbar-view-menu"
-        if (stockIcon === "menu")
-            iconId = "toolbar-menu"
         else if (stockIcon === "delete")
             iconId = "toolbar-delete"
         else if (stockIcon === "home")
@@ -49,5 +47,7 @@ ToolIcon {
             iconId = "toolbar-favorite-mark"
         else if (stockIcon === "jump")
             iconId = "toolbar-jump-to"
+        else if (stockIcon === "add")
+            iconId = "toolbar-add"
     }
 }
