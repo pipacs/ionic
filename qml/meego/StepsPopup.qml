@@ -50,7 +50,7 @@ Dialog {
                 width: popup.width
                 anchors.topMargin: 15
                 anchors.bottomMargin: 15
-                border.color: label.color
+                border.color: "grey" // label.color
                 border.width: 1
             }
         }
