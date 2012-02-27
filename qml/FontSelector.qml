@@ -27,7 +27,7 @@ StepsPopup {
                     source: (platform.osName === "harmattan")? "image://theme/meegotouch-list-background-pressed-center": "qrc:/icons/listbg.png"
                 }
                 StepsLabel {
-                    anchors.verticalCenter: parent
+                    anchors.verticalCenter: parent.verticalCenter
                     text: modelData
                     font.family: modelData
                     font.pixelSize: 28

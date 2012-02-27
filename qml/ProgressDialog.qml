@@ -12,7 +12,10 @@ StepsPopup {
 
     content: Item {
         id: name
-        anchors.fill: parent
+        anchors.top: title.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
         anchors.margins: 5
         Column {
             anchors.centerIn: parent
