@@ -29,7 +29,7 @@ Dialog {
                 anchors.right: header.right
                 anchors.margins: 5
 
-                opacity: closeButtonArea.pressed? 0.5: 1.0
+                opacity: (disableClose || closeButtonArea.pressed)? 0.5: 1.0
                 source: "image://theme/icon-m-common-dialog-close"
 
                 MouseArea {
