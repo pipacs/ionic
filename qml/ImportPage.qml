@@ -85,7 +85,7 @@ StepsPage {
         importDialog.minimumValue = 0
         importDialog.maximumValue = total
         importDialog.value = 0
-        importDialog.buttons[0].enabled = false
+        importDialog.disableClose = true
     }
 
     onAdd: {
@@ -105,7 +105,7 @@ StepsPage {
             message = "" + total + " books imported"
         }
         importDialog.messageText = message
-        importDialog.buttons[0].enabled = true
+        importDialog.disableClose = false
     }
 
     onBack: appWindow.pageStack.pop()
