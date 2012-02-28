@@ -7,7 +7,7 @@ SelectionDialog {
     signal dialogAccepted
     signal dialogRejected
 
-    onStatusChanged: if (status === DialogStatus.Closed) dialogClosed()
+    onStatusChanged: if (status == DialogStatus.Closed) dialogClosed()
     onAccepted: dialogAccepted()
     onRejected: dialogRejected()
 }
