@@ -1,13 +1,18 @@
 import QtQuick 1.1
-import "symbian"
+import "meego"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
 StepsPage {
     // FIXME: orientationLock: prefs.orientation
 
-    BookPage {id: bookPage}
-    ImportPage {id: importPage}
+    BookPage {
+        id: bookPage
+    }
+
+    ImportPage {
+        id: importPage
+    }
 
     PageHeader {
         id: header
@@ -40,7 +45,6 @@ StepsPage {
             BorderImage {
                 id: background
                 anchors.fill: parent
-                // Fill page borders
                 anchors.leftMargin: -listView.anchors.leftMargin
                 anchors.rightMargin: -listView.anchors.rightMargin
                 visible: mouseArea.pressed
@@ -48,6 +52,7 @@ StepsPage {
             }
 
             Row {
+                spacing: 5
                 Image {
                     width: 53
                     height: 59
@@ -83,7 +88,7 @@ StepsPage {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.margins: 11
+        anchors.margins: 5
         clip: true
         focus: true
         model: library.books

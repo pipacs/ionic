@@ -8,7 +8,7 @@ Dialog {
     id: popup
 
     title: Column {
-        Row {
+        Item {
             id: header
             height: 65
             width: popup.width
@@ -40,7 +40,7 @@ Dialog {
             }
         }
 
-        Row {
+        Item {
             id: separator
             height: 65
             width: popup.width
@@ -50,7 +50,7 @@ Dialog {
                 width: popup.width
                 anchors.topMargin: 15
                 anchors.bottomMargin: 15
-                border.color: "grey" // label.color
+                border.color: "grey"
                 border.width: 1
             }
         }

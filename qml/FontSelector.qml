@@ -1,11 +1,14 @@
 import QtQuick 1.1
-import "symbian"
+import "meego"
 
 StepsPopup {
     property string fontName
-    buttonTexts: ["Cancel"]
     titleText: "Select font"
-    anchors.fill: parent
+    anchors.top: title.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+
     content: Flickable {
         anchors.fill: parent
         flickableDirection: Flickable.VerticalFlick

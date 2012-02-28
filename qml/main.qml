@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "symbian"
+import "meego"
 
 StepsPageStackWindow {
     id: appWindow
@@ -30,6 +30,22 @@ StepsPageStackWindow {
         id: infoBookmarkAdded
         width: parent.width - 17
         text: "Bookmarked current position"
+    }
+
+    ImportPage {
+        id: importPage
+    }
+
+    LibraryPage {
+        id: libraryPage
+    }
+
+    SettingsPage {
+        id: settingsPage
+    }
+
+    AboutPage {
+        id: aboutPage
     }
 
     StepsToolBarLayout {
@@ -98,24 +114,36 @@ StepsPageStackWindow {
             }
             StepsMenuItem {
                 text: "Add books"
-                onClicked: {menu.close(); pageStack.push(Qt.resolvedUrl("ImportPage.qml"))}
+                onClicked: {
+                    menu.close()
+                    pageStack.push(importPage)
+                }
             }
             StepsMenuItem {
                 text: "Library"
-                onClicked: {menu.close(); pageStack.push(Qt.resolvedUrl("LibraryPage.qml"))}
+                onClicked: {
+                    menu.close()
+                    pageStack.push(libraryPage)
+                }
             }
             StepsMenuItem {
                 text: "Settings"
-                onClicked: {menu.close(); pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))}
+                onClicked: {
+                    menu.close()
+                    pageStack.push(settingsPage)
+                }
             }
             StepsMenuItem {
                 text: "About"
-                onClicked: {menu.close(); pageStack.push(Qt.resolvedUrl("AboutPage.qml"))}
+                onClicked: {
+                    menu.close()
+                    pageStack.push(aboutPage)
+                }
             }
             StepsMenuItem {
                 text: "Exit"
                 onClicked: Qt.quit()
-                visible: platform.osName === "symbian"
+                visible: platform.osName == "symbian"
             }
         }
         onStatusChanged: {
