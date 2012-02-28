@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "symbian"
+import "meego"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
@@ -75,6 +75,7 @@ StepsPage {
                         firstValueChange = false
                     } else {
                         prefs.zoom = value
+                        console.log("* SettingsPage: Zoom " + prefs.zoom)
                     }
                 }
             }

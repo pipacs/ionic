@@ -1,5 +1,4 @@
 #include <QKeyEvent>
-#include <QDebug>
 
 #include "mediakey.h"
 #include "mediakeyprivate.h"
@@ -12,7 +11,6 @@ MediaKeyPrivate::MediaKeyPrivate(MediaKey *parent): QObject(parent), d_ptr(paren
 }
 
 MediaKeyPrivate::~MediaKeyPrivate() {
-    qDebug() << "MediaKeyPrivate::~MediaKeyPrivate";
     resourceSet->release();
     resourceSet->deleteResource(ResourcePolicy::ScaleButtonType);
     delete resourceSet;
@@ -26,7 +24,6 @@ bool MediaKeyPrivate::eventFilter(QObject *obj, QEvent *event) {
         active = true;
         resourceSet->acquire();
     } else if (event->type() == QEvent::ActivationChange) {
-        qDebug() << "MediaKey::eventFilter: ActivationChange";
         if (active) {
             active = false;
             resourceSet->release();
@@ -38,11 +35,9 @@ bool MediaKeyPrivate::eventFilter(QObject *obj, QEvent *event) {
     } else if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_VolumeUp) {
-            qDebug() << "MediaKeyPrivate::eventFilter: Volume up";
             emit d_ptr->volumeUpPressed();
             return true;
         } else if (keyEvent->key() == Qt::Key_VolumeDown) {
-            qDebug() << "MediaKeyPrivate::eventFilter: Volume down";
             emit d_ptr->volumeDownPressed();
             return true;
         }

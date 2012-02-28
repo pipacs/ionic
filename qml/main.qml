@@ -159,4 +159,8 @@ StepsPageStackWindow {
         Component.onCompleted: splash.activate();
         onFinished: splash.destroy();
     }
+
+    Component.onCompleted: {
+        mainPage.setStyle(prefs.style)
+    }
 }
