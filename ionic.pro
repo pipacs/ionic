@@ -204,7 +204,8 @@ OTHER_FILES += \
     icons/comboindicator.png \
     qml/FontSelector.qml \
     qml/Splash.qml \
-    icons/Office-book.svg
+    icons/Office-book.svg \
+    texts/nobook.html
 
 HEADERS += \
     backend/book.h \

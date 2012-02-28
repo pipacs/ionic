@@ -18,8 +18,5 @@ StepsSelectionDialog {
         }
     }
 
-    onSelectedIndexChanged: {
-        fontName = Qt.fontFamilies()[selectedIndex]
-        console.log("* FontSelector: " + selectedIndex + ": " + fontName)
-    }
+    onSelectedIndexChanged: fontName = Qt.fontFamilies()[selectedIndex]
 }

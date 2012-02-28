@@ -79,6 +79,7 @@ StepsPageStackWindow {
         }
         StepsToolIcon {
             stockIcon: (platform.osName === "harmattan")? "bookmark": "qrc:/icons/bookmark.png"
+            enabled: library.nowReading.valid
             onClicked: {
                 menu.close()
                 bookmarksPage.book = library.nowReading

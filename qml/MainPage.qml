@@ -78,8 +78,12 @@ StepsPage {
     }
 
     onNowReadingChanged: {
-        console.log("* MainPage.onNowReadingChanged")
-        goTo(library.nowReading.lastBookmark.part, library.nowReading.lastBookmark.position, "#")
+        console.log("* MainPage.onNowReadingChanged to " + library.nowReading.title)
+        if (library.nowReading.valid) {
+            goTo(library.nowReading.lastBookmark.part, library.nowReading.lastBookmark.position, "#")
+        } else {
+            bookView.load(":/texts/nobook.html")
+        }
     }
 
     // Handle up/down keys
