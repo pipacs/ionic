@@ -1,5 +1,5 @@
 import QtQuick 1.0
-import "meego"
+import "symbian"
 
 StepsSelectionDialog {
     id: fontSelector
@@ -18,5 +18,5 @@ StepsSelectionDialog {
         }
     }
 
-    onDialogAccepted: fontName = Qt.fontFamilies()[selectedIndex]
+    onSelectedIndexChanged: fontName = Qt.fontFamilies()[selectedIndex]
 }

@@ -21,7 +21,7 @@ StepsPage {
             }
             StepsLabel {
                 width: parent.width - 18
-                font.pixelSize: (platform.osName === "harmattan")? 28: 22
+                font.pixelSize: (platform.osName == "harmattan")? 28: 22
                 textFormat: Text.RichText
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 text: "<b>Ionic E-Book Reader</b><p>Version " + platform.version + "<p>" + platform.text("about.html")

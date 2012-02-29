@@ -21,10 +21,6 @@
 #define IONIC_BASE ".dorian"
 #define IONIC_LOG "dorian.txt"
 
-static const char *IONIC_VERSION =
-#include "pkg/version.txt"
-;
-
 #if defined(Q_OS_SYMBIAN)
 #define IONIC_OS_NAME "symbian"
 #elif defined(MEEGO_EDITION_HARMATTAN)
