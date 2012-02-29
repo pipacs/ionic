@@ -1,3 +1,4 @@
+VERSION = 0.6.0
 QT += webkit xml sql network script
 CONFIG += mobility
 CONFIG += qt-components
@@ -12,6 +13,7 @@ contains(MEEGO_EDITION,harmattan) {
     PKGCONFIG += libresourceqt1
     RESOURCES += meego.qrc
     SOURCES += backend/mediakeyprivate-meego.cpp
+    DEFINES += IONIC_VERSION=\\\"$$VERSION\\\"
 
     # Add a splash image for the Meego launcher
     folder_splash.source = splash
@@ -23,9 +25,10 @@ contains(MEEGO_EDITION,harmattan) {
 symbian {
     DEFINES += USE_FILE32API
     RESOURCES += symbian.qrc
-    TARGET.UID3 = 0xE1E990A6
+    TARGET.UID3 = 0x2005ed15
     LIBS += -L\\epoc32\\release\\armv5\\lib -lremconcoreapi -lremconinterfacebase -lsysutil -lws32 -lapgrfx -lavkon
     SOURCES += backend/mediakeyprivate-symbian.cpp
+    DEFINES += IONIC_VERSION='"$$VERSION"'
 
     # Smart Installer package's UID
     # This UID is from the protected range and therefore the package will
@@ -41,7 +44,6 @@ symbian {
     vendorinfo += "%{\"pipacs\"}" ":\"pipacs\""
     my_deployment.pkg_prerules += vendorinfo
     DEPLOYMENT += my_deployment
-
 }
 
 # The .cpp file which was generated for your project. Feel free to hack it.
@@ -76,7 +78,6 @@ OTHER_FILES += \
     backend/unzip/Makefile \
     backend/unzip/make_vms.com \
     backend/unzip/make_vms_com \
-    pkg/version.txt \
     pkg/acknowledgements.txt \
     books/2BR02B.epub \
     icons/view-normal.png \
