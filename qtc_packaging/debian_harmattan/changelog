@@ -1,3 +1,9 @@
+ionic (0.6.1) unstable; urgency=low
+
+  *
+
+ -- Akos Polster <akos@pipacs.com>  Wed, 7  Mar 2012 16:44:00 +0100
+
 ionic (0.6.0) unstable; urgency=low
 
   * Use common Symbian+Meego components
