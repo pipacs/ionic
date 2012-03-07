@@ -4,7 +4,7 @@ Version=1.0
 Type=Application
 Terminal=false
 Name=Ionic
-Exec=/usr/bin/invoker --type=e --single-instance --splash=/opt/ionic/splash/splash.jpg /opt/ionic/bin/ionic %U
+Exec=/usr/bin/invoker --type=e --single-instance --splash=/opt/ionic/share/splash.jpg /opt/ionic/bin/ionic %U
 Icon=/usr/share/icons/hicolor/80x80/apps/ionic80.png
 X-Window-Icon=
 X-HildonDesk-ShowInToolbar=true

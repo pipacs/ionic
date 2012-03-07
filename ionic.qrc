@@ -5,9 +5,7 @@
         <file>icons/book.png</file>
         <file>icons/star.png</file>
         <file>icons/splash.png</file>
-        <file>texts/about.html</file>
         <file>texts/booksources.html</file>
-        <file>qml/AboutPage.qml</file>
         <file>qml/BookmarkEditor.qml</file>
         <file>qml/BookmarksPage.qml</file>
         <file>qml/BookPage.qml</file>

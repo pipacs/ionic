@@ -88,10 +88,6 @@ QString Platform::dbPath() {
     return QDir(base).absoluteFilePath("books.db");
 }
 
-QString Platform::version() {
-    return QString(IONIC_VERSION);
-}
-
 QString Platform::downloadDir() {
     return QDir::home().absoluteFilePath("Books");
 }

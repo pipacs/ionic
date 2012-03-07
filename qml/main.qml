@@ -44,10 +44,6 @@ StepsPageStackWindow {
         id: settingsPage
     }
 
-    AboutPage {
-        id: aboutPage
-    }
-
     StepsToolBarLayout {
         id: commonTools
         visible: true
@@ -138,7 +134,7 @@ StepsPageStackWindow {
                 text: "About"
                 onClicked: {
                     menu.close()
-                    pageStack.push(aboutPage)
+                    platform.browse(platform.dataDir + "/about.html")
                 }
             }
             StepsMenuItem {

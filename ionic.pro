@@ -3,6 +3,11 @@ QT += webkit xml sql network script
 CONFIG += mobility
 CONFIG += qt-components
 
+# Shared resources
+folder_share.source = share
+folder_share.target =
+DEPLOYMENTFOLDERS += folder_share
+
 # Meego Harmattan settings
 contains(MEEGO_EDITION,harmattan) {
     DEFINES += unix
@@ -14,11 +19,7 @@ contains(MEEGO_EDITION,harmattan) {
     RESOURCES += meego.qrc
     SOURCES += backend/mediakeyprivate-meego.cpp
     DEFINES += IONIC_VERSION=\\\"$$VERSION\\\"
-
-    # Add a splash image for the Meego launcher
-    folder_splash.source = splash
-    folder_splash.target =
-    DEPLOYMENTFOLDERS += folder_splash
+    DEFINES += IONIC_DATA_DIR=\\\"/opt/ionic/share\\\"
 }
 
 # Symbian settings
@@ -29,6 +30,7 @@ symbian {
     LIBS += -L\\epoc32\\release\\armv5\\lib -lremconcoreapi -lremconinterfacebase -lsysutil -lws32 -lapgrfx -lavkon
     SOURCES += backend/mediakeyprivate-symbian.cpp
     DEFINES += IONIC_VERSION='"$$VERSION"'
+    DEFINES += IONIC_DATA_DIR='"c:/data/ionic"'
 
     # Smart Installer package's UID
     # This UID is from the protected range and therefore the package will
@@ -128,9 +130,9 @@ OTHER_FILES += \
     books/2BR02B/21279/0.css \
     books/2BR02B/META-INF/container.xml \
     books/Makefile \
-    texts/about.html \
+    share/about.html \
     texts/booksources.html \
-    splash/splash.jpg \
+    share/splash.jpg \
     qml/meego/StepsYesNoDialog.qml \
     qml/meego/StepsToolIcon.qml \
     qml/meego/StepsToolButton.qml \
@@ -182,7 +184,6 @@ OTHER_FILES += \
     qml/BookPage.qml \
     qml/BookmarksPage.qml \
     qml/BookmarkEditor.qml \
-    qml/AboutPage.qml \
     qml/Dummy.qml \
     qml/meego/StepsMenu.qml \
     qml/symbian/StepsMenu.qml \
