@@ -3,11 +3,6 @@ QT += webkit xml sql network script
 CONFIG += mobility
 CONFIG += qt-components
 
-# Shared resources
-folder_share.source = share
-folder_share.target =
-DEPLOYMENTFOLDERS += folder_share
-
 # Meego Harmattan settings
 contains(MEEGO_EDITION,harmattan) {
     DEFINES += unix
@@ -20,20 +15,30 @@ contains(MEEGO_EDITION,harmattan) {
     SOURCES += backend/mediakeyprivate-meego.cpp
     DEFINES += IONIC_VERSION=\\\"$$VERSION\\\"
     DEFINES += IONIC_DATA_DIR=\\\"/opt/ionic/share\\\"
+
+    # Shared resources
+    folder_share.source = share
+    folder_share.target =
+    DEPLOYMENTFOLDERS += folder_share
 }
 
 # Symbian settings
 symbian {
     DEFINES += USE_FILE32API
     RESOURCES += symbian.qrc
-    TARGET.UID3 = 0xE9A1EA91
+    TARGET.UID3 = 0x2005ed15
+    # TARGET.UID3 = 0xE9A1EA91
+    TARGET.CAPABILITY += NetworkServices
+    TARGET.CAPABILITY += SwEvent
     LIBS += -L\\epoc32\\release\\armv5\\lib -lremconcoreapi -lremconinterfacebase -lsysutil -lws32 -lapgrfx -lavkon
     SOURCES += backend/mediakeyprivate-symbian.cpp
     DEFINES += IONIC_VERSION='"$$VERSION"'
-    DEFINES += IONIC_DATA_DIR='"c:/data/ionic"'
+    DEFINES += IONIC_DATA_DIR='"e:/data/ionic/share"'
 
-    # Official Symbian UID
-    # TARGET.UID3 = 0x2005ed15
+    # Shared resources
+    folder_share.source = share
+    folder_share.target = e:/data/ionic
+    DEPLOYMENTFOLDERS += folder_share
 
     # Smart Installer package's UID
     # This UID is from the protected range and therefore the package will
@@ -42,10 +47,6 @@ symbian {
     # 0x2002CCCF value if protected UID is given to the application
     #symbian:DEPLOYMENT.installer_header = 0x2002CCCF
 
-    # Allow network access
-    TARGET.CAPABILITY += NetworkServices
-
-    # For Nokia Store
     vendorinfo += "%{\"pipacs\"}" ":\"pipacs\""
     my_deployment.pkg_prerules += vendorinfo
     DEPLOYMENT += my_deployment
@@ -210,7 +211,8 @@ OTHER_FILES += \
     qml/FontSelector.qml \
     qml/Splash.qml \
     icons/Office-book.svg \
-    texts/nobook.html
+    texts/nobook.html \
+    share/donate.gif
 
 HEADERS += \
     backend/book.h \

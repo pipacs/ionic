@@ -41,8 +41,9 @@ public:
     QString downloadDir();
     QString traceFileName();
     Q_INVOKABLE void pauseBlanking();
+
+    /// Load string from resource.
     Q_INVOKABLE QString text(const QString &key);
-    Q_INVOKABLE void browse(const QString &url);
 
     /// Operating system name.
     QString osName();

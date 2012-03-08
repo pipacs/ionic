@@ -134,7 +134,7 @@ StepsPageStackWindow {
                 text: "About"
                 onClicked: {
                     menu.close()
-                    platform.browse(platform.dataDir + "/about.html")
+                    Qt.openUrlExternally("file:///" + platform.dataDir + "/about.html")
                 }
             }
             StepsMenuItem {

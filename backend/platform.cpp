@@ -9,6 +9,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <qplatformdefs.h>
+#include <QDebug>
 
 #if defined(MEEGO_EDITION_HARMATTAN)
 #   include <qmdevicemode.h>
@@ -111,10 +112,6 @@ QString Platform::text(const QString &key) {
     QString ret = resource.readAll();
     resource.close();
     return ret;
-}
-
-void Platform::browse(const QString &url) {
-    QDesktopServices::openUrl(QUrl(url));
 }
 
 QString Platform::osName() {
