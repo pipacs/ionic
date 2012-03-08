@@ -1,6 +1,7 @@
 ionic (0.6.1) unstable; urgency=low
 
-  *
+  * Add Donate button
+  * Show settings on tap-and-hold
 
  -- Akos Polster <akos@pipacs.com>  Wed, 7  Mar 2012 16:44:00 +0100
 

@@ -1,4 +1,5 @@
-// Temporarily reveal toolbar on double-tap
+// Temporarily reveal toolbar on double-tap.
+// Additionally, display Settings on press-and-hold.
 
 import QtQuick 1.1
 
@@ -16,7 +17,8 @@ Item {
                 hideTimer.restart()
             }
         }
-        onPressed: mouse.accepted = false
+        // onPressed: mouse.accepted = false
+        onPressAndHold: pageStack.push(settingsPage)
     }
     Timer {
         id: hideTimer
