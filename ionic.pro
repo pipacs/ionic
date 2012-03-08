@@ -26,11 +26,14 @@ contains(MEEGO_EDITION,harmattan) {
 symbian {
     DEFINES += USE_FILE32API
     RESOURCES += symbian.qrc
-    TARGET.UID3 = 0x2005ed15
+    TARGET.UID3 = 0xE9A1EA91
     LIBS += -L\\epoc32\\release\\armv5\\lib -lremconcoreapi -lremconinterfacebase -lsysutil -lws32 -lapgrfx -lavkon
     SOURCES += backend/mediakeyprivate-symbian.cpp
     DEFINES += IONIC_VERSION='"$$VERSION"'
     DEFINES += IONIC_DATA_DIR='"c:/data/ionic"'
+
+    # Official Symbian UID
+    # TARGET.UID3 = 0x2005ed15
 
     # Smart Installer package's UID
     # This UID is from the protected range and therefore the package will
