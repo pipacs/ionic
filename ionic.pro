@@ -212,7 +212,7 @@ OTHER_FILES += \
     qml/Splash.qml \
     icons/Office-book.svg \
     texts/nobook.html \
-    share/donate.gif
+    share/donate-paypal.gif
 
 HEADERS += \
     backend/book.h \
