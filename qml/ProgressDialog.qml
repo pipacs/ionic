@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "symbian"
+import "meego"
 
 StepsPopup {
 
@@ -8,7 +8,7 @@ StepsPopup {
     property alias maximumValue: progressBar.maximumValue
     property alias value: progressBar.value
     property alias messageText: messageLabel.text
-    titleText: "Importing books"
+    titleText: qsTr("Importing books")
 
     content: Item {
         id: name
@@ -22,7 +22,7 @@ StepsPopup {
             anchors.centerIn: parent
             StepsLabel {
                 id: messageLabel
-                text: "Gathering books"
+                text: qsTr("Gathering books")
                 elide: Text.ElideRight
             }
             StepsProgressBar {

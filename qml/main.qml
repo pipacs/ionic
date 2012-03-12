@@ -29,7 +29,7 @@ StepsPageStackWindow {
     StepsBanner {
         id: infoBookmarkAdded
         width: parent.width - 17
-        text: "Bookmarked current position"
+        text: qsTr("Bookmarked current position")
     }
 
     ImportPage {
@@ -101,7 +101,7 @@ StepsPageStackWindow {
         visualParent: pageStack
         StepsMenuLayout {
             StepsMenuItem {
-                text: "Book details"
+                text: qsTr("Book details")
                 enabled: library.nowReading.valid
                 onClicked: {
                     menu.close()
@@ -110,35 +110,35 @@ StepsPageStackWindow {
                 }
             }
             StepsMenuItem {
-                text: "Add books"
+                text: qsTr("Add books")
                 onClicked: {
                     menu.close()
                     pageStack.push(importPage)
                 }
             }
             StepsMenuItem {
-                text: "Library"
+                text: qsTr("Library")
                 onClicked: {
                     menu.close()
                     pageStack.push(libraryPage)
                 }
             }
             StepsMenuItem {
-                text: "Settings"
+                text: qsTr("Settings")
                 onClicked: {
                     menu.close()
                     pageStack.push(settingsPage)
                 }
             }
             StepsMenuItem {
-                text: "About"
+                text: qsTr("About")
                 onClicked: {
                     menu.close()
                     Qt.openUrlExternally("file:///" + platform.dataDir + "/about.html")
                 }
             }
             StepsMenuItem {
-                text: "Exit"
+                text: qsTr("Exit")
                 onClicked: Qt.quit()
                 visible: platform.osName == "symbian"
             }

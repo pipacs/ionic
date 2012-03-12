@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "symbian"
+import "meego"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
@@ -9,9 +9,9 @@ StepsDialog {
     property Book book: emptyBook
     property int index: 0
 
-    acceptText: "OK"
-    rejectText: "Cancel"
-    title: "Ionic"
+    acceptText: qsTr("OK")
+    rejectText: qsTr("Cancel")
+    title: qsTr("Ionic")
 
     content: Flickable {
         anchors.fill: parent
@@ -29,7 +29,7 @@ StepsDialog {
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
             StepsLabel {
-                text: "\nNote:"
+                text: qsTr("\nNote:")
             }
             StepsTextField {
                 id: noteField

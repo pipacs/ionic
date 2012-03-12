@@ -23,15 +23,15 @@ StepsPage {
 
     StepsSelectionDialog {
         id: sortByDialog
-        titleText: "Sort books by"
+        titleText: qsTr("Sort books by")
         selectedIndex: library.sortBy
         onSelectedIndexChanged: library.sortBy = sortByDialog.selectedIndex
 
         model: ListModel {
             id: sortByModel
-            ListElement {name: "Title"; modelData: "Title"; header: "Library: By title"}
-            ListElement {name: "Author"; modelData: "Author"; header: "Library: By author"}
-            ListElement {name: "Date added"; modelData: "Date added"; header: "Library: By date added"}
+            ListElement {name: "Title";          modelData: "Title";          header: "Library: By title"}
+            ListElement {name: "Author";         modelData: "Author";         header: "Library: By author"}
+            ListElement {name: "Date added";     modelData: "Date added";     header: "Library: By date added"}
             ListElement {name: "Date last read"; modelData: "Date last read"; header: "Library: By date last read"}
         }
     }
@@ -65,7 +65,7 @@ StepsPage {
                     }
                     StepsLabel {
                         id: textOpened
-                        text: "Last read: " + dateOpened
+                        text: qsTr("Last read: ") + dateOpened
                         font.pixelSize: platformStyle.fontPixelSize - 4
                     }
                 }

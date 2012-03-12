@@ -2,6 +2,8 @@ import QtQuick 1.1
 import "meego"
 import com.pipacs.ionic.Book 1.0
 
+// FIXME Texts in the import progress dialog are empty
+
 StepsPage {
     orientationLock: prefs.orientation
     id: importPage
@@ -12,7 +14,7 @@ StepsPage {
 
     PageHeader {
         id: header
-        text: "Add Books"
+        text: qsTr("Add Books")
     }
 
     Flickable {
@@ -36,7 +38,7 @@ StepsPage {
                 font.bold: true
                 width: parent.width - 18
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                text: "Step 1: Find and download"
+                text: qsTr("Step 1: Find and download")
             }
             StepsLabel {
                 font.pixelSize: (platform.osName === "harmattan")? 28: 22
@@ -44,20 +46,20 @@ StepsPage {
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 width: parent.width - 18
                 text: platform.text("booksources.html")
-                onLinkActivated: {platform.browse(link)}
+                onLinkActivated: platform.browse(link)
             }
             StepsLabel {
                 font.pixelSize: (platform.osName === "harmattan")? 28: 22
                 font.bold: true
                 width: parent.width - 18
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                text: "Step 2: Import books"
+                text: qsTr("Step 2: Import books")
             }
             StepsButton {
-                text: "Import"
+                text: qsTr("Import")
                 onClicked: {
                     importDialog.indeterminate = true
-                    importDialog.messageText = "Gathering books"
+                    importDialog.messageText = qsTr("Gathering books")
                     importDialog.open()
                     bookFinder.find()
                 }
@@ -71,7 +73,7 @@ StepsPage {
 
     ProgressDialog {
         id: importDialog
-        titleText: "Importing Books"
+        titleText: qsTr("Importing Books")
     }
 
     Component.onCompleted: {
@@ -98,11 +100,11 @@ StepsPage {
         importDialog.value = 1
         var message
         if (total === 0) {
-            message = "No new books"
+            message = qsTr("No new books")
         } else if (total === 1) {
-            message = "1 book imported"
+            message = qsTr("1 book imported")
         } else {
-            message = "" + total + " books imported"
+            message = qsTr("") + total + qsTr(" books imported")
         }
         importDialog.messageText = message
         importDialog.disableClose = false

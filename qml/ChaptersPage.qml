@@ -8,7 +8,7 @@ StepsPage {
 
     PageHeader {
         id: header
-        text: "Chapters: " + book.title
+        text: qsTr("Chapters: ") + book.title
     }
 
     Component {

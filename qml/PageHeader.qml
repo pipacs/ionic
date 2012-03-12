@@ -6,7 +6,7 @@ import "symbian"
 Rectangle {
     id: pageHeader
 
-    property string text: "Page Title"
+    property string text: ""
     property bool clickable: false   // Set to true to show a combobox indicator
     signal clicked
 

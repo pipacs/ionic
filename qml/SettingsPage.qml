@@ -24,20 +24,20 @@ StepsPage {
 
             StepsCheckBox {
                 id: useVolumeKeys
-                text: "Navigate with volume keys"
+                text: qsTr("Navigate with volume keys")
                 checked: prefs.useVolumeKeys
                 onClicked: prefs.useVolumeKeys = checked
             }
             StepsCheckBox {
                 id: useSwipe
-                text: "Navigate with swipe"
+                text: qsTr("Navigate with swipe")
                 checked: prefs.useSwipe
                 // enabled: useVolumeKeys.checked
                 onClicked: prefs.useSwipe = checked
             }
             StepsCheckBox {
                 id: showToolbar
-                text: "Show toolbar"
+                text: qsTr("Show toolbar")
                 checked: prefs.showToolBar
                 onClicked: prefs.showToolBar = checked
             }
@@ -45,10 +45,10 @@ StepsPage {
                 width: parent.width
                 color: "grey"
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                text: "If the toolbar is hidden, double-tap to reveal it temporarily"
+                text: qsTr("If the toolbar is hidden, double-tap to reveal it temporarily")
             }
             StepsLabel {
-                text: "Font:"
+                text: qsTr("Font:")
             }
             StepsButton {
                 id: fontButton
@@ -57,7 +57,7 @@ StepsPage {
             }
 
             StepsLabel {
-                text: "Zoom level:"
+                text: qsTr("Zoom level:")
             }
             StepsSlider {
                 id: zoom
@@ -80,13 +80,13 @@ StepsPage {
                 }
             }
             StepsLabel {
-                text: "Theme:"
+                text: qsTr("Theme:")
             }
             StepsButtonRow {
                 id: styleRow
                 width: flickable.width - 15
                 StepsButton {
-                    text: "Day"
+                    text: qsTr("Day")
                     id: styleButtonDay
                     checked: prefs.style == "day"
                     onClicked: {
@@ -96,7 +96,7 @@ StepsPage {
                 }
                 StepsButton {
                     id: styleButtonNight
-                    text: "Night"
+                    text: qsTr("Night")
                     checked: prefs.style == "night"
                     onClicked: {
                         prefs.style = "night"
@@ -105,7 +105,7 @@ StepsPage {
                 }
                 StepsButton {
                     id: styleButtonSand
-                    text: "Sand"
+                    text: qsTr("Sand")
                     checked: prefs.style == "sand"
                     onClicked: {
                         prefs.style = "sand"
@@ -114,26 +114,26 @@ StepsPage {
                 }
             }
             StepsLabel {
-                text: "Orientation:"
+                text: qsTr("Orientation:")
             }
             StepsButtonRow {
                 id: orientationRow
                 width: flickable.width - 15
                 StepsButton {
                     id: orientationButtonAuto
-                    text: "Auto"
+                    text: qsTr("Auto")
                     checked: prefs.orientation === page.orientationAutomatic
                     onClicked: prefs.orientation = page.orientationAutomatic
                 }
                 StepsButton {
                     id: orientationButtonPortrait
-                    text: "Portrait"
+                    text: qsTr("Portrait")
                     checked: prefs.orientation === page.orientationLockPortrait
                     onClicked: prefs.orientation = page.orientationLockPortrait
                 }
                 StepsButton {
                     id: orientationButtonLandscape
-                    text: "Landscape"
+                    text: qsTr("Landscape")
                     checked: prefs.orientation === page.orientationLockLandscape
                     onClicked: prefs.orientation = page.orientationLockLandscape
                 }
@@ -141,13 +141,13 @@ StepsPage {
             StepsCheckBox {
                 id: preventBlanking
                 visible: platform.osName !== "symbian"
-                text: "Prevent display blanking"
+                text: qsTr("Prevent display blanking")
                 checked: prefs.preventBlanking
                 onClicked: prefs.preventBlanking = checked
             }
             StepsLabel {
                 visible: platform.osName !== "symbian"
-                text: "Brightness:"
+                text: qsTr("Brightness:")
             }
             StepsSlider {
                 id: brightness

@@ -17,7 +17,7 @@ StepsPage {
     StepsYesNoDialog {
         id: deleteQuery
         icon: "qrc:/ionic80.png"
-        title: "Are you sure to delete this book?"
+        title: qsTr("Are you sure to delete this book?")
         onDialogAccepted: {
             library.remove(book)
             pageStack.pop()
@@ -46,18 +46,18 @@ StepsPage {
     }
 
     property list<QtObject> bookModel: [
-        QtObject {property string label: "Title:"; property string content: book.title},
-        QtObject {property string label: "Author:"; property string content: book.creatorsString},
-        QtObject {property string label: "Date:"; property string content: book.date},
-        QtObject {property string label: "Publisher:"; property string content: book.publisher},
-        QtObject {property string label: "Date published:"; property string content: book.datePublished},
-        QtObject {property string label: "Subject:"; property string content: book.subject},
-        QtObject {property string label: "Source:"; property string content: book.source},
-        QtObject {property string label: "Rights:"; property string content: book.rights},
-        QtObject {property string label: "Location:"; property string content: book.path},
-        QtObject {property string label: "Added to library:"; property string content: book.dateAdded},
-        QtObject {property string label: "Last read:"; property string content: book.dateOpened},
-        QtObject {property string label: "Reading progress:"; property string content: book.lastProgress? ("" + Math.floor(book.lastProgress * 100) + "%"): ""}
+        QtObject {property string label: qsTr("Title:"); property string content: book.title},
+        QtObject {property string label: qsTr("Author:"); property string content: book.creatorsString},
+        QtObject {property string label: qsTr("Date:"); property string content: book.date},
+        QtObject {property string label: qsTr("Publisher:"); property string content: book.publisher},
+        QtObject {property string label: qsTr("Date published:"); property string content: book.datePublished},
+        QtObject {property string label: qsTr("Subject:"); property string content: book.subject},
+        QtObject {property string label: qsTr("Source:"); property string content: book.source},
+        QtObject {property string label: qsTr("Rights:"); property string content: book.rights},
+        QtObject {property string label: qsTr("Location:"); property string content: book.path},
+        QtObject {property string label: qsTr("Added to library:"); property string content: book.dateAdded},
+        QtObject {property string label: qsTr("Last read:"); property string content: book.dateOpened},
+                                              QtObject {property string label: qsTr("Reading progress:"); property string content: book.lastProgress? (qsTr("") + Math.floor(book.lastProgress * 100) + qsTr("%")): qsTr("")}
     ]
 
     Image {

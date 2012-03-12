@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "symbian"
+import "meego"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
@@ -11,7 +11,7 @@ StepsPage {
 
     PageHeader {
         id: header
-        text: "Bookmarks"
+        text: qsTr("Bookmarks")
     }
 
     Component {
@@ -81,7 +81,7 @@ StepsPage {
                     var bookmark = book.bookmarks[contextMenu.index]
                     editBookmark.book = book
                     editBookmark.index = contextMenu.index
-                    editBookmark.description = "Bookmark at " + getProgress(bookmark) + " in \"" + book.title + "\""
+                    editBookmark.description = qsTr("Bookmark at ") + getProgress(bookmark) + qsTr(" in \"") + book.title + qsTr("\"")
                     editBookmark.note = book.bookmarks[contextMenu.index].note
                     editBookmark.open()
                 }
@@ -107,7 +107,7 @@ StepsPage {
             stockIcon: "add"
             onClicked: {
                 addBookmark.book = book
-                addBookmark.description = "Bookmark at " + getProgress(book.lastBookmark) + " in \"" + book.title + "\""
+                addBookmark.description = qsTr("Bookmark at ") + getProgress(book.lastBookmark) + qsTr(" in \"") + book.title + qsTr("\"")
                 addBookmark.open()
             }
         }
@@ -134,9 +134,9 @@ StepsPage {
         property Bookmark bookmark
         id: deleteQuery
         icon: "qrc:/ionic80.png"
-        message: "Are you sure to delete bookmark at " + getProgress(bookmark) + "?"
-        acceptButtonText: "Yes"
-        rejectButtonText: "No"
+        message: qsTr("Are you sure to delete bookmark at ") + getProgress(bookmark) + qsTr("?")
+        acceptButtonText: qsTr("Yes")
+        rejectButtonText: qsTr("No")
         onDialogAccepted: book.deleteBookmark(bookmark)
     }
 
@@ -144,10 +144,10 @@ StepsPage {
 
     function getProgress(bookmark) {
         if (!bookmark) {
-            return "0%"
+            return qsTr("0%")
         }
         var progress = Math.floor(book.getProgress(bookmark.part, bookmark.position) * 100.)
-        return "" + progress + "%"
+        return qsTr("") + progress + qsTr("%")
     }
 }
 

@@ -3,8 +3,8 @@ import "symbian"
 
 StepsSelectionDialog {
     id: fontSelector
-    property string fontName: ""
-    titleText: "Select font"
+    property string fontName: qsTr("")
+    titleText: qsTr("Select font")
 
     model: ListModel {
         id: fonts
