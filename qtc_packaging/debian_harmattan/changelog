@@ -1,5 +1,7 @@
 ionic (0.6.2) unstable; urgency=low
 
+  * Symbian-only release, no code changes
+
  -- Akos Polster <akos@pipacs.com>  Fri, 9  Mar 2012 23:16:00 +0100
 
 ionic (0.6.1) unstable; urgency=low
