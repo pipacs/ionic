@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "meego"
+import "symbian"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
@@ -32,8 +32,20 @@ StepsPage {
                 id: useSwipe
                 text: qsTr("Navigate with swipe")
                 checked: prefs.useSwipe
-                // enabled: useVolumeKeys.checked
                 onClicked: prefs.useSwipe = checked
+            }
+            StepsCheckBox {
+                id: usePressAndHold
+                text: qsTr("Long-tap to show Settings")
+                checked: prefs.usePressAndHold
+                enabled: !useSwipe.checked
+                onClicked: prefs.usePressAndHold = checked
+            }
+            StepsLabel {
+                width: parent.width
+                color: "grey"
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                text: qsTr("If <i>Navigate with swipe</i> is disabled, long-tap can show <i>Settings</i> directly")
             }
             StepsCheckBox {
                 id: showToolbar

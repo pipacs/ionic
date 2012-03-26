@@ -1,5 +1,7 @@
 ionic (0.6.3) unstable; urgency=low
 
+  * Restore swipe functionality
+
  -- Akos Polster <akos@pipacs.com>  Tue, 20 Mar 2012 17:07:00 +0100
 
 ionic (0.6.2) unstable; urgency=low

@@ -1,5 +1,5 @@
 // Temporarily reveal toolbar on double-tap.
-// Additionally, display Settings on press-and-hold.
+// Additionally, display Settings on press-and-hold, but only if book navigation by swipe is disabled.
 
 import QtQuick 1.1
 
@@ -17,7 +17,7 @@ Item {
                 hideTimer.restart()
             }
         }
-        // onPressed: mouse.accepted = false
+        onPressed: mouse.accepted = prefs.usePressAndHold && !prefs.useSwipe
         onPressAndHold: pageStack.push(settingsPage)
     }
     Timer {
