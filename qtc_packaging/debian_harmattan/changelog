@@ -1,6 +1,7 @@
 ionic (0.6.3) unstable; urgency=low
 
   * Restore swipe functionality
+  * On Symbian, look deeper for books to import
 
  -- Akos Polster <akos@pipacs.com>  Tue, 20 Mar 2012 17:07:00 +0100
 

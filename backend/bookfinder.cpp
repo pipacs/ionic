@@ -48,12 +48,11 @@ void BookFinderWorker::doFind() {
 
 void BookFinderWorker::doFindInDir(const QString &dir, QStringList &results, int depth) {
 #if defined(Q_OS_SYMBIAN)
-    const int maxDepth = 3;
+    const int maxDepth = 4;
 #else
     const int maxDepth = 6;
 #endif
     if (depth == maxDepth) {
-        qWarning() << "BookFinderWorker::doFindInDir: Bailing out after" << maxDepth << "recursions";
         return;
     }
     qDebug() << "BookFinderWorker::doFindInDir:" << dir << depth;
