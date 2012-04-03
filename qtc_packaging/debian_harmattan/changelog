@@ -1,5 +1,7 @@
 ionic (0.6.4) unstable; urgency=low
 
+  * Force white text in popups
+
  -- Akos Polster <akos@pipacs.com>  Mon, 26 Mar 2012 23:57:00 +0100
 
 ionic (0.6.3) unstable; urgency=low
