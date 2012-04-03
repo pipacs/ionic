@@ -206,7 +206,7 @@ StepsPage {
     onBack: pageStack.pop()
 
     onStatusChanged: {
-        // Work around ButtonRow selection bug on Symbian: Set checkedButton by forceActiveFocus
+        // Work around ButtonRow selection bug on Symbian: Set checkedButton by force
         if (platform.osName === "symbian") {
             if (prefs.style === "day")
                 styleRow.checkedButton = styleButtonDay

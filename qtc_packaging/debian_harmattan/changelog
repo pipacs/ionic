@@ -1,6 +1,8 @@
 ionic (0.6.4) unstable; urgency=low
 
   * Force white text in popups
+  * Make black really black in night theme
+  * Fix one swipe requiring two swipes
 
  -- Akos Polster <akos@pipacs.com>  Mon, 26 Mar 2012 23:57:00 +0100
 

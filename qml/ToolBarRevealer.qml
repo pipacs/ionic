@@ -17,7 +17,7 @@ Item {
                 hideTimer.restart()
             }
         }
-        onPressed: mouse.accepted = prefs.usePressAndHold && !prefs.useSwipe
+        onPressed: mouse.accepted = (prefs.usePressAndHold && !prefs.useSwipe)
         onPressAndHold: pageStack.push(settingsPage)
     }
     Timer {
