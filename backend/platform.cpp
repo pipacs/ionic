@@ -26,6 +26,8 @@
 #define IONIC_OS_NAME "symbian"
 #elif defined(MEEGO_EDITION_HARMATTAN)
 #define IONIC_OS_NAME "harmattan"
+#elif defined(QT_SIMULATOR)
+#define IONIC_OS_NAME "simulator"
 #else
 #error "Unsupported OS"
 #endif

@@ -9,6 +9,7 @@
 #   include <remconcoreapitargetobserver.h>
 #   include <remconcoreapitarget.h>
 #   include <remconinterfaceselector.h>
+#elif defined(QT_SIMULATOR)
 #else
 #   error MediaKeyPrivate not implemented on this platform
 #endif

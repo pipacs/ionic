@@ -52,6 +52,24 @@ symbian {
     DEPLOYMENT += my_deployment
 }
 
+# Simulator settings
+simulator {
+    DEFINES += IONIC_VERSION=\\\"$$VERSION\\\"
+    DEFINES += IONIC_DATA_DIR=\\\"/FIXME/ionic/share\\\"
+    SOURCES += backend/mediakeyprivate-simulator.cpp
+    RESOURCES += meego.qrc
+
+    # Settings for zlib
+    DEFINES += unix
+    DEFINES += USE_FILE32API
+    LIBS += -lz
+
+    # Shared resources
+    folder_share.source = share
+    folder_share.target =
+    DEPLOYMENTFOLDERS += folder_share
+}
+
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     backend/book.cpp \
@@ -66,7 +84,7 @@ SOURCES += main.cpp \
     backend/preferences.cpp \
     backend/platform.cpp \
     backend/bookdbworker.cpp \
-    backend/mediakey.cpp \
+    backend/mediakey.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
