@@ -230,7 +230,8 @@ OTHER_FILES += \
     qml/Splash.qml \
     icons/Office-book.svg \
     texts/nobook.html \
-    share/donate-paypal.gif
+    share/donate-paypal.gif \
+    qml/JumpPage.qml
 
 HEADERS += \
     backend/book.h \
