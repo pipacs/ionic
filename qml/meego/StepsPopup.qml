@@ -20,6 +20,7 @@ Dialog {
                 text: titleText
                 font.pixelSize: 28
                 elide: Text.ElideRight
+                color: "white"
             }
 
             Image {

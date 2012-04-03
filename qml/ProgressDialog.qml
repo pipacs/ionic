@@ -24,6 +24,7 @@ StepsPopup {
                 id: messageLabel
                 text: qsTr("Gathering books")
                 elide: Text.ElideRight
+                color: "white"
             }
             StepsProgressBar {
                 id: progressBar
