@@ -49,5 +49,7 @@ ToolIcon {
             iconId = "toolbar-jump-to"
         else if (stockIcon === "add")
             iconId = "toolbar-add"
+        else if (stockIcon === "new-message")
+            iconId = "toolbar-new-message"
     }
 }

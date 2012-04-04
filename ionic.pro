@@ -231,7 +231,9 @@ OTHER_FILES += \
     icons/Office-book.svg \
     texts/nobook.html \
     share/donate-paypal.gif \
-    qml/JumpPage.qml
+    qml/JumpPage.qml \
+    qml/AboutPage.qml \
+    texts/about.html
 
 HEADERS += \
     backend/book.h \

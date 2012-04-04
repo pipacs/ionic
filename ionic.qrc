@@ -28,6 +28,9 @@
         <file>icons/bookmark.png</file>
         <file>icons/comboindicator.png</file>
         <file>texts/nobook.html</file>
+        <file>icons/about.png</file>
+        <file>texts/about.html</file>
+        <file>qml/AboutPage.qml</file>
     </qresource>
     <qresource prefix="/qml/symbian">
         <file alias="Dummy.qml">qml/Dummy.qml</file>

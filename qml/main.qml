@@ -64,12 +64,10 @@ StepsPageStackWindow {
             }
         }
         StepsToolIcon {
-            stockIcon: (platform.osName === "harmattan")? "bookmark": "qrc:/icons/bookmark.png"
-            enabled: library.nowReading.valid
+            stockIcon: (platform.osName === "symbian")? "qrc:/icons/about.png": "new-message"
             onClicked: {
                 menu.close()
-                bookmarksPage.book = library.nowReading
-                pageStack.push(bookmarksPage)
+                pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
             }
         }
         StepsToolIcon {
@@ -117,13 +115,6 @@ StepsPageStackWindow {
                 onClicked: {
                     menu.close()
                     pageStack.push(settingsPage)
-                }
-            }
-            StepsMenuItem {
-                text: qsTr("About")
-                onClicked: {
-                    menu.close()
-                    Qt.openUrlExternally("file:///" + platform.dataDir + "/about.html")
                 }
             }
             StepsMenuItem {
