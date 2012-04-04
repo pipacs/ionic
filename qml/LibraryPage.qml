@@ -48,7 +48,7 @@ StepsPage {
                 anchors.leftMargin: -listView.anchors.leftMargin
                 anchors.rightMargin: -listView.anchors.rightMargin
                 visible: mouseArea.pressed
-                source: (platform.osName === "harmattan")? "image://theme/meegotouch-list-background-pressed-center": "qrc:/icons/listbg.png"
+                source: "qrc:/icons/listbg.png"
             }
 
             Row {
