@@ -50,6 +50,24 @@ symbian {
     vendorinfo += "%{\"pipacs\"}" ":\"pipacs\""
     my_deployment.pkg_prerules += vendorinfo
     DEPLOYMENT += my_deployment
+
+    # In-App Purchase
+    LIBS += -liapclientapi
+    MOBILITY = serviceframework
+    TARGET.CAPABILITY += ReadDeviceData WriteDeviceData
+
+    supported_platforms = \
+    "; Application only supports Symbian^3" \
+    "[0x20022E6D], 0, 0, 0, {\"Symbian^3\"}"
+
+    iap_dependency.pkg_prerules = \
+    "; Has dependency on IAP component" \
+    "(0x200345C8), 0, 1, 1, {\"IAP\"}"
+    DEPLOYMENT += iap_dependency
+
+    addIapFiles.sources = ./data/IAP_VARIANTID.txt \
+                          ./data/TEST_MODE.txt
+    addIapFiles.path = ./
 }
 
 # Simulator settings
@@ -233,7 +251,9 @@ OTHER_FILES += \
     share/donate-paypal.gif \
     qml/JumpPage.qml \
     qml/AboutPage.qml \
-    texts/about.html
+    texts/about.html \
+    data/TEST_MODE.txt \
+    data/IAP_VARIANTID.txt
 
 HEADERS += \
     backend/book.h \
