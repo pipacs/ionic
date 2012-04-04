@@ -27,7 +27,7 @@ StepsPage {
                 Column {
                     StepsLabel {
                         font.pixelSize: 28
-                        text: "At " + getProgress(book.bookmarks[index])
+                        text: qsTr("At ") + getProgress(book.bookmarks[index]) + qsTr("")
                     }
                     StepsLabel {
                         font.pixelSize: 24
