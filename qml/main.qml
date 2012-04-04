@@ -17,15 +17,6 @@ StepsPageStackWindow {
         enableJump: false
     }
 
-    BookmarksPage {
-        id: bookmarksPage
-        onBookmarkAdded: infoBookmarkAdded.show()
-    }
-
-    ChaptersPage {
-        id: chaptersPage
-    }
-
     StepsBanner {
         id: infoBookmarkAdded
         width: parent.width - 17
@@ -42,10 +33,6 @@ StepsPageStackWindow {
 
     SettingsPage {
         id: settingsPage
-    }
-
-    JumpPage {
-        id: jumpPage
     }
 
     StepsToolBarLayout {
@@ -73,7 +60,7 @@ StepsPageStackWindow {
             enabled: library.nowReading.valid
             onClicked: {
                 menu.close()
-                pageStack.push(jumpPage)
+                pageStack.push(Qt.resolvedUrl("JumpPage.qml"))
             }
         }
         StepsToolIcon {
@@ -108,7 +95,6 @@ StepsPageStackWindow {
                 enabled: library.nowReading.valid
                 onClicked: {
                     menu.close()
-                    thisBookPage.book = library.nowReading
                     pageStack.push(thisBookPage)
                 }
             }

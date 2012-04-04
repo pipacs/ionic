@@ -44,6 +44,7 @@ StepsPage {
         }
         BookmarksPage {
             id: jumpBookmarksPage
+            onBookmarkAdded: infoBookmarkAdded.show()
         }
     }
 

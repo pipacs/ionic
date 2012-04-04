@@ -39,7 +39,7 @@ StepsPage {
                 id: mouseArea
                 anchors.fill: parent
                 onClicked: {
-                    pageStack.pop(null)
+                    mainPage.pageStack.pop(null)
                     mainPage.goTo(book.bookmarks[index].part, book.bookmarks[index].position, "#")
                 }
                 onPressAndHold: {

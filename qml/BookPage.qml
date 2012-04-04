@@ -4,7 +4,7 @@ import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
 StepsPage {
-    property Book book: emptyBook
+    property Book book: library.nowReading
     property alias enableJump: jumpTool.visible
 
     orientationLock: prefs.orientation

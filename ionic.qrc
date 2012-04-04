@@ -1,11 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>books/2BR02B.epub</file>
-        <file>ionic80.png</file>
-        <file>icons/book.png</file>
-        <file>icons/star.png</file>
-        <file>icons/splash.png</file>
-        <file>texts/booksources.html</file>
         <file>qml/BookmarkEditor.qml</file>
         <file>qml/BookmarksPage.qml</file>
         <file>qml/BookPage.qml</file>
@@ -21,13 +15,19 @@
         <file>qml/SettingsPage.qml</file>
         <file>qml/theme.js</file>
         <file>qml/ToolBarRevealer.qml</file>
+        <file>qml/FontSelector.qml</file>
+        <file>qml/Splash.qml</file>
+        <file>qml/JumpPage.qml</file>
+        <file>books/2BR02B.epub</file>
+        <file>ionic80.png</file>
+        <file>icons/book.png</file>
+        <file>icons/star.png</file>
+        <file>icons/splash.png</file>
+        <file>texts/booksources.html</file>
         <file>icons/listbg.png</file>
         <file>icons/bookmark.png</file>
         <file>icons/comboindicator.png</file>
-        <file>qml/FontSelector.qml</file>
-        <file>qml/Splash.qml</file>
         <file>texts/nobook.html</file>
-        <file>qml/JumpPage.qml</file>
     </qresource>
     <qresource prefix="/qml/symbian">
         <file alias="Dummy.qml">qml/Dummy.qml</file>
