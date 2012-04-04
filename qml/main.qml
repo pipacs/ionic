@@ -56,7 +56,7 @@ StepsPageStackWindow {
             }
         }
         StepsToolIcon {
-            stockIcon: "list"
+            stockIcon: (platform.osName === "symbian")? "qrc:/icons/bookmark.png": "bookmark"
             enabled: library.nowReading.valid
             onClicked: {
                 menu.close()

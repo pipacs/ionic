@@ -253,7 +253,8 @@ OTHER_FILES += \
     qml/AboutPage.qml \
     texts/about.html \
     data/TEST_MODE.txt \
-    data/IAP_VARIANTID.txt
+    data/IAP_VARIANTID.txt \
+    texts/donate.html
 
 HEADERS += \
     backend/book.h \
