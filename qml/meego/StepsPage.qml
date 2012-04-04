@@ -23,6 +23,7 @@ Page {
 
     ToolBarLayout {
         id: pageTools
+        visible: showTools
         ToolIcon {
             iconId: "toolbar-back";
             onClicked: back()

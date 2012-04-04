@@ -44,6 +44,10 @@ StepsPageStackWindow {
         id: settingsPage
     }
 
+    JumpPage {
+        id: jumpPage
+    }
+
     StepsToolBarLayout {
         id: commonTools
         visible: true
@@ -69,8 +73,7 @@ StepsPageStackWindow {
             enabled: library.nowReading.valid
             onClicked: {
                 menu.close()
-                chaptersPage.book = library.nowReading
-                pageStack.push(chaptersPage)
+                pageStack.push(jumpPage)
             }
         }
         StepsToolIcon {

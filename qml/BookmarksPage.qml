@@ -5,14 +5,10 @@ import com.pipacs.ionic.Book 1.0
 
 StepsPage {
     id: page
-    property Book book: emptyBook
+    property Book book: library.nowReading
     signal bookmarkAdded
     orientationLock: prefs.orientation
-
-    PageHeader {
-        id: header
-        text: qsTr("Bookmarks")
-    }
+    showTools: false
 
     Component {
         id: delegate
@@ -56,7 +52,7 @@ StepsPage {
 
     ListView {
         id: listView
-        anchors.top: header.bottom
+        anchors.top: page.top
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -79,11 +75,11 @@ StepsPage {
                 text: "Edit"
                 onClicked: {
                     var bookmark = book.bookmarks[contextMenu.index]
-                    editBookmark.book = book
-                    editBookmark.index = contextMenu.index
-                    editBookmark.description = qsTr("Bookmark at ") + getProgress(bookmark) + qsTr(" in \"") + book.title + qsTr("\"")
-                    editBookmark.note = book.bookmarks[contextMenu.index].note
-                    editBookmark.open()
+                    editBookmarkDialog.book = book
+                    editBookmarkDialog.index = contextMenu.index
+                    editBookmarkDialog.description = qsTr("Bookmark at ") + getProgress(bookmark) + qsTr(" in \"") + book.title + qsTr("\"")
+                    editBookmarkDialog.note = book.bookmarks[contextMenu.index].note
+                    editBookmarkDialog.open()
                 }
             }
             StepsMenuItem {
@@ -96,36 +92,19 @@ StepsPage {
         }
     }
 
-    StepsToolBarLayout {
-        id: bookmarksTools
-        visible: true
-        StepsToolIcon {
-            stockIcon: "back"
-            onClicked: pageStack.pop()
-        }
-        StepsToolIcon {
-            stockIcon: "add"
-            onClicked: {
-                addBookmark.book = book
-                addBookmark.description = qsTr("Bookmark at ") + getProgress(book.lastBookmark) + qsTr(" in \"") + book.title + qsTr("\"")
-                addBookmark.open()
-            }
-        }
-    }
-
     BookmarkEditor {
-        id: addBookmark
+        id: addBookmarkDialog
         onDialogAccepted: {
             book.addBookmark(book.lastBookmark.part, book.lastBookmark.position, note)
-            pageStack.pop(null)
+            mainPage.pageStack.pop(null)
             bookmarkAdded()
         }
     }
 
     BookmarkEditor {
-        id: editBookmark
+        id: editBookmarkDialog
         onDialogAccepted: {
-            console.log("* BookmarksPage.editBookmark.onAccepted: Setting " + index + " to \"" + note + "\"")
+            console.log("* BookmarksPage.editBookmarkDialog.onAccepted: Setting " + index + " to \"" + note + "\"")
             book.setBookmarkNote(index, note)
         }
     }
@@ -140,14 +119,18 @@ StepsPage {
         onDialogAccepted: book.deleteBookmark(bookmark)
     }
 
-    Component.onCompleted: setToolBar(bookmarksTools)
-
     function getProgress(bookmark) {
         if (!bookmark) {
             return qsTr("0%")
         }
         var progress = Math.floor(book.getProgress(bookmark.part, bookmark.position) * 100.)
         return qsTr("") + progress + qsTr("%")
+    }
+
+    function addBookmark () {
+        addBookmarkDialog.book = book
+        addBookmarkDialog.description = qsTr("Bookmark at ") + getProgress(book.lastBookmark) + qsTr(" in \"") + book.title + qsTr("\"")
+        addBookmarkDialog.open()
     }
 }
 

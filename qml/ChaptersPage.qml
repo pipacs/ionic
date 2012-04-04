@@ -1,15 +1,11 @@
 import QtQuick 1.1
-import "symbian"
+import "meego"
 import com.pipacs.ionic.Book 1.0
 
 StepsPage {
-    property Book book: emptyBook
+    property Book book: library.nowReading
     orientationLock: prefs.orientation
-
-    PageHeader {
-        id: header
-        text: qsTr("Chapters: ") + book.title
-    }
+    showTools: false
 
     Component {
         id: delegate
@@ -40,7 +36,7 @@ StepsPage {
                     var part = book.partFromChapter(index);
                     var url = book.urlFromChapter(index)
                     console.log("*  Going to part " + part + ", url " + url)
-                    pageStack.pop(null)
+                    mainPage.pageStack.pop(null)
                     mainPage.goTo(part, 0, url)
                 }
             }
@@ -49,7 +45,7 @@ StepsPage {
 
     ListView {
         id: listView
-        anchors.top: header.bottom
+        anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -63,6 +59,4 @@ StepsPage {
     StepsScrollDecorator {
         flickableItem: listView
     }
-
-    onBack: appWindow.pageStack.pop()
 }
