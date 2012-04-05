@@ -52,9 +52,15 @@ symbian {
     DEPLOYMENT += my_deployment
 
     # In-App Purchase
+
     LIBS += -liapclientapi
     MOBILITY = serviceframework
-    TARGET.CAPABILITY += ReadDeviceData WriteDeviceData
+
+    # FIXME: Nokia should make up its mind. This may or may not be needed:
+    # TARGET.CAPABILITY += ReadDeviceData WriteDeviceData
+
+    # NOTE: Another Nokia gem: This is enabling stdlib to prevent error 'undefined symbol __aeabi_atexit'
+    LIBS += -lusrt2_2
 
     supported_platforms = \
     "; Application only supports Symbian^3" \
