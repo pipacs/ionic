@@ -55,6 +55,8 @@ symbian {
 
     LIBS += -liapclientapi
     MOBILITY = serviceframework
+    SOURCES += backend/iap.cpp
+    HEADERS += backend/iap.h
 
     # FIXME: Nokia should make up its mind. This may or may not be needed:
     # TARGET.CAPABILITY += ReadDeviceData WriteDeviceData
