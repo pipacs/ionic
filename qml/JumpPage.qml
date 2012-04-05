@@ -2,10 +2,6 @@ import QtQuick 1.1
 import "meego"
 import com.pipacs.ionic.Book 1.0
 
-// FIXME:
-import com.nokia.meego 1.0
-import com.nokia.extras 1.0
-
 StepsPage {
     PageHeader {
         id: header
@@ -30,7 +26,7 @@ StepsPage {
         }
     }
 
-    TabGroup {
+    StepsTabGroup {
         id: tabGroup
         anchors {
             left: parent.left

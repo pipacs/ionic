@@ -26,5 +26,6 @@
         <file alias="StepsPopup.qml">qml/meego/StepsPopup.qml</file>
         <file alias="StepsProgressBar.qml">qml/meego/StepsProgressBar.qml</file>
         <file alias="StepsButtonRow.qml">qml/meego/StepsButtonRow.qml</file>
+        <file alias="StepsTabGroup.qml">qml/meego/StepsTabGroup.qml</file>
     </qresource>
 </RCC>

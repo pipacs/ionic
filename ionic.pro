@@ -254,7 +254,9 @@ OTHER_FILES += \
     texts/about.html \
     data/TEST_MODE.txt \
     data/IAP_VARIANTID.txt \
-    texts/donate.html
+    texts/donate.html \
+    qml/meego/StepsTabGroup.qml \
+    qml/symbian/StepsTabGroup.qml
 
 HEADERS += \
     backend/book.h \

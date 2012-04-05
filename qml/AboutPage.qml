@@ -38,6 +38,13 @@ StepsPage {
                 anchors.margins: 0
                 anchors.horizontalCenter: column.horizontalCenter
                 text: qsTr("Donate")
+                onClicked: {
+                    if (platform.osName !== "symbian") {
+                        Qt.openUrlExternally("https://www.wepay.com/donations/ionic-e-book-reader")
+                    } else {
+                        // FIXME
+                    }
+                }
             }
 
             StepsLabel {
