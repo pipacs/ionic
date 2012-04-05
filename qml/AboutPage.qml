@@ -40,7 +40,7 @@ StepsPage {
                 text: qsTr("Donate")
                 onClicked: {
                     if (platform.osName !== "symbian") {
-                        Qt.openUrlExternally("https://www.wepay.com/donations/ionic-e-book-reader")
+                        Qt.openUrlExternally("file:///opt/ionic/share/donate-paypal.html")
                     } else {
                         // FIXME
                     }
