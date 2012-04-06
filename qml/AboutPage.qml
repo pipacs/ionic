@@ -29,7 +29,7 @@ StepsPage {
                 font.pixelSize: (platform.osName == "harmattan")? 28: 22
                 textFormat: Text.RichText
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                text: "<br><b>Ionic E-Book Reader</b><p>Version " + platform.version + platform.text("donate.html")
+                text: "<br><b>Ionic E-Book Reader, Version " + platform.version + "</b><p>" + platform.text("donate.html")
                 onLinkActivated: Qt.openUrlExternally(link)
             }
 

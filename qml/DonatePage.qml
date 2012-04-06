@@ -23,15 +23,18 @@ StepsPage {
     Component {
         id: delegate
         Item {
-            height: 65
+            height: 111
             width: donatePage.width
-            StepsButton {
-                id: donateButton
-                // width: donatePage.width - 15
-                text: qsTr("Donate ") + price
-                enabled: ready
-                onClicked: {
-                    iap.purchase(itemId)
+            Column {
+                spacing: 15
+                StepsButton {
+                    id: donateButton
+                    text: qsTr("Donate ") + price
+                    enabled: ready
+                    onClicked: iap.purchase(itemId)
+                }
+                StepsLabel {
+                    text: (purchaseCount > 0)? "Donated already. Thank you!": ""
                 }
             }
         }

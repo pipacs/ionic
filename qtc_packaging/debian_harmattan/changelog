@@ -4,6 +4,7 @@ ionic (0.6.4) unstable; urgency=low
   * Make black really black in night theme
   * Fix one swipe requiring two swipes
   * Unify bookmark and chapter views
+  * Accept donations via Nokia Store
 
  -- Akos Polster <akos@pipacs.com>  Mon, 26 Mar 2012 23:57:00 +0100
 
