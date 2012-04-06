@@ -6,8 +6,14 @@ StepsPage {
     orientationLock: prefs.orientation
     id: donatePage
 
+    PageHeader {
+        id: title
+        text: qsTr("Donate to Ionic")
+    }
+
     StepsLabel {
         id: header
+        anchors.top: title.bottom
         anchors.margins: 15
         width: parent.width - 15
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -17,24 +23,15 @@ StepsPage {
     Component {
         id: delegate
         Item {
-            height: 140
+            height: 65
             width: donatePage.width
-            Column {
-                spacing: 10
-                StepsLabel {
-                    id: donateLabel
-                    width: donatePage.width - 30
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    text: description
-                }
-                StepsButton {
-                    id: donateButton
-                    // width: donatePage.width - 15
-                    text: qsTr("Donate ") + price
-                    enabled: ready
-                    onClicked: {
-                        console.log("* Buy!")
-                    }
+            StepsButton {
+                id: donateButton
+                // width: donatePage.width - 15
+                text: qsTr("Donate ") + price
+                enabled: ready
+                onClicked: {
+                    iap.purchase(itemId)
                 }
             }
         }
@@ -46,7 +43,7 @@ StepsPage {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.margins: 15
+        anchors.margins: 30
         clip: true
         focus: true
         model: iap.items
@@ -58,7 +55,7 @@ StepsPage {
     }
 
     Component.onCompleted: {
-        iap.collectItems()
+        iap.updateItems()
     }
 
     onBack: appWindow.pageStack.pop()
