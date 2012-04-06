@@ -14,6 +14,10 @@
 #include "backend/platform.h"
 #include "backend/mediakey.h"
 
+#if defined(Q_OS_SYMBIAN)
+#include "backend/iap.h"
+#endif
+
 int main(int argc, char *argv[]) {
     // Set up application
     QScopedPointer<QApplication> app(createApplication(argc, argv));
@@ -34,6 +38,9 @@ int main(int argc, char *argv[]) {
     qmlRegisterType<Book>("com.pipacs.ionic.Book", 1, 0, "Book");
     qmlRegisterType<Library>("com.pipacs.ionic.Library", 1, 0, "Library");
     qmlRegisterType<Preferences>("com.pipacs.ionic.Preferences", 1, 0, "Preferences");
+#if defined(Q_OS_SYMBIAN)
+    qmlRegisterType<IapItem>("com.pipacs.ionic.IapItem", 1, 0, "IapItem");
+#endif
 
     // Do book database management in a separate thread
     QThread *bookDbWorkerThread = new QThread;
@@ -85,6 +92,10 @@ int main(int argc, char *argv[]) {
     viewer->rootContext()->setContextProperty("bookFinder", bookFinder);
     viewer->rootContext()->setContextProperty("platform", Platform::instance());
     viewer->rootContext()->setContextProperty("mediaKey", mediaKey);
+#if defined(Q_OS_SYMBIAN)
+    Iap *iap = new Iap(viewer);
+    viewer->rootContext()->setContextProperty("iap", iap);
+#endif
     viewer->setSource(QUrl("qrc:/qml/main.qml"));
     viewer->showExpanded();
 
