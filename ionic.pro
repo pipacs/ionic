@@ -264,7 +264,8 @@ OTHER_FILES += \
     data/IAP_VARIANTID.txt \
     texts/donate.html \
     qml/meego/StepsTabGroup.qml \
-    qml/symbian/StepsTabGroup.qml
+    qml/symbian/StepsTabGroup.qml \
+    qml/DonatePage.qml
 
 HEADERS += \
     backend/book.h \

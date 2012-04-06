@@ -42,7 +42,7 @@ StepsPage {
                     if (platform.osName !== "symbian") {
                         Qt.openUrlExternally("file:///opt/ionic/share/donate-paypal.html")
                     } else {
-                        // FIXME
+                        pageStack.push(Qt.resolvedUrl("DonatePage.qml"))
                     }
                 }
             }
