@@ -57,8 +57,21 @@ StepsPage {
         flickableItem: listView
     }
 
+    StepsSpinner {
+        id: spinner
+        text: qsTr("Updating donations from Nokia Store")
+    }
+
+    function onItemsUpdated() {
+        spinner.running = false
+    }
+
     Component.onCompleted: {
-        iap.updateItems()
+        iap.itemsUpdated.connect(onItemsUpdated)
+        if (!iap.items[0].ready) {
+            spinner.running = true
+            iap.updateItems()
+        }
     }
 
     onBack: appWindow.pageStack.pop()
