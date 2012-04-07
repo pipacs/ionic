@@ -58,10 +58,7 @@ symbian {
     SOURCES += backend/iap.cpp
     HEADERS += backend/iap.h
 
-    # FIXME: Nokia should make up its mind. This may or may not be needed:
-    # TARGET.CAPABILITY += ReadDeviceData WriteDeviceData
-
-    # NOTE: Another Nokia gem: This is enabling stdlib to prevent error 'undefined symbol __aeabi_atexit'
+    # NOTE: A Nokia gem: This is enabling stdlib to prevent error 'undefined symbol __aeabi_atexit'
     LIBS += -lusrt2_2
 
     supported_platforms = \
@@ -73,9 +70,9 @@ symbian {
     "(0x200345C8), 0, 1, 1, {\"IAP\"}"
     DEPLOYMENT += iap_dependency
 
-    addIapFiles.sources = ./data/IAP_VARIANTID.txt \
-                          ./data/TEST_MODE.txt
-    addIapFiles.path = ./
+    iap_files.sources = ./data/IAP_VARIANTID.txt # ./data/TEST_MODE.txt
+    iap_files.path = ./
+    DEPLOYMENT += iap_files
 }
 
 # Simulator settings
