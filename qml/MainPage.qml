@@ -39,6 +39,7 @@ StepsPage {
     StepsSpinner {
         id: spinner
         visible: false
+        darken: false
     }
 
     ToolBarRevealer {

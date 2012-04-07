@@ -133,6 +133,5 @@ StepsPageStackWindow {
 
     Component.onCompleted: {
         mainPage.setStyle(prefs.style)
-        appWindow.message("completed")
     }
 }

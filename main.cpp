@@ -95,8 +95,10 @@ int main(int argc, char *argv[]) {
 #if defined(Q_OS_SYMBIAN)
     Iap *iap = new Iap(viewer);
     viewer->rootContext()->setContextProperty("iap", iap);
-#endif
+    viewer->setSource(QUrl("qrc:/qml/main-symbian.qml"));
+#else
     viewer->setSource(QUrl("qrc:/qml/main.qml"));
+#endif
     viewer->showExpanded();
 
 #if defined(MEEGO_EDITION_HARMATTAN)

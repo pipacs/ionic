@@ -266,7 +266,7 @@ OTHER_FILES += \
     qml/meego/StepsTabGroup.qml \
     qml/symbian/StepsTabGroup.qml \
     qml/DonatePage.qml \
-    qml/mainSplash.qml
+    qml/main-symbian.qml
 
 HEADERS += \
     backend/book.h \

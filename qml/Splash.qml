@@ -42,12 +42,11 @@
 
  Item {
      id: root
-
      property string image: "/icons/splash.png"
      property int timeout: 1000
      property int fadeout: 700
-
      signal finished
+     z: 100
 
      // On Meego, the application launcher is showing the splash screen
      visible: platform.osName !== "meego"

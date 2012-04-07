@@ -5,6 +5,7 @@ import com.nokia.meego 1.0
 Item {
     property bool running: false
     property alias text: label.text
+    property bool darken: true
     id: spinner
     visible: running
 
@@ -12,7 +13,7 @@ Item {
         width: screen.width
         height: screen.height
         id: cover
-        opacity: 0.7
+        opacity: darken? 0.7: 0
         color: "black"
         MouseArea {
             anchors.fill: parent

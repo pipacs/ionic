@@ -4,6 +4,7 @@ import com.nokia.symbian 1.1
 // Simple wrapper for BusyIndicator
 Item {
     property bool running: false
+    property bool darken: true
     property alias text: label.text
     id: spinner
     visible: running
@@ -12,7 +13,7 @@ Item {
         width: screen.width
         height: screen.height
         id: cover
-        opacity: 0.7
+        opacity: darken? 0.7: 0
         color: "black"
         MouseArea {
             anchors.fill: parent

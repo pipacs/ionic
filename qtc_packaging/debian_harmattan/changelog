@@ -5,6 +5,7 @@ ionic (0.6.4) unstable; urgency=low
   * Fix one swipe requiring two swipes
   * Unify bookmark and chapter views
   * Accept donations via Nokia Store
+  * Improve startup on Symbian
 
  -- Akos Polster <akos@pipacs.com>  Mon, 26 Mar 2012 23:57:00 +0100
 

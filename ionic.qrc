@@ -33,6 +33,7 @@
         <file>qml/AboutPage.qml</file>
         <file>texts/donate.html</file>
         <file>qml/DonatePage.qml</file>
+        <file>qml/main-symbian.qml</file>
     </qresource>
     <qresource prefix="/qml/symbian">
         <file alias="Dummy.qml">qml/Dummy.qml</file>
