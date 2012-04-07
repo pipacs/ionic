@@ -131,13 +131,8 @@ StepsPageStackWindow {
         }
     }
 
-    Splash {
-        id: splash
-        Component.onCompleted: splash.activate();
-        onFinished: splash.destroy();
-    }
-
     Component.onCompleted: {
         mainPage.setStyle(prefs.style)
+        appWindow.message("completed")
     }
 }
