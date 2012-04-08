@@ -1,4 +1,4 @@
-VERSION = 0.6.4
+VERSION = 0.6.5
 QT += webkit xml sql network script
 CONFIG += mobility
 CONFIG += qt-components
