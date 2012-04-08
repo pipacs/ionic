@@ -2,10 +2,14 @@
 
 #include "iap.h"
 
-static const char *productIds[] = {
-    "849595",
-    "849596",
-    "849597"
+struct {
+    const char *id;
+    const char *description;
+    const char *price;
+} products[] = {
+    {"849595", "Donate 1EUR", "1 EUR"},
+    {"849596", "Donate 5EUR", "5 EUR"},
+    {"849597", "Donate 10EUR", "10 EUR"}
 };
 
 Iap::Iap(QObject *parent): QObject(parent) {
@@ -13,8 +17,8 @@ Iap::Iap(QObject *parent): QObject(parent) {
     connect(client_, SIGNAL(productDataReceived(int,QString,IAPClient::ProductDataHash)), this, SLOT(onProductDataReceived(int,QString,IAPClient::ProductDataHash)));
     connect(client_, SIGNAL(purchaseCompleted(int,QString,QString)), this, SLOT(onPurchaseCompleted(int,QString,QString)));
     connect(client_, SIGNAL(purchaseFlowFinished(int)), this, SLOT(onPurchaseFlowFinished(int)));
-    for (size_t i = 0; i < sizeof(productIds) / sizeof(productIds[0]); i++) {
-        items_.append(new IapItem(productIds[i], this));
+    for (size_t i = 0; i < sizeof(products) / sizeof(products[0]); i++) {
+        items_.append(new IapItem(products[i].id, products[i].description, products[i].price, this));
     }
 }
 
@@ -46,21 +50,16 @@ IapItem *Iap::findItemByPurchaseRequest(int request) {
 }
 
 void Iap::onProductDataReceived(int requestId, QString status, IAPClient::ProductDataHash data) {
-    qDebug() << "Iap::onProductDataReceived: Request" << requestId << "status" << status;
-    if (status != "OK") {
-        return;
-    }
+    qDebug() << "Iap::onProductDataReceived: Request" << requestId << "status" << status << "ID" << data["id"].toString();
     IapItem *item = findItem(data["id"].toString());
-    if (!item) {
-        qWarning() << "Iap::onProductDataReceived: Uknown product ID";
-        return;
+    if (item && (status == "OK")) {
+        item->setResult(data["result"].toString());
+        item->setInfo(data["info"].toString());
+        item->setDescription(data["description"].toString());
+        item->setShortDescription(data["shortdescription"].toString());
+        item->setPrice(data["price"].toString());
+        item->setReady(true);
     }
-    item->setResult(data["result"].toString());
-    item->setInfo(data["info"].toString());
-    item->setDescription(data["description"].toString());
-    item->setShortDescription(data["shortdescription"].toString());
-    item->setPrice(data["price"].toString());
-    item->setReady(true);
     emit itemsUpdated();
 }
 

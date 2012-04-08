@@ -22,8 +22,10 @@ class IapItem: public QObject {
     Q_PROPERTY(int purchaseCount READ purchaseCount NOTIFY itemChanged)
 
 public:
-    IapItem(const QString &id = QString("42"), QObject *parent = 0): QObject(parent) {
-        data_["itemid"] = data_["description"] = data_["shortdescription"] = data_["info"] = id;
+    IapItem(const QString &id = QString("0"), const QString &description = QString(), const QString &price = QString("0"), QObject *parent = 0): QObject(parent) {
+        data_["itemid"] = id;
+        data_["description"] = data_["shortdescription"] = data_["info"] = description;
+        data_["price"] = price;
         purchaseRequest_ = -1;
     }
     QString itemId() {return data_.value("itemid").toString();}

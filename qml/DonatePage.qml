@@ -30,7 +30,6 @@ StepsPage {
                 StepsButton {
                     id: donateButton
                     text: qsTr("Donate ") + price
-                    enabled: ready
                     onClicked: iap.purchase(itemId)
                 }
                 StepsLabel {
