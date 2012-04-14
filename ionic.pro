@@ -1,13 +1,18 @@
 VERSION = 0.6.5
-QT += webkit xml sql network script
+QT += webkit
+QT += xml
+QT += sql
+QT += network
+QT += script
 CONFIG += mobility
 CONFIG += qt-components
+MOBILITY += sensors
 
 # Meego Harmattan settings
 contains(MEEGO_EDITION,harmattan) {
     DEFINES += unix
     DEFINES += USE_FILE32API
-    CONFIG += link_pkgconfig
+    CONFIG += link_pkgconfigc
     CONFIG += qmsystem2
     LIBS += -lz
     PKGCONFIG += libresourceqt1
@@ -54,7 +59,7 @@ symbian {
     # In-App Purchase
 
     LIBS += -liapclientapi
-    MOBILITY = serviceframework
+    MOBILITY += serviceframework
     SOURCES += backend/iap.cpp
     HEADERS += backend/iap.h
 
@@ -107,7 +112,8 @@ SOURCES += main.cpp \
     backend/preferences.cpp \
     backend/platform.cpp \
     backend/bookdbworker.cpp \
-    backend/mediakey.cpp
+    backend/mediakey.cpp \
+    backend/tapdetector.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -286,6 +292,7 @@ HEADERS += \
     backend/preferences.h \
     backend/bookdbworker.h \
     backend/mediakeyprivate.h \
-    backend/mediakey.h
+    backend/mediakey.h \
+    backend/tapdetector.h
 
 RESOURCES += ionic.qrc
