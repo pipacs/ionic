@@ -1,18 +1,12 @@
 VERSION = 0.6.5
-QT += webkit
-QT += xml
-QT += sql
-QT += network
-QT += script
-CONFIG += mobility
+QT += webkit xml sql network script
 CONFIG += qt-components
-MOBILITY += sensors
 
 # Meego Harmattan settings
 contains(MEEGO_EDITION,harmattan) {
     DEFINES += unix
     DEFINES += USE_FILE32API
-    CONFIG += link_pkgconfigc
+    CONFIG += link_pkgconfig
     CONFIG += qmsystem2
     LIBS += -lz
     PKGCONFIG += libresourceqt1
@@ -50,7 +44,7 @@ symbian {
     # fail to install if self-signed. By default qmake uses the unprotected
     # range value if unprotected UID is defined for the application and
     # 0x2002CCCF value if protected UID is given to the application
-    #symbian:DEPLOYMENT.installer_header = 0x2002CCCF
+    # symbian:DEPLOYMENT.installer_header = 0x2002CCCF
 
     vendorinfo += "%{\"pipacs\"}" ":\"pipacs\""
     my_deployment.pkg_prerules += vendorinfo
@@ -59,6 +53,7 @@ symbian {
     # In-App Purchase
 
     LIBS += -liapclientapi
+    CONFIG += mobility
     MOBILITY += serviceframework
     SOURCES += backend/iap.cpp
     HEADERS += backend/iap.h
@@ -112,8 +107,7 @@ SOURCES += main.cpp \
     backend/preferences.cpp \
     backend/platform.cpp \
     backend/bookdbworker.cpp \
-    backend/mediakey.cpp \
-    backend/tapdetector.cpp
+    backend/mediakey.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -292,7 +286,6 @@ HEADERS += \
     backend/preferences.h \
     backend/bookdbworker.h \
     backend/mediakeyprivate.h \
-    backend/mediakey.h \
-    backend/tapdetector.h
+    backend/mediakey.h
 
 RESOURCES += ionic.qrc

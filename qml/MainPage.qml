@@ -110,6 +110,14 @@ StepsPage {
         }
     }
 
+    function onTap() {
+        console.log("* MainPage.onTap")
+    }
+
+    function onDoubleTap() {
+        console.log("* MainPage.onDoubleTap")
+    }
+
     function goToPreviousPage() {
         bookView.goToPreviousPage()
     }

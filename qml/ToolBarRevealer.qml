@@ -4,13 +4,16 @@
 import QtQuick 1.1
 
 Item {
+    id: revealer
     property bool active: false // Double-taps are only handled if active is true
     property StepsPageStackWindow targetWindow // Target window that has the toolbar
+    signal clicked
 
     anchors.fill: parent
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
+        onClicked: revealer.clicked()
         onDoubleClicked: {
             if (active) {
                 targetWindow.showToolBar = true

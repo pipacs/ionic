@@ -13,7 +13,6 @@
 #include "backend/bookfinder.h"
 #include "backend/platform.h"
 #include "backend/mediakey.h"
-#include "backend/tapdetector.h"
 
 #if defined(Q_OS_SYMBIAN)
 #include "backend/iap.h"
@@ -84,7 +83,6 @@ int main(int argc, char *argv[]) {
     // Set up and show QML widget with main.qml
     QmlApplicationViewer *viewer = new QmlApplicationViewer;
     MediaKey *mediaKey = new MediaKey(viewer);
-    TapDetector *tapDetector = new TapDetector(viewer);
     viewer->setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer->engine()->addImageProvider(QString("covers"), new CoverProvider);
     viewer->rootContext()->setContextProperty("library", library);
@@ -94,7 +92,6 @@ int main(int argc, char *argv[]) {
     viewer->rootContext()->setContextProperty("bookFinder", bookFinder);
     viewer->rootContext()->setContextProperty("platform", Platform::instance());
     viewer->rootContext()->setContextProperty("mediaKey", mediaKey);
-    viewer->rootContext()->setContextProperty("tapDetector", tapDetector);
 #if defined(Q_OS_SYMBIAN)
     Iap *iap = new Iap(viewer);
     viewer->rootContext()->setContextProperty("iap", iap);
