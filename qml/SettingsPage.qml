@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "symbian"
+import "meego"
 import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
@@ -26,32 +26,45 @@ StepsPage {
                 id: useVolumeKeys
                 text: qsTr("Navigate with volume keys")
                 checked: prefs.useVolumeKeys
-                onClicked: prefs.useVolumeKeys = checked
+                onClicked: prefs.useVolumeKeys = !prefs.useVolumeKeys
             }
             StepsCheckBox {
                 id: useSwipe
                 text: qsTr("Navigate with swipe")
                 checked: prefs.useSwipe
-                onClicked: prefs.useSwipe = checked
+                onClicked: prefs.useSwipe = !prefs.useSwipe
+            }
+            StepsCheckBox {
+                id: useTap
+                text: qsTr("Navigate by tapping")
+                checked: prefs.useTap
+                enabled: !useSwipe.checked
+                onClicked: prefs.useTap = !prefs.useTap
+            }
+            StepsLabel {
+                width: parent.width
+                color: "grey"
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                text: qsTr("Tap the bottom of the screen to go to the next page, tap the top to go to the previous. Only works if <i>Navigate with swipe</i> is disabled")
             }
             StepsCheckBox {
                 id: usePressAndHold
                 text: qsTr("Long-tap to show Settings")
                 checked: prefs.usePressAndHold
                 enabled: !useSwipe.checked
-                onClicked: prefs.usePressAndHold = checked
+                onClicked: prefs.usePressAndHold = !prefs.usePressAndHold
             }
             StepsLabel {
                 width: parent.width
                 color: "grey"
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                text: qsTr("If <i>Navigate with swipe</i> is disabled, long-tap can show <i>Settings</i> directly")
+                text: qsTr("Tap and hold to show <i>Settings</i> directly. Only works if <i>Navigate with swipe</i> is disabled")
             }
             StepsCheckBox {
                 id: showToolbar
                 text: qsTr("Show toolbar")
                 checked: prefs.showToolBar
-                onClicked: prefs.showToolBar = checked
+                onClicked: prefs.showToolBar = !prefs.showToolBar
             }
             StepsLabel {
                 width: parent.width
@@ -81,15 +94,14 @@ StepsPage {
                 maximumValue: 250
                 value: prefs.zoom
                 property bool firstValueChange: true
-                onValueChanged: {
-                    // The first valueChanged signal comes too early: work around it
-                    if (firstValueChange) {
-                        firstValueChange = false
-                    } else {
-                        prefs.zoom = value
-                        console.log("* SettingsPage: Zoom " + prefs.zoom)
-                    }
-                }
+//                onValueChanged: {
+//                    // The first valueChanged signal comes too early: work around it
+//                    if (firstValueChange) {
+//                        firstValueChange = false
+//                    } else {
+//                        prefs.zoom = value
+//                    }
+//                }
             }
             StepsLabel {
                 text: qsTr("Theme:")
@@ -199,14 +211,10 @@ StepsPage {
         }
     }
 
-    Component.onCompleted: {
-        // zoom.value = prefs.zoom
-    }
-
     onBack: pageStack.pop()
 
     onStatusChanged: {
-        // Work around ButtonRow selection bug on Symbian: Set checkedButton by force
+        // Work around ButtonRow selection bug on Symbian: Set checkedButtons by force
         if (platform.osName === "symbian") {
             if (prefs.style === "day")
                 styleRow.checkedButton = styleButtonDay

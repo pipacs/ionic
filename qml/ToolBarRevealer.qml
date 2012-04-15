@@ -7,21 +7,34 @@ Item {
     id: revealer
     property bool active: false // Double-taps are only handled if active is true
     property StepsPageStackWindow targetWindow // Target window that has the toolbar
-    signal clicked
+    signal clickedTop
+    signal clickedBottom
 
     anchors.fill: parent
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
-        onClicked: revealer.clicked()
+        onClicked: {
+            if (prefs.useTap) {
+                if (mouse.y < (height / 2)) {
+                    clickedTop()
+                } else {
+                    clickedBottom()
+                }
+            }
+        }
         onDoubleClicked: {
             if (active) {
                 targetWindow.showToolBar = true
                 hideTimer.restart()
             }
         }
-        onPressed: mouse.accepted = (prefs.usePressAndHold && !prefs.useSwipe)
-        onPressAndHold: pageStack.push(settingsPage)
+        onPressed: mouse.accepted = !prefs.useSwipe
+        onPressAndHold: {
+            if (prefs.usePressAndHold) {
+                pageStack.push(settingsPage)
+            }
+        }
     }
     Timer {
         id: hideTimer

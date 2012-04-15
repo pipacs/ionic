@@ -1,5 +1,7 @@
 ionic (0.6.5) unstable; urgency=low
 
+  * Navigate by tapping
+
  -- Akos Polster <akos@pipacs.com>  Sun, 9  Apr 2012 16:02:00 +0100
 
 ionic (0.6.4) unstable; urgency=low

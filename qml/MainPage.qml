@@ -64,6 +64,8 @@ StepsPage {
         appWindow.orientationChangeFinished.connect(restoreTimer.start)
         mediaKey.volumeUpPressed.connect(onVolumeUpPressed)
         mediaKey.volumeDownPressed.connect(onVolumeDownPressed)
+        revealer.clickedTop.connect(bookView.goToPreviousPage)
+        revealer.clickedBottom.connect(bookView.goToNextPage)
     }
 
     onStatusChanged: {
@@ -108,14 +110,6 @@ StepsPage {
         if (prefs.useVolumeKeys && status === statusActive) {
             bookView.goToNextPage()
         }
-    }
-
-    function onTap() {
-        console.log("* MainPage.onTap")
-    }
-
-    function onDoubleTap() {
-        console.log("* MainPage.onDoubleTap")
     }
 
     function goToPreviousPage() {
