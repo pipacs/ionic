@@ -2,6 +2,7 @@ ionic (0.6.5) unstable; urgency=low
 
   * Navigate by tapping
   * Set margins from Settings
+  * Reduce overlap between pages
 
  -- Akos Polster <akos@pipacs.com>  Sun, 9  Apr 2012 16:02:00 +0100
 

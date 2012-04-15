@@ -177,7 +177,7 @@ Flickable {
             goToPreviousPart()
             return
         }
-        var newY = flickable.contentY - flickable.height + 31;
+        var newY = flickable.contentY - flickable.height + 17;
         if (newY < 0) {
             newY = 0
         }
@@ -190,7 +190,7 @@ Flickable {
         if (flickable.contentY + flickable.height >= webView.contentsSize.height) {
             goToNextPart()
         }
-        var newY = flickable.contentY + flickable.height - 31;
+        var newY = flickable.contentY + flickable.height - 17;
         if (newY + flickable.height > webView.contentsSize.height) {
             newY = webView.contentsSize.height - flickable.height
         }
