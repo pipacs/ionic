@@ -20,7 +20,8 @@
  */
 
 import QtQuick 1.1
-import QtWebKit 1.0
+// import QtWebKit 1.0
+import com.pipacs.ionic.IWebView 1.0
 import com.pipacs.ionic.Book 1.0
 import com.pipacs.ionic.Preferences 1.0
 import "theme.js" as Theme
@@ -59,7 +60,8 @@ Flickable {
     flickableDirection: Flickable.VerticalFlick
     interactive: prefs.useSwipe
 
-    WebView {
+    // WebView {
+    IWebView {
         id: webView
         transformOrigin: Item.TopLeft
         pressGrabTime: 9999
