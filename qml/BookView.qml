@@ -51,13 +51,10 @@ Flickable {
     signal loadFailed
 
     id: flickable
-    width: parent.width
+    // width: parent.width
     contentWidth: Math.max(parent.width, webView.width)
     contentHeight: Math.max(parent.height, webView.height)
-    anchors.top: parent.top
-    anchors.bottom: parent.top
-    anchors.left: parent.left
-    anchors.right: parent.right
+    anchors.fill: parent
     pressDelay: 0
     flickableDirection: Flickable.VerticalFlick
     interactive: prefs.useSwipe
@@ -105,6 +102,7 @@ Flickable {
 
         onLoadFinished: {
             setStyle(prefs.style)
+            setMargin(prefs.margin)
             loading = false
             bookView.jump()
             coverRemover.restart()
@@ -252,6 +250,11 @@ Flickable {
     function setStyle(style) {
         styleCover.color = Theme.background(style)
         webView.evaluateJavaScript(Theme.webTheme(style))
+    }
+
+    // Set body margins
+    function setMargin(margin) {
+        webView.evaluateJavaScript("document.body.style.margin = '" + prefs.margin + "px " + prefs.margin + "px " + prefs.margin + "px " + prefs.margin + "px'")
     }
 
     // Load URL while covering the web view

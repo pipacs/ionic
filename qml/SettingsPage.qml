@@ -80,28 +80,29 @@ StepsPage {
                 text: prefs.font
                 onClicked: fontSelector.open()
             }
-
             StepsLabel {
                 text: qsTr("Zoom level:")
             }
             StepsSlider {
                 id: zoom
-                property bool firstUpdate: true
                 width: flickable.width - 15
                 stepSize: 10
                 valueIndicatorVisible: true
                 minimumValue: 80
                 maximumValue: 250
                 value: prefs.zoom
-                property bool firstValueChange: true
-//                onValueChanged: {
-//                    // The first valueChanged signal comes too early: work around it
-//                    if (firstValueChange) {
-//                        firstValueChange = false
-//                    } else {
-//                        prefs.zoom = value
-//                    }
-//                }
+            }
+            StepsLabel {
+                text: qsTr("Margins:")
+            }
+            StepsSlider {
+                id: margin
+                width: flickable.width - 15
+                stepSize: 1
+                valueIndicatorVisible: true
+                minimumValue: 0
+                maximumValue: 45
+                value: prefs.margin
             }
             StepsLabel {
                 text: qsTr("Theme:")
@@ -211,7 +212,12 @@ StepsPage {
         }
     }
 
-    onBack: pageStack.pop()
+    onBack: {
+        prefs.margin = margin.value
+        mainPage.setMargin(margin.value)
+        prefs.zoom = zoom.value
+        pageStack.pop()
+    }
 
     onStatusChanged: {
         // Work around ButtonRow selection bug on Symbian: Set checkedButtons by force

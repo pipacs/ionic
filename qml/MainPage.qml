@@ -9,7 +9,6 @@ StepsPage {
     signal nowReadingChanged
     property alias toolBarRevelaerActive: revealer.active
 
-    tools: commonTools
     orientationLock: prefs.orientation
     focus: true
 
@@ -66,6 +65,7 @@ StepsPage {
         mediaKey.volumeDownPressed.connect(onVolumeDownPressed)
         revealer.clickedTop.connect(bookView.goToPreviousPage)
         revealer.clickedBottom.connect(bookView.goToNextPage)
+        setToolBar(commonTools)
     }
 
     onStatusChanged: {
@@ -147,6 +147,10 @@ StepsPage {
         }
         readingProgress.color = Theme.progressColor(style)
         bookView.setStyle(style)
+    }
+
+    function setMargin(margin) {
+        bookView.setMargin(margin)
     }
 
     function prepareRestoringPosition() {

@@ -23,6 +23,7 @@ class Preferences: public QObject {
     Q_PROPERTY(QString font READ font WRITE setFont NOTIFY valueChanged)
     Q_PROPERTY(bool usePressAndHold READ usePressAndHold WRITE setUsePressAndHold NOTIFY valueChanged)
     Q_PROPERTY(bool useTap READ useTap WRITE setUseTap NOTIFY valueChanged)
+    Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY valueChanged)
 
 public:
     static Preferences *instance();
@@ -51,6 +52,8 @@ public:
     void setUsePressAndHold(bool v) {setValue("usepressandhold", v);}
     bool useTap() {return value("usetap").toBool();}
     void setUseTap(bool v) {setValue("usetap", v);}
+    int margin() {return value("margin", 10).toInt();}
+    void setMargin(int v) {setValue("margin", v);}
 
 signals:
     void valueChanged(const QString &key);
