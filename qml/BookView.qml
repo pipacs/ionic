@@ -20,28 +20,22 @@
  */
 
 import QtQuick 1.1
-import QtWebKit 1.0
+// import QtWebKit 1.0
 import com.pipacs.ionic.IWebView 1.0
 import com.pipacs.ionic.Book 1.0
 import com.pipacs.ionic.Preferences 1.0
 import "theme.js" as Theme
 
 Flickable {
+    id: flickable
+
     // Target reading position, within the current part of the book. After loading the part, BookView will jump to this position, unless it is set to -1
     property double targetPos: -1
 
     // Current part index
     property int part: 0
 
-    property alias title: webView.title
-    property alias icon: webView.icon
-    property alias progress: webView.progress
     property alias url: webView.url
-    property alias back: webView.back
-    property alias stop: webView.stop
-    property alias reload: webView.reload
-    property alias forward: webView.forward
-    property alias scale: webView.contentsScale
     property alias sx: flickable.contentX
     property alias sy: flickable.contentY
     property alias webView: webView
@@ -51,7 +45,6 @@ Flickable {
     signal loadFinished
     signal loadFailed
 
-    id: flickable
     // width: parent.width
     contentWidth: Math.max(parent.width, webView.width)
     contentHeight: Math.max(parent.height, webView.height)
@@ -60,8 +53,7 @@ Flickable {
     flickableDirection: Flickable.VerticalFlick
     interactive: prefs.useSwipe
 
-    // WebView {
-    IWebView {
+    IWebView { // WebView...
         id: webView
         // transformOrigin: Item.TopLeft
         // pressGrabTime: 9999
@@ -80,21 +72,14 @@ Flickable {
         settings.offlineWebApplicationCacheEnabled: false
         settings.pluginsEnabled: false
         // smooth: false
-        // preferredWidth: flickable.width
-        // preferredHeight: flickable.height
+        preferredWidth: flickable.width
+        preferredHeight: flickable.height
+        width: flickable.width
+        height: contentsSize.height
         // contentsScale: 1
         z: 0
 
         property bool loading: false
-
-        // Hide cover with a delay (prevent flicking)
-        Timer {
-            id: coverRemover
-            interval: 200
-            running: false
-            repeat: false
-            onTriggered: {styleCover.opacity = 0}
-        }
 
         onLoadFailed: {
             loading = false
@@ -116,7 +101,7 @@ Flickable {
             loading = true
         }
 
-        // Forward signals on completion
+        // Forward signals
         Component.onCompleted: {
             loadStarted.connect(flickable.loadStarted)
             loadFailed.connect(flickable.loadFailed)
@@ -129,6 +114,15 @@ Flickable {
         z: 1
         model: library.nowReading.bookmarks
         delegate: bookmarkDelegate
+    }
+
+    // Hide cover with a delay (prevent flicking)
+    Timer {
+        id: coverRemover
+        interval: 200
+        running: false
+        repeat: false
+        onTriggered: styleCover.opacity = 0
     }
 
     // Delegate to draw a bookmark, but only if it points to the current part

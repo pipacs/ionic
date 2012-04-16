@@ -1,4 +1,5 @@
 #include <QWebFrame>
+#include <QDebug>
 
 #include "iwebview.h"
 #include "iwebsettings.h"
@@ -10,13 +11,19 @@ IWebView::IWebView(QGraphicsProxyWidget *parent):
     view_->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
     view_->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
     view_->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-    QObject::connect(view_->page()->mainFrame(), SIGNAL(contentsSizeChanged(QSize)), this, SIGNAL(contentSizeChanged()));
-    QObject::connect(view_, SIGNAL(linkClicked(QUrl)), this, SIGNAL(linkClicked(QUrl)));
-    QObject::connect(view_, SIGNAL(loadFinished(bool)), this, SLOT(onLoadFinished(bool)));
-    QObject::connect(view_, SIGNAL(loadProgress(int)), this, SIGNAL(loadProgress(int)));
-    QObject::connect(view_, SIGNAL(urlChanged(QUrl)), this, SIGNAL(urlChanged(QUrl)));
+    connect(view_->page()->mainFrame(), SIGNAL(contentsSizeChanged(QSize)), this, SIGNAL(contentsSizeChanged(QSize)));
+    connect(view_, SIGNAL(linkClicked(QUrl)), this, SIGNAL(linkClicked(QUrl)));
+    connect(view_, SIGNAL(loadFinished(bool)), this, SLOT(onLoadFinished(bool)));
+    connect(view_, SIGNAL(loadProgress(int)), this, SIGNAL(loadProgress(int)));
+    connect(view_, SIGNAL(loadStarted()), this, SIGNAL(loadStarted()));
+    connect(view_, SIGNAL(urlChanged(QUrl)), this, SIGNAL(urlChanged(QUrl)));
+    connect(view_, SIGNAL(selectionChanged()), this, SLOT(onSelectionChanged()));
     setWidget(view_);
     settings_ = new IWebSettings(view_->settings(), this);
+}
+
+IWebView::~IWebView() {
+    view_->deleteLater();
 }
 
 void IWebView::setUrl(const QUrl &url) {
@@ -42,4 +49,39 @@ IWebSettings *IWebView::settings() {
 
 QVariant IWebView::evaluateJavaScript(const QString &script) {
     return view_->page()->mainFrame()->evaluateJavaScript(script);
+}
+
+void IWebView::onLoadFinished(bool result) {
+    if (result) {
+        emit loadFinished();
+    } else {
+        emit loadFailed();
+    }
+}
+
+const QSize IWebView::contentsSize() {
+    return view_->page()->mainFrame()->contentsSize();
+}
+
+qreal IWebView::prefWidth() {
+    return preferredWidth();
+}
+
+void IWebView::setPrefWidth(qreal w) {
+    setPreferredWidth(w);
+    emit prefWidthChanged();
+}
+
+qreal IWebView::prefHeight() {
+    return preferredHeight();
+}
+
+void IWebView::setPrefHeight(qreal h) {
+    setPreferredHeight(h);
+    emit prefHeightChanged();
+}
+
+void IWebView::onSelectionChanged() {
+    // Clear selection immediately, effectively disabling all selections
+    view_->findText("");
 }
