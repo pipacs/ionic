@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QWebSettings>
+#include <QDebug>
+#include <QString>
 
 class IWebSettings: public QObject {
     Q_OBJECT
@@ -23,7 +25,10 @@ class IWebSettings: public QObject {
 public:
     explicit IWebSettings(QWebSettings *settings = QWebSettings::globalSettings(), QObject *parent = 0): QObject(parent), settings_(settings) {}
     QString standardFontFamily() {return settings_->fontFamily(QWebSettings::StandardFont);}
-    int defaultFontSize() {return settings_->fontSize(QWebSettings::DefaultFontSize);}
+    int defaultFontSize() {
+        qDebug() << "IWebSettings::defaultFontSize:" << settings_->fontSize(QWebSettings::DefaultFontSize);
+        return settings_->fontSize(QWebSettings::DefaultFontSize);
+    }
     int minimumFontSize() {return settings_->fontSize(QWebSettings::MinimumFontSize);}
     bool javaEnabled() {return false;}
     bool javascriptCanAccessClipboard() {return false;}
@@ -57,6 +62,7 @@ public slots:
         emit standardFontFamilyChanged();
     }
     void setDefaultFontSize(int v) {
+        qDebug() << "IWebSettings::setDefaultFontSize:" << v;
         settings_->setFontSize(QWebSettings::DefaultFontSize, v);
         emit defaultFontSizeChanged();
     }

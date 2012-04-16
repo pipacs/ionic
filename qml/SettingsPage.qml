@@ -177,7 +177,6 @@ StepsPage {
             StepsSlider {
                 id: brightness
                 visible: platform.osName !== "symbian"
-                property bool firstUpdate: true
                 width: flickable.width - 15
                 stepSize: 1
                 valueIndicatorVisible: true
@@ -213,9 +212,10 @@ StepsPage {
     }
 
     onBack: {
+        console.log("* SettingsPage.onBack: Zoom is " + zoom.value)
+        prefs.zoom = zoom.value
         prefs.margin = margin.value
         mainPage.setMargin(margin.value)
-        prefs.zoom = zoom.value
         pageStack.pop()
     }
 
