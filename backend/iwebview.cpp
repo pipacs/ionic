@@ -39,3 +39,7 @@ QString IWebView::html() {
 IWebSettings *IWebView::settings() {
     return settings_;
 }
+
+QVariant IWebView::evaluateJavaScript(const QString &script) {
+    return view_->page()->mainFrame()->evaluateJavaScript(script);
+}

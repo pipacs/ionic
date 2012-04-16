@@ -30,6 +30,7 @@ signals:
 public slots:
     void setUrl(const QUrl &url);
     void setHtml(const QString &html);
+    Q_INVOKABLE QVariant evaluateJavaScript(const QString &script);
 
 public:
     QWebView *view_;

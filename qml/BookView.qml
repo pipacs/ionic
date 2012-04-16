@@ -20,7 +20,7 @@
  */
 
 import QtQuick 1.1
-// import QtWebKit 1.0
+import QtWebKit 1.0
 import com.pipacs.ionic.IWebView 1.0
 import com.pipacs.ionic.Book 1.0
 import com.pipacs.ionic.Preferences 1.0
@@ -63,9 +63,9 @@ Flickable {
     // WebView {
     IWebView {
         id: webView
-        transformOrigin: Item.TopLeft
-        pressGrabTime: 9999
-        focus: true
+        // transformOrigin: Item.TopLeft
+        // pressGrabTime: 9999
+        // focus: true
         settings.standardFontFamily: prefs.font
         settings.defaultFontSize: ((platform.osName == "harmattan")? 26: 22) + (prefs.zoom - 100) / 10
         settings.minimumFontSize: (platform.osName == "harmattan")? 22: 18
@@ -79,10 +79,10 @@ Flickable {
         settings.offlineStorageDatabaseEnabled: false
         settings.offlineWebApplicationCacheEnabled: false
         settings.pluginsEnabled: false
-        smooth: false
-        preferredWidth: flickable.width
-        preferredHeight: flickable.height
-        contentsScale: 1
+        // smooth: false
+        // preferredWidth: flickable.width
+        // preferredHeight: flickable.height
+        // contentsScale: 1
         z: 0
 
         property bool loading: false
