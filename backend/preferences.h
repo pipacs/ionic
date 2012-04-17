@@ -11,7 +11,7 @@ class QString;
 
 /**
  * Shallow wrapper for QSettings.
- * Emits valueChanged signals when a setting value has changed, provides some settings as QML properties.
+ * Emits signals when a setting has changed, provides some settings as QML properties.
  */
 class Preferences: public QObject {
     Q_OBJECT

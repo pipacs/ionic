@@ -42,7 +42,7 @@ StepsPage {
                 onClicked: prefs.useTap = !prefs.useTap
             }
             StepsLabel {
-                width: parent.width
+                width: flickable.width - 15
                 color: "grey"
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 text: qsTr("Tap the bottom of the screen to go to the next page, tap the top to go to the previous. Only works if <i>Navigate with swipe</i> is disabled")
@@ -55,7 +55,7 @@ StepsPage {
                 onClicked: prefs.usePressAndHold = !prefs.usePressAndHold
             }
             StepsLabel {
-                width: parent.width
+                width: flickable.width - 15
                 color: "grey"
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 text: qsTr("Tap and hold to show <i>Settings</i> directly. Only works if <i>Navigate with swipe</i> is disabled")
@@ -67,7 +67,7 @@ StepsPage {
                 onClicked: prefs.showToolBar = !prefs.showToolBar
             }
             StepsLabel {
-                width: parent.width
+                width: flickable.width - 15
                 color: "grey"
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 text: qsTr("If the toolbar is hidden, double-tap to reveal it temporarily")
@@ -212,7 +212,6 @@ StepsPage {
     }
 
     onBack: {
-        console.log("* SettingsPage.onBack: Zoom is " + zoom.value)
         prefs.zoom = zoom.value
         prefs.margin = margin.value
         mainPage.setMargin(margin.value)
