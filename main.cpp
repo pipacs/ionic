@@ -13,7 +13,7 @@
 #include "backend/bookfinder.h"
 #include "backend/platform.h"
 #include "backend/mediakey.h"
-#include "backend/iwebview.h"
+#include "backend/qdeclarativewebview_p.h"
 
 #if defined(Q_OS_SYMBIAN)
 #include "backend/iap.h"
@@ -42,7 +42,8 @@ int main(int argc, char *argv[]) {
 #if defined(Q_OS_SYMBIAN)
     qmlRegisterType<IapItem>("com.pipacs.ionic.IapItem", 1, 0, "IapItem");
 #endif
-    qmlRegisterType<IWebView>("com.pipacs.ionic.IWebView", 1, 0, "IWebView");
+    qmlRegisterType<QDeclarativeWebSettings>();
+    qmlRegisterType<QDeclarativeWebView>("com.pipacs.ionic.IWebView", 1, 0, "IWebView");
 
     // Do book database management in a separate thread
     QThread *bookDbWorkerThread = new QThread;

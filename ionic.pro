@@ -108,7 +108,7 @@ SOURCES += main.cpp \
     backend/platform.cpp \
     backend/bookdbworker.cpp \
     backend/mediakey.cpp \
-    backend/iwebview.cpp
+    backend/qdeclarativewebview.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -288,6 +288,6 @@ HEADERS += \
     backend/bookdbworker.h \
     backend/mediakeyprivate.h \
     backend/mediakey.h \
-    backend/iwebview.h
+    backend/qdeclarativewebview_p.h
 
 RESOURCES += ionic.qrc

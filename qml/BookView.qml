@@ -55,14 +55,14 @@ Flickable {
 
     IWebView { // WebView...
         id: webView
-        standardFontFamily: prefs.font
-        defaultFontSize: (platform.osName == "harmattan")? 26: 22 // + (prefs.zoom - 100) / 10
-        minimumFontSize: (platform.osName == "harmattan")? 22: 18
-        zoomFactor: prefs.zoom / 100.0
+        settings.standardFontFamily: prefs.font
+        settings.defaultFontSize: ((platform.osName == "harmattan")? 26: 22) + (prefs.zoom - 100) / 10
+        settings.minimumFontSize: (platform.osName == "harmattan")? 22: 18
+        // zoomFactor: prefs.zoom / 100.0
         // preferredWidth: flickable.width
         // preferredHeight: flickable.height
         width: flickable.width
-        height: contentsSize.height
+        // height: contentsSize.height
         z: 0
 
         property bool loading: false
@@ -84,10 +84,6 @@ Flickable {
         }
 
         onLoadStarted: loading = true
-
-        onContentsSizeChanged: {
-            console.log("* BookView.IWebView.onContentsSizeChanged: " + contentsSize.width + ", " + contentsSize.height)
-        }
 
         // Forward signals
         Component.onCompleted: {
