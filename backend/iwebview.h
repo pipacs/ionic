@@ -7,26 +7,26 @@
 #include <QString>
 #include <QUrl>
 
-class IWebSettings;
-
 class IWebView: public QGraphicsProxyWidget {
     Q_OBJECT
     Q_PROPERTY(QUrl url READ url WRITE setUrl NOTIFY urlChanged)
     Q_PROPERTY(QString html READ html WRITE setHtml NOTIFY htmlChanged)
-    Q_PROPERTY(IWebSettings *settings READ settings)
     Q_PROPERTY(QSize contentsSize READ contentsSize NOTIFY contentsSizeChanged)
-    Q_PROPERTY(qreal preferredWidth READ prefWidth WRITE setPrefWidth NOTIFY prefWidthChanged)
-    Q_PROPERTY(qreal preferredHeight READ prefHeight WRITE setPrefHeight NOTIFY prefHeightChanged)
+    Q_PROPERTY(QString standardFontFamily READ standardFontFamily WRITE setStandardFontFamily NOTIFY standardFontFamilyChanged)
+    Q_PROPERTY(int defaultFontSize READ defaultFontSize WRITE setDefaultFontSize NOTIFY defaultFontSizeChanged)
+    Q_PROPERTY(int minimumFontSize READ minimumFontSize WRITE setMinimumFontSize NOTIFY minimumFontSizeChanged)
+    Q_PROPERTY(qreal zoomFactor READ zoomFactor WRITE setZoomFactor NOTIFY zoomFactorChanged)
 
 public:
     explicit IWebView(QGraphicsProxyWidget *parent = 0);
     ~IWebView();
     QUrl url();
     QString html();
-    IWebSettings *settings();
     const QSize contentsSize();
-    qreal prefWidth();
-    qreal prefHeight();
+    QString standardFontFamily();
+    int defaultFontSize();
+    int minimumFontSize();
+    qreal zoomFactor();
 
 signals:
     void loadStarted();
@@ -37,21 +37,24 @@ signals:
     void urlChanged(QUrl);
     void htmlChanged();
     void contentsSizeChanged(QSize);
-    void prefWidthChanged();
-    void prefHeightChanged();
+    void standardFontFamilyChanged();
+    void defaultFontSizeChanged();
+    void minimumFontSizeChanged();
+    void zoomFactorChanged();
 
 public slots:
     void setUrl(const QUrl &url);
     void setHtml(const QString &html);
     Q_INVOKABLE QVariant evaluateJavaScript(const QString &script);
     void onLoadFinished(bool result);
-    void setPrefWidth(qreal w);
-    void setPrefHeight(qreal h);
     void onSelectionChanged();
+    void setStandardFontFamily(const QString &family);
+    void setDefaultFontSize(int size);
+    void setMinimumFontSize(int size);
+    void setZoomFactor(qreal factor);
 
 public:
     QWebView *view_;
-    IWebSettings *settings_;
 };
 
 #endif // IWEBVIEW_H

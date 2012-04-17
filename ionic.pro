@@ -288,7 +288,6 @@ HEADERS += \
     backend/bookdbworker.h \
     backend/mediakeyprivate.h \
     backend/mediakey.h \
-    backend/iwebview.h \
-    backend/iwebsettings.h
+    backend/iwebview.h
 
 RESOURCES += ionic.qrc

@@ -13,7 +13,7 @@ StepsPage {
     Component {
         id: delegate
         Item {
-            height: 64
+            height: 71
             width: parent.width
             BorderImage {
                 id: background

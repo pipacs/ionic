@@ -55,28 +55,14 @@ Flickable {
 
     IWebView { // WebView...
         id: webView
-        // transformOrigin: Item.TopLeft
-        // pressGrabTime: 9999
-        // focus: true
-        settings.standardFontFamily: prefs.font
-        settings.defaultFontSize: ((platform.osName == "harmattan")? 26: 22) + (prefs.zoom - 100) / 10
-        settings.minimumFontSize: (platform.osName == "harmattan")? 22: 18
-        settings.javaEnabled: false
-        settings.javascriptCanAccessClipboard: false
-        settings.javascriptCanOpenWindows: false
-        settings.javascriptEnabled: true
-        settings.linksIncludedInFocusChain: false
-        settings.localContentCanAccessRemoteUrls: false
-        settings.localStorageDatabaseEnabled: false
-        settings.offlineStorageDatabaseEnabled: false
-        settings.offlineWebApplicationCacheEnabled: false
-        settings.pluginsEnabled: false
-        // smooth: false
-        preferredWidth: flickable.width
-        preferredHeight: flickable.height
+        standardFontFamily: prefs.font
+        defaultFontSize: (platform.osName == "harmattan")? 26: 22 // + (prefs.zoom - 100) / 10
+        minimumFontSize: (platform.osName == "harmattan")? 22: 18
+        zoomFactor: prefs.zoom / 100.0
+        // preferredWidth: flickable.width
+        // preferredHeight: flickable.height
         width: flickable.width
         height: contentsSize.height
-        // contentsScale: 1
         z: 0
 
         property bool loading: false
@@ -97,8 +83,10 @@ Flickable {
             webView.evaluateJavaScript("for (var i = 0; i < document.links.length; i++) {l = document.links[i]; l.disabled = true; l.onclick = new Function('return false'); l.style.textDecoration = 'none'}")
         }
 
-        onLoadStarted: {
-            loading = true
+        onLoadStarted: loading = true
+
+        onContentsSizeChanged: {
+            console.log("* BookView.IWebView.onContentsSizeChanged: " + contentsSize.width + ", " + contentsSize.height)
         }
 
         // Forward signals
