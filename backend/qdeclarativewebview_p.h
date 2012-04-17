@@ -217,6 +217,7 @@ Q_SIGNALS:
     void zoomTo(qreal zoom, int centerX, int centerY);
 
     void alert(const QString& message);
+    void linkClicked(const QUrl &link);
 
 public Q_SLOTS:
     QVariant evaluateJavaScript(const QString&);

@@ -45,7 +45,6 @@ Flickable {
     signal loadFinished
     signal loadFailed
 
-    // width: parent.width
     contentWidth: Math.max(parent.width, webView.width)
     contentHeight: Math.max(parent.height, webView.height)
     anchors.fill: parent
@@ -58,11 +57,7 @@ Flickable {
         settings.standardFontFamily: prefs.font
         settings.defaultFontSize: ((platform.osName == "harmattan")? 26: 22) + (prefs.zoom - 100) / 10
         settings.minimumFontSize: (platform.osName == "harmattan")? 22: 18
-        // zoomFactor: prefs.zoom / 100.0
-        // preferredWidth: flickable.width
-        // preferredHeight: flickable.height
         width: flickable.width
-        // height: contentsSize.height
         z: 0
 
         property bool loading: false
@@ -80,10 +75,12 @@ Flickable {
             bookView.jump()
             coverRemover.restart()
             // Disable links
-            webView.evaluateJavaScript("for (var i = 0; i < document.links.length; i++) {l = document.links[i]; l.disabled = true; l.onclick = new Function('return false'); l.style.textDecoration = 'none'}")
+            // webView.evaluateJavaScript("for (var i = 0; i < document.links.length; i++) {l = document.links[i]; l.disabled = true; l.onclick = new Function('return false'); l.style.textDecoration = 'none'}")
         }
 
         onLoadStarted: loading = true
+
+        onLinkClicked: console.log("* BookView.webView.onLinkClicked: " + link)
 
         // Forward signals
         Component.onCompleted: {

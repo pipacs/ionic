@@ -228,6 +228,7 @@ void QDeclarativeWebView::init()
     connect(d->view, SIGNAL(geometryChanged()), this, SLOT(updateDeclarativeWebViewSize()));
     connect(d->view, SIGNAL(doubleClick(int, int)), this, SIGNAL(doubleClick(int, int)));
     connect(d->view, SIGNAL(scaleChanged()), this, SIGNAL(contentsScaleChanged()));
+    connect(d->view, SIGNAL(linkClicked(QUrl)), this, SIGNAL(linkClicked(QUrl)));
 }
 
 void QDeclarativeWebView::componentComplete()
@@ -303,6 +304,7 @@ void QDeclarativeWebView::pageUrlChanged()
 
 void QDeclarativeWebView::doLoadFinished(bool ok)
 {
+    d->view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
     if (ok) {
         d->status = d->url.isEmpty() ? Null : Ready;
         emit loadFinished();
