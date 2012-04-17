@@ -2,8 +2,6 @@ import QtQuick 1.1
 import "meego"
 import com.pipacs.ionic.Book 1.0
 
-// FIXME Texts in the import progress dialog are empty
-
 StepsPage {
     orientationLock: prefs.orientation
     id: importPage
@@ -46,7 +44,7 @@ StepsPage {
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 width: parent.width - 18
                 text: platform.text("booksources.html")
-                onLinkActivated: platform.browse(link)
+                onLinkActivated: Qt.openUrlExternally(link)
             }
             StepsLabel {
                 font.pixelSize: (platform.osName === "harmattan")? 28: 22
