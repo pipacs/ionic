@@ -164,6 +164,13 @@ StepsPage {
                 }
             }
             StepsCheckBox {
+                id: openExternal
+                text: qsTr("Open external links with browser")
+                checked: prefs.openExternal
+                onClicked: prefs.openExternal = checked
+            }
+
+            StepsCheckBox {
                 id: preventBlanking
                 visible: platform.osName !== "symbian"
                 text: qsTr("Prevent display blanking")

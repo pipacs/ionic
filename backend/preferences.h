@@ -26,6 +26,7 @@ class Preferences: public QObject {
     Q_PROPERTY(bool usePressAndHold READ usePressAndHold WRITE setUsePressAndHold NOTIFY usePressAndHoldChanged)
     Q_PROPERTY(bool useTap READ useTap WRITE setUseTap NOTIFY useTapChanged)
     Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
+    Q_PROPERTY(bool openExternal READ openExternal WRITE setOpenExternal NOTIFY openExternalChanged)
 
 public:
     static Preferences *instance();
@@ -56,6 +57,8 @@ public:
     void setUseTap(bool v) {setValue("usetap", v); emit useTapChanged();}
     int margin() {return value("margin", 10).toInt();}
     void setMargin(int v) {setValue("margin", v); emit marginChanged();}
+    bool openExternal() {return value("openexternal", true).toBool();}
+    void setOpenExternal(bool v) {setValue("openexternal", v); emit openExternalChanged();}
 
 signals:
     void valueChanged(const QString &key);
@@ -70,6 +73,7 @@ signals:
     void usePressAndHoldChanged();
     void useTapChanged();
     void marginChanged();
+    void openExternalChanged();
 
 protected:
     Preferences();
