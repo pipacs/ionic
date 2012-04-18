@@ -60,6 +60,7 @@ Flickable {
         settings.standardFontFamily: prefs.font
         settings.defaultFontSize: ((platform.osName == "harmattan")? 26: 22) + (prefs.zoom - 100) / 10
         settings.minimumFontSize: (platform.osName == "harmattan")? 22: 18
+        settings.javascriptEnabled: true
         preferredWidth: flickable.width
         preferredHeight: flickable.height
         contentsScale: 1
@@ -70,6 +71,7 @@ Flickable {
         onLoadFailed: {
             loading = false
             flickable.targetPos = -1
+            flickable.targetAnchor = ""
             coverRemover.restart()
         }
 
@@ -79,8 +81,6 @@ Flickable {
             loading = false
             flickable.jump()
             coverRemover.restart()
-            // Disable links
-            // webView.evaluateJavaScript("for (var i = 0; i < document.links.length; i++) {l = document.links[i]; l.disabled = true; l.onclick = new Function('return false'); l.style.textDecoration = 'none'}")
         }
 
         onLoadStarted: loading = true
@@ -216,11 +216,13 @@ Flickable {
         flickable.targetAnchor = ""
         var hashPos = linkStr.lastIndexOf("#")
         if (hashPos >= 0) {
-            flickable.targetAnchor = linkStr.substring(hashPos)
+            flickable.targetAnchor = linkStr.substring(hashPos + 1)
             linkStr = linkStr.substring(0, hashPos)
             console.log("*  Anchor " + flickable.targetAnchor)
         }
         if (part != flickable.part) {
+            console.log("*  Loading new part " + part + ", current is " + flickable.part)
+            flickable.part = part
             load(linkStr)
         } else {
             jump()
@@ -255,7 +257,13 @@ Flickable {
             updateLastBookmark()
         } else if (flickable.targetAnchor != "") {
             console.log("* BookView.jump: To anchor " + flickable.targetAnchor)
-            webView.evaluateJavaScript("window.location.hash = '" + flickable.targetAnchor + "'")
+            // NOTE: We can't use document.location.hash because the viewport is as big as the whole page
+            // var script = "window.location.hash = \"" + flickable.targetAnchor + "\""
+            var script = "document.getElementById('" + flickable.targetAnchor + "').getBoundingClientRect().top"
+            console.log("*  " + script)
+            var ret = webView.evaluateJavaScript(script)
+            console.log("*  --> " + ret)
+            flickable.contentY = 0 + ret
             flickable.targetAnchor = ""
             updateLastBookmark()
         }
@@ -273,9 +281,9 @@ Flickable {
     }
 
     // Load URL while covering the web view
-    function load(url) {
-        console.log("* BookView.load: " + url)
+    function load(link) {
+        console.log("* BookView.load: " + link)
         styleCover.opacity = 1
-        webView.url = url
+        webView.url = "" + link
     }
 }
