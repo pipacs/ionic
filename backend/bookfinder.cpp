@@ -61,7 +61,7 @@ void BookFinderWorker::doFindInDir(const QString &dir, QStringList &results, int
         results.append(entry.absoluteFilePath());
     }
     QStringList dirFilters(QString("*"));
-    foreach (QFileInfo entry, QDir(dir).entryInfoList(dirFilters, QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot)) {
+    foreach (QFileInfo entry, QDir(dir).entryInfoList(dirFilters, QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot | QDir::Hidden | QDir::NoSymLinks)) {
         doFindInDir(entry.absoluteFilePath(), results, depth + 1);
     }
 }
