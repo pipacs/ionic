@@ -150,13 +150,6 @@ Flickable {
         onTriggered: {if (!webView.loading) updateLastBookmark()}
     }
 
-    // Forward signals
-//    Component.onCompleted: {
-//        loadStarted.connect(flickable.loadStarted)
-//        loadFailed.connect(flickable.loadFailed)
-//        loadFinished.connect(flickable.loadFinished)
-//    }
-
     // Scroll up one page
     function goToPreviousPage() {
         if (flickable.contentY == 0) {
@@ -206,12 +199,15 @@ Flickable {
 
     // Go to any URL in the book
     function goToUrl(link) {
-        console.log("* BookView.flickable.goToUrl " + url)
+        console.log("* BookView.flickable.goToUrl " + link)
         var linkStr = new String(link)
         var part = library.nowReading.partFromUrl(linkStr)
         console.log("*  Part " + part)
         if (part < 0) {
-            console.log("*  Not jumping to external URL")
+            if (prefs.openExternal) {
+                console.log("*  Opening external URL")
+                Qt.openUrlExternally(link)
+            }
             return
         }
         flickable.targetAnchor = ""
