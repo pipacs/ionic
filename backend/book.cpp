@@ -15,6 +15,16 @@ const int COVER_WIDTH = 53;
 const int COVER_HEIGHT = 59;
 const int COVER_MAX = 512 * 1024;
 
+/** Remove the anchor part from an URL. */
+QString removeFragment(const QString &url) {
+    QString ret = url;
+    int fragmentStart = ret.lastIndexOf("#");
+    if (fragmentStart != -1) {
+        ret = ret.remove(fragmentStart, ret.length());
+    }
+    return ret;
+}
+
 Book::Book(): QObject(0), path_(""), lastBookmark_(new Bookmark), loaded_(false), valid_(false), isOpen_(false), lastProgress_(0) {
 }
 
@@ -465,12 +475,8 @@ QString Book::urlFromChapter(int index) {
     QString id = chapters_[index];
     QString fullPath = QDir(rootPath_).absoluteFilePath(content_[id].href);
     QString ret = QUrl::fromLocalFile(fullPath).toString();
-    // FIXME: Get rid of the fragment part as the QML WebView cannot handle it
-    int fragmentStart = ret.indexOf("#");
-    if (fragmentStart != -1) {
-        ret = ret.remove(fragmentStart, ret.length());
-    }
-    return ret;
+    // NOTE: We get rid of the fragment part as the QML WebView cannot handle it
+    return removeFragment(ret);
 }
 
 QString Book::urlFromPart(int part) {
@@ -644,4 +650,17 @@ void Book::fixFileExtension(const QString &fileName) {
             qCritical() << "Book::fixFileExtension: Failed to rename" << src << "to" << dst;
         }
     }
+}
+
+int Book::partFromUrl(const QString &url) {
+    QString baseUrl = removeFragment(url);
+    for (int i = 0; i < parts_.length(); i++) {
+        QString partName = parts_[i];
+        QString fullPath = QDir(rootPath_).absoluteFilePath(content_[partName].href);
+        QString pathUrl = QUrl::fromLocalFile(fullPath).toString();
+        if (baseUrl == removeFragment(pathUrl)) {
+            return i;
+        }
+    }
+    return -1;
 }

@@ -32,6 +32,9 @@ Flickable {
     // Target reading position, within the current part of the book. After loading the part, BookView will jump to this position, unless it is set to -1
     property double targetPos: -1
 
+    // Target reading anchor, within the current part of the book. After loading the part, BookView will jump to this anchor, unless it is set to ""
+    property string targetAnchor: ""
+
     // Current part index
     property int part: 0
 
@@ -72,7 +75,7 @@ Flickable {
             setStyle(prefs.style)
             setMargin(prefs.margin)
             loading = false
-            bookView.jump()
+            flickable.jump()
             coverRemover.restart()
             // Disable links
             // webView.evaluateJavaScript("for (var i = 0; i < document.links.length; i++) {l = document.links[i]; l.disabled = true; l.onclick = new Function('return false'); l.style.textDecoration = 'none'}")
@@ -80,13 +83,12 @@ Flickable {
 
         onLoadStarted: loading = true
 
-        onLinkClicked: console.log("* BookView.webView.onLinkClicked: " + link)
-
         // Forward signals
         Component.onCompleted: {
             loadStarted.connect(flickable.loadStarted)
             loadFailed.connect(flickable.loadFailed)
             loadFinished.connect(flickable.loadFinished)
+            linkClicked.connect(flickable.goToUrl)
         }
     }
 
@@ -148,6 +150,13 @@ Flickable {
         onTriggered: {if (!webView.loading) updateLastBookmark()}
     }
 
+    // Forward signals
+//    Component.onCompleted: {
+//        loadStarted.connect(flickable.loadStarted)
+//        loadFailed.connect(flickable.loadFailed)
+//        loadFinished.connect(flickable.loadFinished)
+//    }
+
     // Scroll up one page
     function goToPreviousPage() {
         if (flickable.contentY == 0) {
@@ -195,6 +204,30 @@ Flickable {
         load(library.nowReading.urlFromPart(flickable.part))
     }
 
+    // Go to any URL in the book
+    function goToUrl(link) {
+        console.log("* BookView.flickable.goToUrl " + url)
+        var linkStr = new String(link)
+        var part = library.nowReading.partFromUrl(linkStr)
+        console.log("*  Part " + part)
+        if (part < 0) {
+            console.log("*  Not jumping to external URL")
+            return
+        }
+        flickable.targetAnchor = ""
+        var hashPos = linkStr.lastIndexOf("#")
+        if (hashPos >= 0) {
+            flickable.targetAnchor = linkStr.substring(hashPos)
+            linkStr = linkStr.substring(0, hashPos)
+            console.log("*  Anchor " + flickable.targetAnchor)
+        }
+        if (part != flickable.part) {
+            load(linkStr)
+        } else {
+            jump()
+        }
+    }
+
     // Update book's last reading position, but only if it has been changed
     function updateLastBookmark() {
         if (webView.contentsSize.height > 0) {
@@ -207,9 +240,10 @@ Flickable {
         }
     }
 
-    // Jump to a new location within the page, specified in flickable.targetPos
+    // Jump to a new location within the page, specified in flickable.targetPos or flickable.targetAnchor
     function jump() {
         if (flickable.targetPos != -1) {
+            console.log("* BookView.jump: To position " + flickable.targetPos)
             var newY = webView.contentsSize.height * flickable.targetPos
             if (flickable.targetPos == 1) {
                 newY -= flickable.height
@@ -219,6 +253,11 @@ Flickable {
             }
             flickable.contentY = newY
             flickable.targetPos = -1
+            updateLastBookmark()
+        } else if (flickable.targetAnchor != "") {
+            console.log("* BookView.jump: To anchor " + flickable.targetAnchor)
+            webView.evaluateJavaScript("window.location.hash = '" + flickable.targetAnchor + "'")
+            flickable.targetAnchor = ""
             updateLastBookmark()
         }
     }
@@ -236,6 +275,7 @@ Flickable {
 
     // Load URL while covering the web view
     function load(url) {
+        console.log("* BookView.load: " + url)
         styleCover.opacity = 1
         webView.url = url
     }

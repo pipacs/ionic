@@ -131,6 +131,13 @@ public:
     /** Get the URL corresponding to a given part. */
     Q_INVOKABLE QString urlFromPart(int partIndex);
 
+    /**
+     * Get the part index corresponding to a URL.
+     * The URL may contain an anchor.
+     * @return Part index or -1 if not part not found.
+     */
+    Q_INVOKABLE int partFromUrl(const QString &url);
+
     /** Get progress (0..1) corresponding to part index and part position. */
     Q_INVOKABLE qreal getProgress(int part, qreal position);
 
