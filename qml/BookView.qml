@@ -60,7 +60,9 @@ Flickable {
         settings.standardFontFamily: prefs.font
         settings.defaultFontSize: ((platform.osName == "harmattan")? 26: 22) + (prefs.zoom - 100) / 10
         settings.minimumFontSize: (platform.osName == "harmattan")? 22: 18
-        width: flickable.width
+        preferredWidth: flickable.width
+        preferredHeight: flickable.height
+        contentsScale: 1
         z: 0
 
         property bool loading: false
@@ -168,6 +170,7 @@ Flickable {
     function goToNextPage() {
         if (flickable.contentY + flickable.height >= webView.contentsSize.height) {
             goToNextPart()
+            return
         }
         var newY = flickable.contentY + flickable.height - 17;
         if (newY + flickable.height > webView.contentsSize.height) {
