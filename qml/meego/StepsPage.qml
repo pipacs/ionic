@@ -4,7 +4,6 @@ import com.nokia.meego 1.0
 // Simple wrapper for Page
 Page {
     property bool active
-    property bool lockOrientation: true
     property bool showBack: true
     property bool showTools: true
     property int statusInactive: PageStatus.Inactive
@@ -18,7 +17,6 @@ Page {
     signal back
 
     active: status === PageStatus.Active
-    orientationLock: lockOrientation? PageOrientation.LockPortrait: PageOrientation.Automatic
     tools: showTools? pageTools: null
 
     ToolBarLayout {

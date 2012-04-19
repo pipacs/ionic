@@ -5,7 +5,6 @@ Page {
     property bool active
     property bool showBack: true
     property bool showTools: true
-    property bool lockOrientation: true
     property int statusInactive: PageStatus.Inactive
     property int statusActivating: PageStatus.Activating
     property int statusActive: PageStatus.Active
@@ -16,7 +15,6 @@ Page {
 
     signal back
 
-    orientationLock: lockOrientation? PageOrientation.LockPortrait: PageOrientation.Automatic
     active: status === PageStatus.Active
 
     // FIXME: This is causing problems on Symbian:

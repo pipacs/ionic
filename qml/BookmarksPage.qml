@@ -7,7 +7,6 @@ StepsPage {
     id: page
     property Book book: library.nowReading
     signal bookmarkAdded
-    orientationLock: prefs.orientation
     showTools: false
 
     Component {

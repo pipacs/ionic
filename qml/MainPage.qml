@@ -141,6 +141,10 @@ StepsPage {
         }
     }
 
+    function goToUrl(link) {
+        bookView.goToUrl(link)
+    }
+
     function setStyle(style) {
         if (platform.osName === "harmattan") {
             theme.inverted = (style === "night")

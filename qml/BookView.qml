@@ -1,26 +1,4 @@
-/*
- * Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
- * Copyright (C) 2011 Niels Mayer <NielsMayer _AT_ gmail _DOT_ com>
- * Copyright (C) 2011 Akos Polster <akos@pipacs.com>
- * All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- */
-
 import QtQuick 1.1
-// import QtWebKit 1.0
 import com.pipacs.ionic.IWebView 1.0
 import com.pipacs.ionic.Book 1.0
 import com.pipacs.ionic.Preferences 1.0
@@ -61,12 +39,27 @@ Flickable {
         settings.defaultFontSize: ((platform.osName == "harmattan")? 26: 22) + (prefs.zoom - 100) / 10
         settings.minimumFontSize: (platform.osName == "harmattan")? 22: 18
         settings.javascriptEnabled: true
+        settings.javaEnabled: false
+        settings.javascriptCanOpenWindows: false
+        settings.localContentCanAccessRemoteUrls: false
+        settings.offlineStorageDatabaseEnabled: false
+        settings.offlineWebApplicationCacheEnabled: false
+        settings.pluginsEnabled: false
         preferredWidth: flickable.width
         preferredHeight: flickable.height
         contentsScale: 1
         z: 0
 
         property bool loading: false
+
+        // Jump to the target position after a slight delay
+        Timer {
+            id: jumpTimer
+            interval: 10
+            running: false
+            repeat: false
+            onTriggered: jump()
+        }
 
         onLoadFailed: {
             loading = false
@@ -79,7 +72,7 @@ Flickable {
             setStyle(prefs.style)
             setMargin(prefs.margin)
             loading = false
-            flickable.jump()
+            jumpTimer.start()
             coverRemover.restart()
         }
 

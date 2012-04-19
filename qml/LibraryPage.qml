@@ -4,8 +4,6 @@ import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
 StepsPage {
-    // FIXME: orientationLock: prefs.orientation
-
     BookPage {
         id: bookPage
     }

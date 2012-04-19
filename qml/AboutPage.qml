@@ -3,7 +3,6 @@ import com.pipacs.ionic.Book 1.0
 import "meego"
 
 StepsPage {
-    orientationLock: prefs.orientation
     id: aboutPage
 
     Flickable {

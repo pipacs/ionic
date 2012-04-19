@@ -7,8 +7,6 @@ StepsPage {
     property Book book: library.nowReading
     property alias enableJump: jumpTool.visible
 
-    orientationLock: prefs.orientation
-
     PageHeader {
         id: header
         text: book.title

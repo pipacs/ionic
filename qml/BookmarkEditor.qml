@@ -14,6 +14,7 @@ StepsDialog {
     title: qsTr("Ionic")
 
     content: Flickable {
+        id: flickable
         anchors.fill: parent
         anchors.leftMargin: 10
         anchors.topMargin: 10
@@ -33,10 +34,7 @@ StepsDialog {
             }
             StepsTextField {
                 id: noteField
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
+                width: flickable.width - 15
                 Keys.onReturnPressed: parent.focus = true
             }
         }

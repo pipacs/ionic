@@ -4,7 +4,6 @@ import com.pipacs.ionic.Bookmark 1.0
 import com.pipacs.ionic.Book 1.0
 
 StepsPage {
-    orientationLock: prefs.orientation
     id: page
 
     Flickable {

@@ -4,7 +4,6 @@ import com.pipacs.ionic.Book 1.0
 
 StepsPage {
     property Book book: library.nowReading
-    orientationLock: prefs.orientation
     showTools: false
 
     Component {
@@ -33,11 +32,10 @@ StepsPage {
                 anchors.fill: parent
                 onClicked: {
                     console.log("* ChaptersPage.delegate.onClicked " + index)
-                    var part = book.partFromChapter(index);
                     var url = book.urlFromChapter(index)
-                    console.log("*  Going to part " + part + ", url " + url)
+                    console.log("*  Going to URL " + url)
                     mainPage.pageStack.pop(null)
-                    mainPage.goTo(part, 0, url)
+                    mainPage.goToUrl(url)
                 }
             }
         }

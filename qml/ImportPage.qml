@@ -3,7 +3,6 @@ import "meego"
 import com.pipacs.ionic.Book 1.0
 
 StepsPage {
-    orientationLock: prefs.orientation
     id: importPage
 
     signal begin(int total)

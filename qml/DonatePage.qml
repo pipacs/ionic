@@ -3,7 +3,6 @@ import com.pipacs.ionic.IapItem 1.0
 import "symbian"
 
 StepsPage {
-    orientationLock: prefs.orientation
     id: donatePage
 
     PageHeader {
