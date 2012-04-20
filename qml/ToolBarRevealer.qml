@@ -7,35 +7,28 @@ Item {
     id: revealer
     property bool active: false // Double-taps are only handled if active is true
     property StepsPageStackWindow targetWindow // Target window that has the toolbar
-    signal clickedTop
-    signal clickedBottom
-
     anchors.fill: parent
+
     MouseArea {
         anchors.fill: parent
-        hoverEnabled: true
-        onClicked: {
-            if (prefs.useTap) {
-                if (mouse.y < (height / 2)) {
-                    clickedTop()
-                } else {
-                    clickedBottom()
-                }
-            }
-        }
+
         onDoubleClicked: {
+            console.log("* ToolBarRevealer: onDoubleClicked")
             if (active) {
                 targetWindow.showToolBar = true
                 hideTimer.restart()
             }
         }
-        onPressed: mouse.accepted = !prefs.useSwipe
-        onPressAndHold: {
-            if (prefs.usePressAndHold) {
-                pageStack.push(settingsPage)
-            }
+        onPressed: {
+            console.log("* ToolBarRevealer: onPressed")
+            // We can't accept press events, otherwise the WebView won't emit linkActivated signals
+            mouse.accepted = false
+        }
+        onReleased: {
+            console.log("* ToolBarRevealer: onReleased")
         }
     }
+
     Timer {
         id: hideTimer
         interval: 3000

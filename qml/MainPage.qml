@@ -37,10 +37,10 @@ StepsPage {
 
     StepsSpinner {
         id: spinner
-        visible: false
         darken: false
     }
 
+    // Handle double-tap to reveal the toolbar
     ToolBarRevealer {
         id: revealer
     }
@@ -63,13 +63,11 @@ StepsPage {
         appWindow.orientationChangeFinished.connect(restoreTimer.start)
         mediaKey.volumeUpPressed.connect(onVolumeUpPressed)
         mediaKey.volumeDownPressed.connect(onVolumeDownPressed)
-        revealer.clickedTop.connect(bookView.goToPreviousPage)
-        revealer.clickedBottom.connect(bookView.goToNextPage)
         setToolBar(commonTools)
     }
 
+    // Activate/deactivate the toolbar revealer, depending on the page status
     onStatusChanged: {
-        // Activate/deactivate the toolbar revealer, depending on the page status
         if (status === statusActivating) {
             revealer.active = true
             appWindow.showToolBar = prefs.showToolBar
@@ -80,6 +78,7 @@ StepsPage {
         }
     }
 
+    // Restore a new book's last reading position
     onNowReadingChanged: {
         console.log("* MainPage.onNowReadingChanged to " + library.nowReading.title)
         if (library.nowReading.valid) {
@@ -137,7 +136,6 @@ StepsPage {
             console.log("*  Loading new url")
             bookView.load(url)
             // BookView itself will force a jump, after loading url
-            // Loading an url with a fragment is however not supported by WebView. So we always end up on the top of the page, even if the chapter URL points to somewhere in the middle. See https://bugs.webkit.org/show_bug.cgi?id=48415
         }
     }
 

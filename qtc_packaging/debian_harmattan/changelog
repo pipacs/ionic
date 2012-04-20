@@ -1,10 +1,10 @@
 ionic (0.6.5) unstable; urgency=low
 
-  * Navigate by tapping
   * Set margins from Settings
   * Reduce overlap between pages
   * Fix importing books downloaded with the web browser
   * Handle links in books
+  * Disable tap-and-hold to show Settings
 
  -- Akos Polster <akos@pipacs.com>  Sun, 9  Apr 2012 16:02:00 +0100
 

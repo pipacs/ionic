@@ -34,32 +34,6 @@ StepsPage {
                 onClicked: prefs.useSwipe = !prefs.useSwipe
             }
             StepsCheckBox {
-                id: useTap
-                text: qsTr("Navigate by tapping")
-                checked: prefs.useTap
-                enabled: !useSwipe.checked
-                onClicked: prefs.useTap = !prefs.useTap
-            }
-            StepsLabel {
-                width: flickable.width - 15
-                color: "grey"
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                text: qsTr("Tap the bottom of the screen to go to the next page, tap the top to go to the previous. Only works if <i>Navigate with swipe</i> is disabled")
-            }
-            StepsCheckBox {
-                id: usePressAndHold
-                text: qsTr("Long-tap to show Settings")
-                checked: prefs.usePressAndHold
-                enabled: !useSwipe.checked
-                onClicked: prefs.usePressAndHold = !prefs.usePressAndHold
-            }
-            StepsLabel {
-                width: flickable.width - 15
-                color: "grey"
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                text: qsTr("Tap and hold to show <i>Settings</i> directly. Only works if <i>Navigate with swipe</i> is disabled")
-            }
-            StepsCheckBox {
                 id: showToolbar
                 text: qsTr("Show toolbar")
                 checked: prefs.showToolBar

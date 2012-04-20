@@ -29,7 +29,7 @@ Flickable {
     contentWidth: Math.max(parent.width, webView.width)
     contentHeight: Math.max(parent.height, webView.height)
     anchors.fill: parent
-    pressDelay: 0
+    pressDelay: 30
     flickableDirection: Flickable.VerticalFlick
     interactive: prefs.useSwipe
 
