@@ -263,6 +263,9 @@ protected:
     /** Ensure a given file name has an extension supported by WebView. */
     void fixFileExtension(const QString &fileName);
 
+    /** Fix potential encoding conflicts between XML and HTML meta-data. */
+    void fixEncodings();
+
     QString title_;                         //< Book title from EPUB.
     QStringList parts_;                     //< EPUB part list.
     QHash<QString, ContentItem> content_;   //< Content items from EPUB.

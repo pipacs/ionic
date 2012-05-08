@@ -78,6 +78,7 @@ bool Book::open() {
     }
     parse();
     fixExtensions();
+    fixEncodings();
     setDateOpened(QDateTime::currentDateTime().toUTC());
     isOpen_ = true;
     save();
@@ -664,4 +665,22 @@ int Book::partFromUrl(const QString &url) {
         }
     }
     return -1;
+}
+
+void Book::fixEncodings() {
+    foreach (QString key, content_.keys()) {
+        // Don't touch non-HTML content items
+        if (content_[key].mediaType != QString("application/xhtml+xml")) {
+            continue;
+        }
+
+        QString fileName = QDir(rootPath_).absoluteFilePath(removeFragment(content_[key].href));
+        QFile file(fileName);
+        if (!file.exists()) {
+            qWarning() << "Book::fixEncodings: Part" << fileName << "doesn't exist";
+            continue;
+        }
+
+        // FIXME: Read and compare XML and HTML meta-data encoding values
+    }
 }
