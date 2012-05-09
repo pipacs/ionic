@@ -668,7 +668,12 @@ int Book::partFromUrl(const QString &url) {
 }
 
 void Book::fixEncodings() {
+    const qint64 MaxSample = 25 * 80;
+
     foreach (QString key, content_.keys()) {
+        QString xmlEncoding;
+        QString htmlEncoding;
+
         // Don't touch non-HTML content items
         if (content_[key].mediaType != QString("application/xhtml+xml")) {
             continue;
@@ -680,7 +685,31 @@ void Book::fixEncodings() {
             qWarning() << "Book::fixEncodings: Part" << fileName << "doesn't exist";
             continue;
         }
+        if (!file.open(QIODevice::ReadOnly)) {
+            qWarning() << "Book::fixEncoding: Could not open" << fileName;
+            return;
+        }
+        QString header = QString::fromUtf8(file.read(MaxSample).data()).toLower();
+        file.close();
 
-        // FIXME: Read and compare XML and HTML meta-data encoding values
+        // Get XML encoding
+        // <?xml version="1.0" encoding="UTF-8"?>
+        QRegExp xmlMeta("<\\?xml\\s+.*encoding\\s*=\\s*[\"'](.*)[\"']\\s*\\?>");
+        xmlMeta.setMinimal(true);
+        if (xmlMeta.indexIn(header) != -1) {
+            xmlEncoding = xmlMeta.cap(1);
+        }
+
+        // Get HTML encoding
+        // <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        QRegExp htmlMeta("<meta\\s+http-equiv\\s*=\\s*[\"']content-type[\"']\\s*content\\s*=\\s*[\"'].*;\\s*charset=(.*)[\"']\\s*/?>");
+        htmlMeta.setMinimal(true);
+        if (htmlMeta.indexIn(header) != -1) {
+            htmlEncoding = htmlMeta.cap(1);
+        }
+
+        if (!htmlEncoding.isEmpty() && (htmlEncoding != xmlEncoding)) {
+            qWarning() << "Book::fixEncoding: Encoding mismatch in" << content_[key].href << ": XML" << xmlEncoding << "HTML" << htmlEncoding;
+        }
     }
 }
