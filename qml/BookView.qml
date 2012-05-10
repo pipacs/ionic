@@ -32,6 +32,7 @@ Flickable {
     pressDelay: 30
     flickableDirection: Flickable.VerticalFlick
     interactive: prefs.useSwipe
+    focus: true
 
     IWebView { // WebView...
         id: webView
@@ -49,7 +50,6 @@ Flickable {
         preferredHeight: flickable.height
         contentsScale: 1
         z: 0
-        focus: true
 
         property bool loading: false
 
