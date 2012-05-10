@@ -49,6 +49,7 @@ Flickable {
         preferredHeight: flickable.height
         contentsScale: 1
         z: 0
+        focus: true
 
         property bool loading: false
 
