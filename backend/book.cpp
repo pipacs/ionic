@@ -718,7 +718,7 @@ void Book::fixEncodings() {
 
         // Get HTML encoding
         // <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        QRegExp htmlMeta("<meta\\s+.*charset=(.*)[\"']\\s*/?>");
+        QRegExp htmlMeta("<meta\\s+.*charset=(.*)[\"']");
         htmlMeta.setMinimal(true);
         if (htmlMeta.indexIn(header) != -1) {
             htmlEncoding = htmlMeta.cap(1);
