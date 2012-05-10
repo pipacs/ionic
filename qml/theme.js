@@ -12,7 +12,7 @@ backgrounds.sand = "#EDC9AF"
 
 var webThemes = new Object
 webThemes.day = "document.body.style.background = '#FFFFFB';document.body.style.color = '#000000'"
-webThemes.night = "document.body.style.background = '#000000';document.body.style.color = '#FFFFFF'"
+webThemes.night = "document.body.style.background = '#000000';document.body.style.color = '#BEBEBE'"
 webThemes.sand = "document.body.style.background = '#EDC9AF';document.body.style.color = '#000000'"
 
 function background(style) {
