@@ -668,10 +668,10 @@ int Book::partFromUrl(const QString &url) {
 }
 
 void Book::fixEncodings() {
-    const qint64 MaxSample = 25 * 80;
+    const qint64 MaxSample = 1024;
 
     foreach (QString key, content_.keys()) {
-        QString xmlEncoding;
+        QString xmlEncoding("utf-8");
         QString htmlEncoding;
 
         // Don't touch non-HTML content items
@@ -692,12 +692,16 @@ void Book::fixEncodings() {
         QString header = QString::fromUtf8(file.read(MaxSample).data()).toLower();
         file.close();
 
-        // Get XML encoding
+        // Double-check XML encoding
         // <?xml version="1.0" encoding="UTF-8"?>
         QRegExp xmlMeta("<\\?xml\\s+.*encoding\\s*=\\s*[\"'](.*)[\"']\\s*\\?>");
         xmlMeta.setMinimal(true);
         if (xmlMeta.indexIn(header) != -1) {
             xmlEncoding = xmlMeta.cap(1);
+        }
+        if (xmlEncoding != "utf-8") {
+            qWarning() << "Book::fixEncodings: Unsupported XML encoding" << xmlEncoding;
+            return;
         }
 
         // Get HTML encoding
@@ -708,8 +712,56 @@ void Book::fixEncodings() {
             htmlEncoding = htmlMeta.cap(1);
         }
 
-        if (!htmlEncoding.isEmpty() && (htmlEncoding != xmlEncoding)) {
-            qWarning() << "Book::fixEncoding: Encoding mismatch in" << content_[key].href << ": XML" << xmlEncoding << "HTML" << htmlEncoding;
+        if (!htmlEncoding.isEmpty() && (htmlEncoding != "utf-8")) {
+            qWarning() << "Book::fixEncoding: Unsupported HTML encoding" << htmlEncoding << "in" << content_[key].href;
+            fixFileEncoding(fileName);
         }
+    }
+}
+
+void Book::fixFileEncoding(const QString &fileName) {
+    const qint64 MaxSample = 1024;
+    QString dir = QFileInfo(fileName).canonicalPath();
+    QString tmp = dir + "/x";
+    qDebug() << "Book::fixFileEncoding:" << fileName << "->" << tmp;
+    QFile in(fileName);
+    QFile out(tmp);
+    if (!in.open(QIODevice::ReadOnly)) {
+        return;
+    }
+    if (!out.open(QIODevice::WriteOnly)) {
+        in.close();
+        return;
+    }
+
+    QString header = QString::fromUtf8(in.read(MaxSample).data());
+    QRegExp htmlMeta("(<meta\\s+http-equiv\\s*=\\s*[\"']content-type[\"']\\s*content\\s*=\\s*[\"'].*;\\s*charset=)(.*)([\"']\\s*/?>)");
+    htmlMeta.setMinimal(true);
+    htmlMeta.setCaseSensitivity(Qt::CaseInsensitive);
+    int index = htmlMeta.indexIn(header);
+    if (index != -1) {
+        int length = htmlMeta.matchedLength();
+        out.write(header.mid(0, index).toUtf8());
+        out.write(htmlMeta.cap(1).toUtf8());
+        out.write("utf-8");
+        out.write(htmlMeta.cap(3).toUtf8());
+        out.write(header.mid(index + length).toUtf8());
+    } else {
+        out.write(header.toUtf8());
+    }
+
+    qint64 written;
+    do {
+        written = out.write(in.read(MaxSample));
+    } while (written > 0);
+
+    out.close();
+    in.close();
+    if (in.remove()) {
+        if (!out.rename(fileName)) {
+            qWarning() << "Book::fixFileEncoding: Failed to rename" << tmp << "to" << fileName;
+        }
+    } else {
+        qWarning() << "Book::fixFileEncoding: Failed to delete" << fileName;
     }
 }

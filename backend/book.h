@@ -266,6 +266,9 @@ protected:
     /** Fix potential encoding conflicts between XML and HTML meta-data. */
     void fixEncodings();
 
+    /** Fix HTML encoding meta-data. */
+    void fixFileEncoding(const QString &fileName);
+
     QString title_;                         //< Book title from EPUB.
     QStringList parts_;                     //< EPUB part list.
     QHash<QString, ContentItem> content_;   //< Content items from EPUB.

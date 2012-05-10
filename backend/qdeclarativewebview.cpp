@@ -344,6 +344,7 @@ void QDeclarativeWebView::setUrl(const QUrl& url)
 
         Q_ASSERT(!seturl.isRelative());
 
+        page()->settings()->setDefaultTextEncoding("utf-8");
         page()->mainFrame()->load(seturl);
 
         emit urlChanged();
