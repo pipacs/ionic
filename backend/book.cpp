@@ -116,8 +116,12 @@ void Book::close() {
 }
 
 QString Book::tmpDir() const {
+#if defined(Q_OS_SYMBIAN)
+    return QString("E:/data/ionic/temp");
+#else
     QString tmpName = QFileInfo(tempFile_.fileName()).fileName();
     return QDir(QDir::temp().absoluteFilePath("dorian")).absoluteFilePath(tmpName);
+#endif
 }
 
 bool Book::extract(const QStringList &excludedExtensions) {
@@ -614,7 +618,8 @@ void Book::fixExtensions() {
 
     foreach (QString key, content_.keys()) {
         // Don't touch non-HTML content items
-        if (content_[key].mediaType != QString("application/xhtml+xml")) {
+        QString mediaType = content_[key].mediaType;
+        if (!mediaType.isEmpty() && (mediaType != QString("application/xhtml+xml"))) {
             continue;
         }
 
@@ -675,10 +680,17 @@ void Book::fixEncodings() {
         QString htmlEncoding;
 
         // Don't touch non-HTML content items
-        if (content_[key].mediaType != QString("application/xhtml+xml")) {
+        QFileInfo info(removeFragment(content_[key].href));
+        QString extension = info.suffix();
+        QString mediaType = content_[key].mediaType;
+        if (!mediaType.isEmpty() && (mediaType != QString("application/xhtml+xml"))) {
+            continue;
+        }
+        if (mediaType.isEmpty() && (-1 == extension.indexOf("ht", 0, Qt::CaseInsensitive))) {
             continue;
         }
 
+        // Read a small sample from the file, let's hope all information we need is there
         QString fileName = QDir(rootPath_).absoluteFilePath(removeFragment(content_[key].href));
         QFile file(fileName);
         if (!file.exists()) {
@@ -687,26 +699,26 @@ void Book::fixEncodings() {
         }
         if (!file.open(QIODevice::ReadOnly)) {
             qWarning() << "Book::fixEncoding: Could not open" << fileName;
-            return;
+            continue;
         }
         QString header = QString::fromUtf8(file.read(MaxSample).data()).toLower();
         file.close();
 
         // Double-check XML encoding
         // <?xml version="1.0" encoding="UTF-8"?>
-        QRegExp xmlMeta("<\\?xml\\s+.*encoding\\s*=\\s*[\"'](.*)[\"']\\s*\\?>");
+        QRegExp xmlMeta("<\\?xml\\s+.*encoding\\s*=\\s*[\"'](.*)[\"']");
         xmlMeta.setMinimal(true);
         if (xmlMeta.indexIn(header) != -1) {
             xmlEncoding = xmlMeta.cap(1);
         }
         if (xmlEncoding != "utf-8") {
             qWarning() << "Book::fixEncodings: Unsupported XML encoding" << xmlEncoding;
-            return;
+            continue;
         }
 
         // Get HTML encoding
         // <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        QRegExp htmlMeta("<meta\\s+http-equiv\\s*=\\s*[\"']content-type[\"']\\s*content\\s*=\\s*[\"'].*;\\s*charset=(.*)[\"']\\s*/?>");
+        QRegExp htmlMeta("<meta\\s+.*charset=(.*)[\"']\\s*/?>");
         htmlMeta.setMinimal(true);
         if (htmlMeta.indexIn(header) != -1) {
             htmlEncoding = htmlMeta.cap(1);
@@ -723,7 +735,6 @@ void Book::fixFileEncoding(const QString &fileName) {
     const qint64 MaxSample = 1024;
     QString dir = QFileInfo(fileName).canonicalPath();
     QString tmp = dir + "/x";
-    qDebug() << "Book::fixFileEncoding:" << fileName << "->" << tmp;
     QFile in(fileName);
     QFile out(tmp);
     if (!in.open(QIODevice::ReadOnly)) {
@@ -735,7 +746,7 @@ void Book::fixFileEncoding(const QString &fileName) {
     }
 
     QString header = QString::fromUtf8(in.read(MaxSample).data());
-    QRegExp htmlMeta("(<meta\\s+http-equiv\\s*=\\s*[\"']content-type[\"']\\s*content\\s*=\\s*[\"'].*;\\s*charset=)(.*)([\"']\\s*/?>)");
+    QRegExp htmlMeta("(<meta\\s+.*charset=)(.*)([\"']\\s*/?>)");
     htmlMeta.setMinimal(true);
     htmlMeta.setCaseSensitivity(Qt::CaseInsensitive);
     int index = htmlMeta.indexIn(header);
