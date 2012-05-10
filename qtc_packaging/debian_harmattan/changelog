@@ -2,7 +2,7 @@ ionic (0.6.6) unstable; urgency=low
 
   * Set default encoding to UTF-8
   * Work-around encoding mismatches
-  * Reuce "night" theme's brightness
+  * Reduce "night" theme's brightness
 
  -- Akos Polster <akos@pipacs.com>  Tue, 8  May 2012 19:57:00 +0100
 
